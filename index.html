@@ -399,25 +399,14 @@
 
       
         
-          
-            <h1 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h1><h2 id="1、定义"><a href="#1、定义" class="headerlink" title="1、定义"></a>1、定义</h2><blockquote>
-<p>Kafka 是由 Linkedin 公司开发的， 是一个分布式的基于发布&#x2F;订阅模式的消息队列（Message Queue）,同时是支持多分区、多副本的分布式消息流平台，<br>适合大数据的存储以及计算</p>
-</blockquote>
-<h2 id="2、应用场景"><a href="#2、应用场景" class="headerlink" title="2、应用场景"></a>2、应用场景</h2><blockquote>
-<p><strong>限流削峰</strong>：在非常高的并发下，防止导致服务系统崩溃，消息队列能帮忙服务顶住突发的访问压力，解决生产能力和消费能力不一致的问题</p>
-</blockquote>
-<blockquote>
-<p><strong>服务解耦</strong>：解除不同服务之间的依赖关系，防止一端服务变更导致另一端服务需要同步变更或崩溃的问题，使修改更为灵活，维护与开发成本降低</p>
-</blockquote>
-<blockquote>
-<p><strong>异步通信</strong>：允许将消息放入队列中不用立即处理，且生产者发送消息时也可选择异步或者同步发送</p>
-</blockquote>
-<h2 id="3、特点"><a href="#3、特点" class="headerlink" title="3、特点"></a>3、特点</h2><blockquote>
-<p><strong>高吞吐、低延迟</strong>：kakfa 最大的特点就是收发消息非常快，kafka 每秒可以处理几十万条消息，它的最低延迟只有几毫秒；<br><strong>高伸缩性</strong>：每个主题(topic) 包含多个分区(partition)，主题中的分区可以分布在不同的主机(broker)中；<br><strong>持久性、可靠性</strong>：Kafka 能够允许数据的持久化存储，消息被持久化到磁盘，并支持数据备份防止数据丢失，Kafka 底层的数据存储是基于 Zookeeper 存储的，<br>Zookeeper 我们知道它的数据能够持久存储；<br><strong>容错性</strong>：允许集群中的节点失败，某个节点宕机，Kafka 集群能够正常工作；<br><strong>高并发</strong>：支持数千个客户端同时读写。</p>
-</blockquote>
-<h2 id="4、对比"><a href="#4、对比" class="headerlink" title="4、对比"></a>4、对比</h2><img src="/rookie.github.io/2022/07/24/kafka/kafka1/kafka-compare.png" class="" title="img.png">
-
-          
+          Kafka 是由 Linkedin 公司开发的， 是一个分布式的基于发布/订阅模式的消息队列（Message Queue）,同时是支持多分区、多副本的分布式消息流平台， 适合大数据的存储以及计算
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/rookie.github.io/2022/07/24/kafka/kafka1/">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -534,22 +523,17 @@
 
       
         
-          
-            <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
 
 <p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/rookie.github.io/2022/07/24/hello-world/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
