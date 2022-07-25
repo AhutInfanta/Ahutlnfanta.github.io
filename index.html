@@ -296,6 +296,222 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ahutinfanta.github.io/rookie.github.io/rookie.github.io/2022/07/25/kafka/kafka2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="rookie">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/rookie.github.io/images/myHead.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="rookie的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/rookie.github.io/2022/07/25/kafka/kafka2/" itemprop="url">kafka2</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-07-25T19:55:12+08:00">
+                2022-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/rookie.github.io/categories/kafka/" itemprop="url" rel="index">
+                    <span itemprop="name">kafka</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/rookie.github.io/categories/kafka/%E5%9F%BA%E7%A1%80%E7%AF%87/" itemprop="url" rel="index">
+                    <span itemprop="name">基础篇</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="1-kafka配置详解"><a href="#1-kafka配置详解" class="headerlink" title="1. kafka配置详解"></a>1. kafka配置详解</h2><h3 id="1-1-broker配置"><a href="#1-1-broker配置" class="headerlink" title="1.1 broker配置"></a>1.1 broker配置</h3><ul>
+<li><strong>broker.id</strong>：（必须配置）节点ID，必须全局唯一</li>
+<li><strong>log.dir</strong>：（必须配置）日志存放目录，默认值（&#x2F;tmp&#x2F;kafka-logs），tmp目录会被系统定期清理</li>
+<li><strong>zookeeper.connect</strong>：（必须配置）zookeeper连接</li>
+<li><strong>auto.create.topics.enable</strong>：是否自动创建主题，默认为true</li>
+<li><strong>auto.leader.rebalance.enable</strong>：分区leader自动负载均衡，默认true</li>
+<li><strong>compression.type</strong>：压缩类型，可选值 (‘gzip’, ‘snappy’, ‘lz4’, ‘zstd’)</li>
+</ul>
+<h3 id="1-2-producer配置"><a href="#1-2-producer配置" class="headerlink" title="1.2 producer配置"></a>1.2 producer配置</h3><ul>
+<li><strong>client.id</strong>：生产者客户端Id</li>
+<li><strong>batch.size</strong>：批量发送数据大小，默认16K</li>
+<li><strong>linger.ms</strong>：延迟时间，默认0</li>
+<li><strong>buffer.memory</strong>：缓冲区大小，默认32M</li>
+<li><strong>compression.type</strong>：消息压缩格式，默认none，可选none, gzip, snappy, lz4, or zstd</li>
+<li><strong>acks</strong>：消息确认机制，默认all，即-1，可选[all, -1, 0, 1]，0-不需要回应，1-等leader落盘后回应，-1-所有副本落盘后回应</li>
+<li><strong>partitioner.class</strong>：分区器类路径，默认DefaultPartitioner，还提供RoundRobinPartitioner，UniformStickyPartitioner</li>
+<li><strong>key.serializer</strong>：key的序列化器</li>
+<li><strong>value.serializer</strong>：value的序列化器</li>
+<li><strong>bootstrap.servers</strong>：kafka地址</li>
+<li><strong>retries</strong>：重试次数，默认int最大值</li>
+<li><strong>enable.idempotence</strong>：幂等性，默认true,根据&lt;pid,分区号，序列号&gt;去重</li>
+<li><strong>max.in.flight.requests.per.connection</strong>：生产者在收到kafka响应前最大发送请求数，默认5</li>
+<li><strong>transactional.id</strong>：事务ID，全局唯一，基于enable.idempotence</li>
+</ul>
+<h3 id="1-3-consume配置"><a href="#1-3-consume配置" class="headerlink" title="1.3 consume配置"></a>1.3 consume配置</h3><ul>
+<li><strong>group.id</strong>：消费者所属的群组ID</li>
+<li><strong>enable.auto.commit</strong>：自动提交，默认开启，一般关闭</li>
+<li><strong>auto.offset.reset</strong>：有效值为“earliest”“latest”“none”,默认latest</li>
+<li><strong>fetch.min.bytes</strong>：最小拉取字节数，默认1(B)，</li>
+<li><strong>fetch.max.wait.mss</strong>：拉取最大等待时间数，默认500（ms），</li>
+<li><strong>max-poll-records</strong>：一次请求最大拉取的消息条数，默认500</li>
+<li><strong>key.serializer</strong>：key的序列化器</li>
+<li><strong>value.serializer</strong>：value的序列化器</li>
+<li><strong>bootstrap.servers</strong>：kafka地址</li>
+</ul>
+<h2 id="2-常用命令"><a href="#2-常用命令" class="headerlink" title="2. 常用命令"></a>2. 常用命令</h2><h3 id="2-1-启动停止"><a href="#2-1-启动停止" class="headerlink" title="2.1 启动停止"></a>2.1 启动停止</h3><ul>
+<li>.&#x2F;bin&#x2F;kafka-server-start.sh -daemon .&#x2F;config&#x2F;server.properties</li>
+<li>.&#x2F;bin&#x2F;kafka-server-stop.sh</li>
+</ul>
+<h3 id="2-2-主题（kafka-topic-sh）"><a href="#2-2-主题（kafka-topic-sh）" class="headerlink" title="2.2 主题（kafka-topic.sh）"></a>2.2 主题（kafka-topic.sh）</h3><ul>
+<li>–bootstrap-server IP:PORT(多个用逗号分隔)</li>
+<li>–topic 主题名称</li>
+<li>–create</li>
+<li>–delete</li>
+<li>–describe</li>
+<li>–partitions</li>
+<li>–replication-factor</li>
+<li>–list</li>
+</ul>
+<h3 id="2-3-生产者（kafka-console-producer-sh）"><a href="#2-3-生产者（kafka-console-producer-sh）" class="headerlink" title="2.3 生产者（kafka-console-producer.sh）"></a>2.3 生产者（kafka-console-producer.sh）</h3><ul>
+<li>–bootstrap-server IP:PORT(多个用逗号分隔)</li>
+<li>–topic 主题名称</li>
+</ul>
+<h3 id="2-4-消费者（kafka-console-consumer-sh）"><a href="#2-4-消费者（kafka-console-consumer-sh）" class="headerlink" title="2.4 消费者（kafka-console-consumer.sh）"></a>2.4 消费者（kafka-console-consumer.sh）</h3><ul>
+<li>–bootstrap-server IP:PORT(多个用逗号分隔)</li>
+<li>–topic 主题名称 –from-beginning</li>
+<li>–group 指定消费组</li>
+</ul>
+<h2 id="3-分区"><a href="#3-分区" class="headerlink" title="3. 分区"></a>3. 分区</h2><h3 id="3-1-默认分区规则"><a href="#3-1-默认分区规则" class="headerlink" title="3.1 默认分区规则"></a>3.1 默认分区规则</h3><ul>
+<li>若发送时指定分区，则发送到指定的分区中</li>
+<li>未指定分区，指定了Key，则Key的hashcode%分区数</li>
+<li>均未指定，采取粘性规则，第一次随机选择分区，直到缓存满或者时间到发送完消息，下一次继续随机但不会选择上次使用的分区</li>
+</ul>
+<h3 id="3-2-自定义分区"><a href="#3-2-自定义分区" class="headerlink" title="3.2 自定义分区"></a>3.2 自定义分区</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.kafka.clients.producer.Partitioner;</span><br><span class="line"><span class="keyword">import</span> org.apache.kafka.common.Cluster;</span><br><span class="line"><span class="keyword">import</span> org.apache.kafka.common.PartitionInfo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 自定义hash分区,实现Partitioner接口,重写partition方法</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyPartition</span> <span class="keyword">implements</span> <span class="title class_">Partitioner</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">partition</span><span class="params">(String topic, Object key, <span class="type">byte</span>[] keyBytes, Object value, <span class="type">byte</span>[] valueBytes1, Cluster cluster)</span> &#123;</span><br><span class="line">        <span class="comment">// 获取topic中partition数量</span></span><br><span class="line">        List&lt;PartitionInfo&gt; partitionInfoList = cluster.availablePartitionsForTopic(topic);</span><br><span class="line">        <span class="type">int</span> <span class="variable">partitionCount</span> <span class="operator">=</span> partitionInfoList.size();</span><br><span class="line">        <span class="comment">// 根据key的hash值计取模，计算出在哪个分区中</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">numPartitions</span> <span class="operator">=</span> Math.abs(String.valueOf(key).hashCode()) % partitionCount;</span><br><span class="line">        <span class="keyword">return</span> numPartitions;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">close</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">configure</span><span class="params">(Map&lt;String, ?&gt; map)</span> &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">kafkaProperties.put(<span class="string">&quot;partitioner.class&quot;</span>,<span class="string">&quot;com.pg.kafka.MyPartition&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://ahutinfanta.github.io/rookie.github.io/rookie.github.io/2022/07/24/kafka/kafka1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -617,7 +833,7 @@
               
                 <a href="/rookie.github.io/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
