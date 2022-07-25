@@ -59,7 +59,9 @@
   <entry>
     <title>kafka2</title>
     <url>/rookie.github.io/2022/07/25/kafka/kafka2/</url>
-    <content><![CDATA[<h2 id="1-kafka配置详解"><a href="#1-kafka配置详解" class="headerlink" title="1. kafka配置详解"></a>1. kafka配置详解</h2><h3 id="1-1-broker配置"><a href="#1-1-broker配置" class="headerlink" title="1.1 broker配置"></a>1.1 broker配置</h3><ul>
+    <content><![CDATA[<h2 id="1-kafka配置详解"><a href="#1-kafka配置详解" class="headerlink" title="1. kafka配置详解"></a>1. kafka配置详解</h2><h3 id="1-1-broker配置"><a href="#1-1-broker配置" class="headerlink" title="1.1 broker配置"></a>1.1 broker配置</h3><span id="more"></span>
+<blockquote>
+<ul>
 <li><strong>broker.id</strong>：（必须配置）节点ID，必须全局唯一</li>
 <li><strong>log.dir</strong>：（必须配置）日志存放目录，默认值（&#x2F;tmp&#x2F;kafka-logs），tmp目录会被系统定期清理</li>
 <li><strong>zookeeper.connect</strong>：（必须配置）zookeeper连接</li>
@@ -67,7 +69,9 @@
 <li><strong>auto.leader.rebalance.enable</strong>：分区leader自动负载均衡，默认true</li>
 <li><strong>compression.type</strong>：压缩类型，可选值 (‘gzip’, ‘snappy’, ‘lz4’, ‘zstd’)</li>
 </ul>
-<h3 id="1-2-producer配置"><a href="#1-2-producer配置" class="headerlink" title="1.2 producer配置"></a>1.2 producer配置</h3><ul>
+</blockquote>
+<h3 id="1-2-producer配置"><a href="#1-2-producer配置" class="headerlink" title="1.2 producer配置"></a>1.2 producer配置</h3><blockquote>
+<ul>
 <li><strong>client.id</strong>：生产者客户端Id</li>
 <li><strong>batch.size</strong>：批量发送数据大小，默认16K</li>
 <li><strong>linger.ms</strong>：延迟时间，默认0</li>
@@ -83,7 +87,9 @@
 <li><strong>max.in.flight.requests.per.connection</strong>：生产者在收到kafka响应前最大发送请求数，默认5</li>
 <li><strong>transactional.id</strong>：事务ID，全局唯一，基于enable.idempotence</li>
 </ul>
-<h3 id="1-3-consume配置"><a href="#1-3-consume配置" class="headerlink" title="1.3 consume配置"></a>1.3 consume配置</h3><ul>
+</blockquote>
+<h3 id="1-3-consume配置"><a href="#1-3-consume配置" class="headerlink" title="1.3 consume配置"></a>1.3 consume配置</h3><blockquote>
+<ul>
 <li><strong>group.id</strong>：消费者所属的群组ID</li>
 <li><strong>enable.auto.commit</strong>：自动提交，默认开启，一般关闭</li>
 <li><strong>auto.offset.reset</strong>：有效值为“earliest”“latest”“none”,默认latest</li>
@@ -94,11 +100,15 @@
 <li><strong>value.serializer</strong>：value的序列化器</li>
 <li><strong>bootstrap.servers</strong>：kafka地址</li>
 </ul>
-<h2 id="2-常用命令"><a href="#2-常用命令" class="headerlink" title="2. 常用命令"></a>2. 常用命令</h2><h3 id="2-1-启动停止"><a href="#2-1-启动停止" class="headerlink" title="2.1 启动停止"></a>2.1 启动停止</h3><ul>
+</blockquote>
+<h2 id="2-常用命令"><a href="#2-常用命令" class="headerlink" title="2. 常用命令"></a>2. 常用命令</h2><h3 id="2-1-启动停止"><a href="#2-1-启动停止" class="headerlink" title="2.1 启动停止"></a>2.1 启动停止</h3><blockquote>
+<ul>
 <li>.&#x2F;bin&#x2F;kafka-server-start.sh -daemon .&#x2F;config&#x2F;server.properties</li>
 <li>.&#x2F;bin&#x2F;kafka-server-stop.sh</li>
 </ul>
-<h3 id="2-2-主题（kafka-topic-sh）"><a href="#2-2-主题（kafka-topic-sh）" class="headerlink" title="2.2 主题（kafka-topic.sh）"></a>2.2 主题（kafka-topic.sh）</h3><ul>
+</blockquote>
+<h3 id="2-2-主题（kafka-topic-sh）"><a href="#2-2-主题（kafka-topic-sh）" class="headerlink" title="2.2 主题（kafka-topic.sh）"></a>2.2 主题（kafka-topic.sh）</h3><blockquote>
+<ul>
 <li>–bootstrap-server IP:PORT(多个用逗号分隔)</li>
 <li>–topic 主题名称</li>
 <li>–create</li>
@@ -108,21 +118,34 @@
 <li>–replication-factor</li>
 <li>–list</li>
 </ul>
-<h3 id="2-3-生产者（kafka-console-producer-sh）"><a href="#2-3-生产者（kafka-console-producer-sh）" class="headerlink" title="2.3 生产者（kafka-console-producer.sh）"></a>2.3 生产者（kafka-console-producer.sh）</h3><ul>
+</blockquote>
+<h3 id="2-3-生产者（kafka-console-producer-sh）"><a href="#2-3-生产者（kafka-console-producer-sh）" class="headerlink" title="2.3 生产者（kafka-console-producer.sh）"></a>2.3 生产者（kafka-console-producer.sh）</h3><blockquote>
+<ul>
 <li>–bootstrap-server IP:PORT(多个用逗号分隔)</li>
 <li>–topic 主题名称</li>
 </ul>
-<h3 id="2-4-消费者（kafka-console-consumer-sh）"><a href="#2-4-消费者（kafka-console-consumer-sh）" class="headerlink" title="2.4 消费者（kafka-console-consumer.sh）"></a>2.4 消费者（kafka-console-consumer.sh）</h3><ul>
+</blockquote>
+<h3 id="2-4-消费者（kafka-console-consumer-sh）"><a href="#2-4-消费者（kafka-console-consumer-sh）" class="headerlink" title="2.4 消费者（kafka-console-consumer.sh）"></a>2.4 消费者（kafka-console-consumer.sh）</h3><blockquote>
+<ul>
 <li>–bootstrap-server IP:PORT(多个用逗号分隔)</li>
 <li>–topic 主题名称 –from-beginning</li>
 <li>–group 指定消费组</li>
 </ul>
-<h2 id="3-分区"><a href="#3-分区" class="headerlink" title="3. 分区"></a>3. 分区</h2><h3 id="3-1-默认分区规则"><a href="#3-1-默认分区规则" class="headerlink" title="3.1 默认分区规则"></a>3.1 默认分区规则</h3><ul>
+</blockquote>
+<h2 id="3-分区"><a href="#3-分区" class="headerlink" title="3. 分区"></a>3. 分区</h2><h3 id="3-1-默认分区器（DefaultPartitioner）"><a href="#3-1-默认分区器（DefaultPartitioner）" class="headerlink" title="3.1 默认分区器（DefaultPartitioner）"></a>3.1 默认分区器（DefaultPartitioner）</h3><blockquote>
+<ul>
 <li>若发送时指定分区，则发送到指定的分区中</li>
 <li>未指定分区，指定了Key，则Key的hashcode%分区数</li>
 <li>均未指定，采取粘性规则，第一次随机选择分区，直到缓存满或者时间到发送完消息，下一次继续随机但不会选择上次使用的分区</li>
 </ul>
-<h3 id="3-2-自定义分区"><a href="#3-2-自定义分区" class="headerlink" title="3.2 自定义分区"></a>3.2 自定义分区</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.kafka.clients.producer.Partitioner;</span><br><span class="line"><span class="keyword">import</span> org.apache.kafka.common.Cluster;</span><br><span class="line"><span class="keyword">import</span> org.apache.kafka.common.PartitionInfo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 自定义hash分区,实现Partitioner接口,重写partition方法</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyPartition</span> <span class="keyword">implements</span> <span class="title class_">Partitioner</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">partition</span><span class="params">(String topic, Object key, <span class="type">byte</span>[] keyBytes, Object value, <span class="type">byte</span>[] valueBytes1, Cluster cluster)</span> &#123;</span><br><span class="line">        <span class="comment">// 获取topic中partition数量</span></span><br><span class="line">        List&lt;PartitionInfo&gt; partitionInfoList = cluster.availablePartitionsForTopic(topic);</span><br><span class="line">        <span class="type">int</span> <span class="variable">partitionCount</span> <span class="operator">=</span> partitionInfoList.size();</span><br><span class="line">        <span class="comment">// 根据key的hash值计取模，计算出在哪个分区中</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">numPartitions</span> <span class="operator">=</span> Math.abs(String.valueOf(key).hashCode()) % partitionCount;</span><br><span class="line">        <span class="keyword">return</span> numPartitions;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">close</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">configure</span><span class="params">(Map&lt;String, ?&gt; map)</span> &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">kafkaProperties.put(<span class="string">&quot;partitioner.class&quot;</span>,<span class="string">&quot;com.pg.kafka.MyPartition&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="3-2-RoundRobinPartitioner"><a href="#3-2-RoundRobinPartitioner" class="headerlink" title="3.2 RoundRobinPartitioner"></a>3.2 RoundRobinPartitioner</h3><blockquote>
+<p>这种分区策略是一系列连续记录中的每条记录将被发送到不同的分区（无论是否提供’key’），直到我们用完分区并重新开始。注意：有一个已知问题会在创建新批次时导致分布不均</p>
+</blockquote>
+<h3 id="3-3-UniformStickyPartitioner"><a href="#3-3-UniformStickyPartitioner" class="headerlink" title="3.3 UniformStickyPartitioner"></a>3.3 UniformStickyPartitioner</h3><blockquote>
+<p>此分区策略将尝试坚持一个分区（无论是否提供了“key”），直到batch.size已满或已满linger.ms</p>
+</blockquote>
+<h3 id="3-4-自定义分区"><a href="#3-4-自定义分区" class="headerlink" title="3.4 自定义分区"></a>3.4 自定义分区</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.kafka.clients.producer.Partitioner;</span><br><span class="line"><span class="keyword">import</span> org.apache.kafka.common.Cluster;</span><br><span class="line"><span class="keyword">import</span> org.apache.kafka.common.PartitionInfo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 自定义hash分区,实现Partitioner接口,重写partition方法</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyPartition</span> <span class="keyword">implements</span> <span class="title class_">Partitioner</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">partition</span><span class="params">(String topic, Object key, <span class="type">byte</span>[] keyBytes, Object value, <span class="type">byte</span>[] valueBytes1, Cluster cluster)</span> &#123;</span><br><span class="line">        <span class="comment">// 获取topic中partition数量</span></span><br><span class="line">        List&lt;PartitionInfo&gt; partitionInfoList = cluster.availablePartitionsForTopic(topic);</span><br><span class="line">        <span class="type">int</span> <span class="variable">partitionCount</span> <span class="operator">=</span> partitionInfoList.size();</span><br><span class="line">        <span class="comment">// 根据key的hash值计取模，计算出在哪个分区中</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">numPartitions</span> <span class="operator">=</span> Math.abs(String.valueOf(key).hashCode()) % partitionCount;</span><br><span class="line">        <span class="keyword">return</span> numPartitions;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">close</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">configure</span><span class="params">(Map&lt;String, ?&gt; map)</span> &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">kafkaProperties.put(<span class="string">&quot;partitioner.class&quot;</span>,<span class="string">&quot;com.pg.kafka.MyPartition&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>kafka</category>
