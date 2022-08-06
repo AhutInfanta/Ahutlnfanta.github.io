@@ -237,4 +237,106 @@
         <tag>kafka</tag>
       </tags>
   </entry>
+  <entry>
+    <title>kafka常见面试题以及答案整理</title>
+    <url>/rookie.github.io/2022/08/01/kafka/kafka4/</url>
+    <content><![CDATA[<h3 id="1-Kafka的用途有哪些？使用场景如何？"><a href="#1-Kafka的用途有哪些？使用场景如何？" class="headerlink" title="1. Kafka的用途有哪些？使用场景如何？"></a>1. Kafka的用途有哪些？使用场景如何？</h3><blockquote>
+</blockquote>
+<p>###Kafka中的ISR、AR又代表什么？ISR的伸缩又指什么</p>
+<blockquote>
+<p><strong>ISR</strong>：所有与leader副本保持一定程度同步的副本（包括leader副本在内），（In-Sync Replicas）<br><strong>OSR</strong>：与leader副本同步滞后过多或断开连接的副本（不包括leader副本）组成OSR（Out-of-Sync Replicas），<br>时间阈值由replica.lag.time.max.ms配置，默认30S<br><strong>AR</strong>：所有的副本列表统称AR（Assigned Replicas）<br><strong>ISR伸缩</strong>：leader副本负责维护和跟踪 ISR 集合中所有follower副本的滞后状态，当follower副本落后太多或失效时，leader副本会把它从 ISR 集合中剔除。<br>如果 OSR 集合中所有follower副本“追上”了leader副本，那么leader副本会把它从 OSR 集合转移至 ISR 集合。默认情况下，当leader副本发生故障时，只有在 ISR 集合中的follower副本才有资格被选举为新的leader，而在 OSR 集合中的副本则没有任何机会（不过这个可以通过配置来改变<br>###Kafka中的HW、LEO、LSO、LW等分别代表什么？<br><strong>HW</strong>:High Watermark 高水位线，所有副本中最小的offset,即ISR中副本最小的LEO<br><strong>LEO</strong>:Log End Offset，每个副本当前日志文件中下一条待写入消息的offset，即最新的Offset+1，<br><strong>LSO</strong>:Last Stable Offset,与kafka 事务有关。对于未完成的事务而言，LSO的值等于事务中的第一条消息所在的位置（firstUnstableOffset）；对于已经完成的事务而言，它的值等同于HW相同<br><strong>LW</strong>:Low Watermark,AR集合中最小的LogStartOffset值。<br><strong>Log Start Offset</strong>：每个副本当前日志文件中写入消息的起始offset</p>
+</blockquote>
+<blockquote>
+<p><strong>消费者配置参数：isolation.level</strong>,这个参数用来配置消费者事务的隔离级别。可选值“read_uncommitted”和“read_committed”，表示消费者所消费到<br>的位置，如果设置为“read_committed”，那么消费这就会忽略事务未提交的消息，即只能消费到LSO(LastStableOffset)的位置，<br>默认配置为”read_uncommitted”,即可以消费到HW（High Watermak）的位置。<br><strong>注：follower副本的事务隔离级别也为“read_uncommitted”，并且不可修改。</strong><br>###Kafka中是怎么体现消息顺序性的？<br><strong>一定条件下，消息单分区内有序</strong>  </p>
+<ul>
+<li>在kafka  1.x版本之前需要配置<strong>max.in.flight.requests.per.connect&#x3D;1</strong>  </li>
+<li>在kafka  1.x版本后，未开启幂等性的情况下必须配置<strong>max.in.flight.requests.per.connect&#x3D;1</strong>，开启幂等性配置（默认开启）可配置<strong>max.in.flight.requests.per.connect&#x3D;5</strong>，<br> 最大为5，因为kafka服务器端会缓存producer5个request的元数据</li>
+</ul>
+<p>###Kafka中的分区器、序列化器、拦截器是否了解？它们之间的处理顺序是什么？<br>拦截器-&gt;序列化器-&gt;分区器</p>
+<ul>
+<li><strong>拦截器</strong>：用于Client的定制化逻辑处理，比如说过滤不合规则的数据，补充修改消息内容等等，自定义拦截器可以通过实现ProducerInterceptor（生产者的拦截器）接口  </li>
+<li><strong>序列化器</strong>： 序列化数据，防止数据丢失  </li>
+<li><strong>分区器</strong>：按照一定规则，将数据划分到不同的分区，若未手动指定分区，则使用默认的分区策略，也可通过实现Partitioner实现自定义分区</li>
+</ul>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3><p>###Kafka生产者客户端的整体结构是什么样子的？</p>
+</blockquote>
+<img src="/rookie.github.io/2022/08/01/kafka/kafka4/producer-design.png" class="" title="img.png">
+<p>###Kafka生产者客户端中使用了几个线程来处理？分别是什么？</p>
+<blockquote>
+<p>俩个，main线程和sender线程,具体作用详见上图<br>###Kafka的旧版Scala的消费者客户端的设计有什么缺陷？<br>老版本的 Consumer Group 把位移保存在 ZooKeeper 中,这种大吞吐量的写操作会极大地拖慢 ZooKeeper 集群的性能<br>###“消费组中的消费者个数如果超过topic的分区，那么就会有消费者消费不到数据”这句话是否正确？如果不正确，那么有没有什么hack的手段？<br>一般来说如果消费者过多，出现了消费者的个数大于分区个数的情况，就会有消费者分配不到任何分区,但是可以通过继承AbstractPartitionAssignor<br>实现自定义消费策略，从而实现同一消费组内的任意消费者都可以消费订阅主题的所有分区，其实就是组内广播，<br>###消费者提交消费位移时提交的是当前消费到的最新消息的offset还是offset+1?<br>在旧消费者客户端中，消费位移是存储在 ZooKeeper 中的。而在新消费者客户端中，消费位移存储在 Kafka 内部的主题__consumer_offsets 中。<br>当前消费者需要提交的消费位移是offset+1<br>###有哪些情形会造成重复消费？</p>
+<ul>
+<li><p><strong>Rebalance</strong>:一个consumer正在消费一个分区的一条消息，还没有消费完，发生了rebalance(加入了一个consumer)，从而导致这条消息没有消费成功，rebalance后，另一个consumer又把这条消息消费一遍。</p>
+</li>
+<li><p><strong>消费者端手动提交</strong>:如果先消费消息，再更新offset位置，导致消息重复消费。</p>
+</li>
+<li><p><strong>消费者端自动提交</strong>:设置offset为自动提交，关闭kafka时，如果在close之前，调用 consumer.unsubscribe() 则有可能部分offset没提交，下次重启会重复消费。</p>
+</li>
+<li><p><strong>生产者端</strong>:生产者因为业务问题导致的宕机，在重启之后可能数据会重发</p>
+</li>
+</ul>
+<p>###那些情景下会造成消息漏消费？</p>
+<ul>
+<li><strong>自动提交</strong>:设置offset为自动定时提交，当offset被自动定时提交时，数据还在内存中未处理，此时刚好把线程kill掉，那么offset已经提交，但是数据未处理，导致这部分内存中的数据丢失。</li>
+<li><strong>生产者发送消息</strong>:<br>发送消息设置的是fire-and-forget（发后即忘），它只管往 Kafka 中发送消息而并不关心消息是否正确到达。不过在某些时候（比如发生不可重试异常时）会造成消息的丢失。这种发送方式的性能最高，可靠性也最差。</li>
+<li><strong>消费者端</strong>:<br>先提交位移，但是消息还没消费完就宕机了，造成了消息没有被消费。自动位移提交同理</li>
+<li><strong>acks没有设置为all</strong>:<br>如果在broker还没把消息同步到其他broker的时候宕机了，那么消息将会丢失</li>
+</ul>
+<p>###KafkaConsumer是非线程安全的，那么怎么样实现多线程消费？</p>
+</blockquote>
+<img src="/rookie.github.io/2022/08/01/kafka/kafka4/multi-thread-consumer.png" class="" title="img.png">
+<p>###简述消费者与消费组之间的关系</p>
+<blockquote>
+<p>Consumer Group 下可以有一个或多个 Consumer 实例。这里的实例可以是一个单独的进程，也可以是同一进程下的线程。在实际场景中，使用进程更为常见一些。<br>Consumer Group 下所有实例订阅的主题的单个分区，只能分配给组内的某个 Consumer 实例消费。这个分区当然也可以被其他的 Group 消费<br>###当你使用kafka-topics.sh创建（删除）了一个topic之后，Kafka背后会执行什么逻辑？<br>Kafka 会在 log.dir 或 log.dirs 参数所配置的目录下创建相应的主题分区，默认情况下这个目录为&#x2F;tmp&#x2F;kafka-logs&#x2F;。<br>在 ZooKeeper 的&#x2F;brokers&#x2F;topics&#x2F;目录下创建一个同名的实节点，该节点中记录了该主题的分区副本分配方案<br>###topic的分区数可不可以增加？如果可以怎么增加？如果不可以，那又是为什么？<br>可以增加，使用 kafka-topics 脚本，结合 –alter 参数来增加某个主题的分区数</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">kafka-topics.sh --bootstrap-server broker_host:port --alter --topic &lt;topic_name&gt; --partitions &lt;新分区数&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>当分区数增加时，就会触发订阅该主题的所有 Group 开启 Rebalance。<br>首先，Rebalance 过程对 Consumer Group 消费过程有极大的影响。在 Rebalance 过程中，所有 Consumer 实例都会停止消费，等待 Rebalance 完成。这是 Rebalance 为人诟病的一个方面。<br>其次，目前 Rebalance 的设计是所有 Consumer 实例共同参与，全部重新分配所有分区。其实更高效的做法是尽量减少分配方案的变动。<br>最后，Rebalance 实在是太慢了<br>###topic的分区数可不可以减少？如果可以怎么减少？如果不可以，那又是为什么？<br>不支持，因为删除的分区中的消息不好处理。如果直接存储到现有分区的尾部，消息的时间戳就不会递增，如此对于 Spark、Flink 这类需要消息时间戳（事件时间）的组件将会受到影响；如果分散插入现有的分区，那么在消息量很大的时候，内部的数据复制会占用很大的资源，而且在复制期间，此主题的可用性又如何得到保障？与此同时，顺序性问题、事务性问题，以及分区和副本的状态机切换问题都是不得不面对的<br>###创建topic时如何选择合适的分区数？<br>可以使用Kafka 本身提供的用于生产者性能测试的 kafka-producer- perf-test.sh 和用于消费者性能测试的 kafka-consumer-perf-test.sh来进行测试。<br>增加合适的分区数可以在一定程度上提升整体吞吐量，但超过对应的阈值之后吞吐量不升反降。如果应用对吞吐量有一定程度上的要求，则建议在投入生产环境之前对同款硬件资源做一个完备的吞吐量相关的测试，以找到合适的分区数阈值区间。<br>分区数的多少还会影响系统的可用性。如果分区数非常多，如果集群中的某个 broker 节点宕机，那么就会有大量的分区需要同时进行 leader 角色切换，这个切换的过程会耗费一笔可观的时间，并且在这个时间窗口内这些分区也会变得不可用。<br>分区数越多也会让 Kafka 的正常启动和关闭的耗时变得越长，与此同时，主题的分区数越多不仅会增加日志清理的耗时，而且在被删除时也会耗费更多的时间。<br>###Kafka目前有那些内部topic，它们都有什么特征？各自的作用又是什么？<br><strong>__consumer_offsets</strong>：作用是保存 Kafka 消费者的位移信息<br><strong>__transaction_state</strong>：用来存储事务日志消息<br>###优先副本是什么？它有什么特殊的作用？<br>所谓的优先副本是指在AR集合列表中的第一个副本。理想情况下，优先副本就是该分区的leader 副本，所以也可以称之为 preferred leader。<br>Kafka 要确保所有主题的优先副本在 Kafka 集群中均匀分布，这样就保证了所有分区的 leader 均衡分布。以此来促进集群的负载均衡，这一行为也可以称为“分区平衡”<br>###Kafka有哪几处地方有分区分配的概念？简述大致的过程及原理</p>
+<ul>
+<li><strong>生产者的分区分配</strong>:是指为每条消息指定其所要发往的分区。可以编写一个具体的类实现org.apache.kafka.clients.producer.Partitioner接口。</li>
+<li><strong>消费者中的分区分配</strong>:是指为消费者指定其可以消费消息的分区。Kafka 提供了消费者客户端参数 partition.assignment.strategy 来设置消费者与订阅主题之间的分区分配策略。</li>
+<li><strong>分区副本的分配</strong>:是指为集群制定创建主题时的分区副本分配方案，即在哪个 broker 中创建哪些分区的副本。kafka-topics.sh 脚本中提供了一个 replica-assignment 参数来手动指定分区副本的分配方案</li>
+</ul>
+</blockquote>
+<p>###简述Kafka的日志目录结构</p>
+<img src="/rookie.github.io/2022/08/01/kafka/kafka4/log-construct.png" class="" title="img.png">
+<p>###Kafka中有那些索引文件？</p>
+<blockquote>
+<ul>
+<li><strong>偏移量索引文件</strong>:用来建立消息偏移量（offset）到物理地址之间的映射关系，方便快速定位消息所在的物理文件位置</li>
+<li><strong>时间戳索引文件</strong>:则根据指定的时间戳（timestamp）来查找对应的偏移量信息。</li>
+</ul>
+<p>###如果我指定了一个offset，Kafka怎么查找到对应的消息？<br>Kafka是通过seek() 方法来指定消费的，在执行seek() 方法之前要去执行一次poll()方法，等到分配到分区之后会去对应的分区的指定位置开始消费，如果指定的位置发生了越界，那么会根据auto.offset.reset 参数设置的情况进行消费。</p>
+</blockquote>
+<p>###如果我指定了一个timestamp，Kafka怎么查找到对应的消息？</p>
+<blockquote>
+<p>Kafka提供了一个 offsetsForTimes() 方法，通过 timestamp 来查询与此对应的分区位置。offsetsForTimes() 方法的参数 timestampsToSearch 是一个 Map 类型，key 为待查询的分区，而 value 为待查询的时间戳，该方法会返回时间戳大于等于待查询时间的第一条消息对应的位置和时间戳，对应于 OffsetAndTimestamp 中的 offset 和 timestamp 字段</p>
+</blockquote>
+<p>###聊一聊你对Kafka的Log Retention的理解</p>
+<blockquote>
+<p><strong>日志删除：</strong> 配置服务端参数log.cleanup.policy:delete(默认就是delete)</p>
+<ul>
+<li><strong>基于时间：</strong> 日志删除任务会检查当前日志文件中是否有保留时间超过设定的阈值（retentionMs）来寻找可删除的日志分段文件集合（deletableSegments）retentionMs， 可以通过 broker 端参数 log.retention.hours、log.retention.minutes 和 log.retention.ms 来配置，三个配置优先级依次提升。默认情况下只配置了 log.retention.hours 参数，其值为168，即为7天。<br>  删除日志分段时，首先会从 Log 对象中所维护日志分段的跳跃表中移除待删除的日志分段，以保证没有线程对这些日志分段进行读取操作。然后将日志分段所对应的所有文件添加上“.deleted”的后缀（当然也包括对应的索引文件）。最后交由一个以“delete-file”命名的延迟任务来删除这些以“.deleted”为后缀的文件，这个任务的延迟执行时间可以通过 file.delete.delay.ms 参数来调配，此参数的默认值为60000，即1分钟。</li>
+<li><strong>基于大小：</strong> 日志删除任务会检查当前日志的大小是否超过设定的阈值（retentionSize）来寻找可删除的日志分段的文件集合（deletableSegments）。<br>  retentionSize 可以通过 broker 端参数 log.retention.bytes 来配置，默认值为-1，表示无穷大。注意 log.retention.bytes 配置的是 Log 中所有日志文件的总大小，而不是单个日志分段（确切地说应该为 .log 日志文件）的大小。单个日志分段的大小由 broker 端参数 log.segment.bytes 来限制，默认值为1073741824，即 1GB</li>
+<li><strong>基于日志偏移量：</strong> 这个无法配置，一般不关注，一般情况下日志文件的起始偏移量logStartOffset（logStartOffset值是整个 Log 对象对外可见消息的最小位移值）等于第一个日志分段的baseOffset，但是这并不是绝对的，logStartOffset的值可以通过DeleteRecordsRequest请求、日志的清理和截断等操作修改。</li>
+</ul>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">log.retention.hours=168 //7d</span><br><span class="line">log.retention.check.interval.ms=300000 //5min log过期检查时间间隔</span><br><span class="line">log.segment.bytes=1073741824 //1G</span><br><span class="line">log.cleaner.delete.retention.ms=86400000 // 1d 标记为deleted的segment的保留时间</span><br><span class="line">log.cleaner.backoff.ms=15000 //15s 清理线程扫描间隔</span><br></pre></td></tr></table></figure>
+<p>###聊一聊你对Kafka的Log Compaction的理解</p>
+<blockquote>
+<p><strong>日志压缩：</strong> 配置服务端参数log.cleanup.policy:compact<br>Log Compaction 对于有相同 key 的不同 value 值，只保留最后一个版本。如果应用只关心 key 对应的最新 value 值，则可以开启 Kafka 的日志清理功能，Kafka 会定期将相同 key 的消息进行合并，只保留最新的 value 值，一般可用于用户信息存储等<br>###聊一聊你对Kafka底层存储的理解（页缓存、内核层、块层、设备层）<br><strong>页缓存：</strong> 页缓存是操作系统实现的一种主要的磁盘缓存，以此用来减少对磁盘 I&#x2F;O 的操作。具体来说，就是把磁盘中的数据缓存到内存中，把对磁盘的访问变为对内存的访问，基于这些因素，使用文件系统并依赖于页缓存的做法明显要优于维护一个进程内缓存或其他结构，至少我们可以省去了一份进程内部的缓存消耗，同时还可以通过结构紧凑的字节码来替代使用对象的方式以节省更多的空间。<br>此外，即使 Kafka 服务重启，页缓存还是会保持有效，然而进程内的缓存却需要重建。这样也极大地简化了代码逻辑，因为维护页缓存和文件之间的一致性交由操作系统来负责，这样会比进程内维护更加安全有效。  </p>
+<p><strong>零拷贝：</strong> 除了消息顺序追加、页缓存等技术，Kafka 还使用零拷贝（Zero-Copy）技术来进一步提升性能。所谓的零拷贝是指将数据直接从磁盘文件复制到网卡设备中，而不需要经由应用程序之手。零拷贝大大提高了应用程序的性能，减少了内核和用户模式之间的上下文切换。对 Linux 操作系统而言，零拷贝技术依赖于底层的 sendfile() 方法实现。对应于 Java 语言，FileChannal.transferTo() 方法的底层实现就是 sendfile() 方法   </p>
+</blockquote>
+<blockquote>
+<p>下图中左侧为传统方式，右侧为零拷贝，详细可见：<a href="https://developer.ibm.com/articles/j-zerocopy/">https://developer.ibm.com/articles/j-zerocopy/</a></p>
+</blockquote>
+<img src="/rookie.github.io/2022/08/01/kafka/kafka4/zero-copy.png" class="" title="img.png">
+<p>###聊一聊Kafka的延时操作的原理</p>
+<blockquote>
+</blockquote>
+<p>###聊一聊Kafka控制器的作用<br>###<br>###消费再均衡的原理是什么？（提示：消费者协调器和消费组协调器）<br>###<br>###Kafka中的幂等是怎么实现的<br>###<br>###Kafka中的事务是怎么实现的（这题我去面试6家被问4次，照着答案念也要念十几分钟，面试官简直凑不要脸。实在记不住的话…只要简历上不写精通Kafka一般不会问到，我简历上写的是“熟悉Kafka，了解RabbitMQ….”）<br>###<br>###Kafka中有那些地方需要选举？这些地方的选举策略又有哪些？<br>###<br>###失效副本是指什么？有那些应对措施？<br>###<br>###多副本下，各个副本中的HW和LEO的演变过程<br>###<br>###为什么Kafka不支持读写分离？<br>###<br>###Kafka在可靠性方面做了哪些改进？（HW, LeaderEpoch）<br>###<br>###Kafka中怎么实现死信队列和重试队列？<br>###<br>###Kafka中的延迟队列怎么实现（这题被问的比事务那题还要多！！！听说你会Kafka，那你说说延迟队列怎么实现？）<br>###<br>###Kafka中怎么做消息审计？<br>###<br>###Kafka中怎么做消息轨迹？<br>###<br>###Kafka中有那些配置参数比较有意思？聊一聊你的看法<br>###<br>###Kafka中有那些命名比较有意思？聊一聊你的看法<br>###<br>###Kafka有哪些指标需要着重关注？<br>###<br>###怎么计算Lag？(注意read_uncommitted和read_committed状态下的不同)<br>###<br>###Kafka的那些设计让它有如此高的性能？<br>###<br>###Kafka有什么优缺点？<br>###<br>###还用过什么同质类的其它产品，与Kafka相比有什么优缺点？<br>###<br>###为什么选择Kafka?<br>###<br>###在使用Kafka的过程中遇到过什么困难？怎么解决的？<br>###<br>###怎么样才能确保Kafka极大程度上的可靠性？<br>###<br>###聊一聊你对Kafka生态的理解<br>###</p>
+]]></content>
+      <tags>
+        <tag>kafka 面试题</tag>
+      </tags>
+  </entry>
 </search>
