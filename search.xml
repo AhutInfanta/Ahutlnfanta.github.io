@@ -1,8 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>kafka概述（一）</title>
+    <url>/rookie/2022/07/24/kafka/kafka1/</url>
+    <content><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><h2 id="1、定义"><a href="#1、定义" class="headerlink" title="1、定义"></a>1、定义</h2><blockquote>
+<p>Kafka 是由 Linkedin 公司开发的， 是一个分布式的基于发布&#x2F;订阅模式的消息队列（Message Queue）,同时是支持多分区、多副本的分布式消息流平台，适合大数据的存储以及计算</p>
+</blockquote>
+<h2 id="2、应用场景"><a href="#2、应用场景" class="headerlink" title="2、应用场景"></a>2、应用场景</h2><blockquote>
+<p><strong>限流削峰</strong>：在非常高的并发下，防止导致服务系统崩溃，消息队列能帮忙服务顶住突发的访问压力，解决生产能力和消费能力不一致的问题</p>
+</blockquote>
+<blockquote>
+<p><strong>服务解耦</strong>：解除不同服务之间的依赖关系，防止一端服务变更导致另一端服务需要同步变更或崩溃的问题，使修改更为灵活，维护与开发成本降低</p>
+</blockquote>
+<blockquote>
+<p><strong>异步通信</strong>：允许将消息放入队列中不用立即处理，且生产者发送消息时也可选择异步或者同步发送</p>
+</blockquote>
+<h2 id="3、特点"><a href="#3、特点" class="headerlink" title="3、特点"></a>3、特点</h2><blockquote>
+<p><strong>高吞吐、低延迟</strong>：kakfa 最大的特点就是收发消息非常快，kafka 每秒可以处理几十万条消息，它的最低延迟只有几毫秒；<br><strong>高伸缩性</strong>：每个主题(topic) 包含多个分区(partition)，主题中的分区可以分布在不同的主机(broker)中；<br><strong>持久性、可靠性</strong>：Kafka 能够允许数据的持久化存储，消息被持久化到磁盘，并支持数据备份防止数据丢失，Kafka 底层的数据存储是基于 Zookeeper 存储的，<br>Zookeeper 我们知道它的数据能够持久存储；<br><strong>容错性</strong>：允许集群中的节点失败，某个节点宕机，Kafka 集群能够正常工作；<br><strong>高并发</strong>：支持数千个客户端同时读写。</p>
+</blockquote>
+<h2 id="4、基本概念"><a href="#4、基本概念" class="headerlink" title="4、基本概念"></a>4、基本概念</h2><blockquote>
+<p><strong>生产者（Producer）</strong>：向 Kafka 发布（写入）事件的客户端应用程序<br><strong>消费者（Consumer）</strong>：订阅（读取和处理）事件的客户端应用程序<br><strong>节点（Broker）</strong>：kafka所安装的服务器，负责存储和读取消息<br><strong>主题（Topic）</strong>：消息的主题，每条发布到队列中的消息都隶属一个主题<br><strong>分区（Partition）</strong>：可以为主题划定分区，存储在不同的节点，提高消息存储以及读取的速率<br><strong>消费者群组（Consumer Group）</strong>：包含一组消费者，topic的一个分区只会被同一消费组中的某一个消费者进行消费</p>
+</blockquote>
+<h2 id="5、对比"><a href="#5、对比" class="headerlink" title="5、对比"></a>5、对比</h2><img src="/rookie/2022/07/24/kafka/kafka1/kafka-compare.png" class="" title="img.png">  
+
+
+
+]]></content>
+      <categories>
+        <category>kafka</category>
+        <category>基础篇</category>
+      </categories>
+      <tags>
+        <tag>kafka</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hello World</title>
-    <url>/2022/07/24/hello-world/</url>
+    <url>/rookie/2022/07/24/hello-world/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
 
@@ -23,42 +57,8 @@
       </tags>
   </entry>
   <entry>
-    <title>kafka概述（一）</title>
-    <url>/2022/07/24/kafka/kafka1/</url>
-    <content><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><h2 id="1、定义"><a href="#1、定义" class="headerlink" title="1、定义"></a>1、定义</h2><blockquote>
-<p>Kafka 是由 Linkedin 公司开发的， 是一个分布式的基于发布&#x2F;订阅模式的消息队列（Message Queue）,同时是支持多分区、多副本的分布式消息流平台，适合大数据的存储以及计算</p>
-</blockquote>
-<h2 id="2、应用场景"><a href="#2、应用场景" class="headerlink" title="2、应用场景"></a>2、应用场景</h2><blockquote>
-<p><strong>限流削峰</strong>：在非常高的并发下，防止导致服务系统崩溃，消息队列能帮忙服务顶住突发的访问压力，解决生产能力和消费能力不一致的问题</p>
-</blockquote>
-<blockquote>
-<p><strong>服务解耦</strong>：解除不同服务之间的依赖关系，防止一端服务变更导致另一端服务需要同步变更或崩溃的问题，使修改更为灵活，维护与开发成本降低</p>
-</blockquote>
-<blockquote>
-<p><strong>异步通信</strong>：允许将消息放入队列中不用立即处理，且生产者发送消息时也可选择异步或者同步发送</p>
-</blockquote>
-<h2 id="3、特点"><a href="#3、特点" class="headerlink" title="3、特点"></a>3、特点</h2><blockquote>
-<p><strong>高吞吐、低延迟</strong>：kakfa 最大的特点就是收发消息非常快，kafka 每秒可以处理几十万条消息，它的最低延迟只有几毫秒；<br><strong>高伸缩性</strong>：每个主题(topic) 包含多个分区(partition)，主题中的分区可以分布在不同的主机(broker)中；<br><strong>持久性、可靠性</strong>：Kafka 能够允许数据的持久化存储，消息被持久化到磁盘，并支持数据备份防止数据丢失，Kafka 底层的数据存储是基于 Zookeeper 存储的，<br>Zookeeper 我们知道它的数据能够持久存储；<br><strong>容错性</strong>：允许集群中的节点失败，某个节点宕机，Kafka 集群能够正常工作；<br><strong>高并发</strong>：支持数千个客户端同时读写。</p>
-</blockquote>
-<h2 id="4、基本概念"><a href="#4、基本概念" class="headerlink" title="4、基本概念"></a>4、基本概念</h2><blockquote>
-<p><strong>生产者（Producer）</strong>：向 Kafka 发布（写入）事件的客户端应用程序<br><strong>消费者（Consumer）</strong>：订阅（读取和处理）事件的客户端应用程序<br><strong>节点（Broker）</strong>：kafka所安装的服务器，负责存储和读取消息<br><strong>主题（Topic）</strong>：消息的主题，每条发布到队列中的消息都隶属一个主题<br><strong>分区（Partition）</strong>：可以为主题划定分区，存储在不同的节点，提高消息存储以及读取的速率<br><strong>消费者群组（Consumer Group）</strong>：包含一组消费者，topic的一个分区只会被同一消费组中的某一个消费者进行消费</p>
-</blockquote>
-<h2 id="5、对比"><a href="#5、对比" class="headerlink" title="5、对比"></a>5、对比</h2><img src="/2022/07/24/kafka/kafka1/kafka-compare.png" class="" title="img.png">  
-
-
-
-]]></content>
-      <categories>
-        <category>kafka</category>
-        <category>基础篇</category>
-      </categories>
-      <tags>
-        <tag>kafka</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>kafka概述（二）</title>
-    <url>/2022/07/25/kafka/kafka2/</url>
+    <url>/rookie/2022/07/25/kafka/kafka2/</url>
     <content><![CDATA[<h2 id="1-kafka配置详解"><a href="#1-kafka配置详解" class="headerlink" title="1. kafka配置详解"></a>1. kafka配置详解</h2><h3 id="1-1-broker配置"><a href="#1-1-broker配置" class="headerlink" title="1.1 broker配置"></a>1.1 broker配置</h3><blockquote>
 <ul>
 <li><strong>broker.id</strong>：（必须配置）节点ID，必须全局唯一</li>
@@ -142,7 +142,7 @@
   </entry>
   <entry>
     <title>kafka-分区原来是这样子</title>
-    <url>/2022/07/30/kafka/kafka3/</url>
+    <url>/rookie/2022/07/30/kafka/kafka3/</url>
     <content><![CDATA[<h1 id="1-分区器"><a href="#1-分区器" class="headerlink" title="1. 分区器"></a>1. 分区器</h1><blockquote>
 <p><em><strong>broker配置项：partitioner.class</strong></em></p>
 <ul>
@@ -170,11 +170,11 @@
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">./kafka-topics.sh --bootstrap-server 127.0.0.1:9092 --create --replication-factor 3  --partitions 16 --topic test2</span><br></pre></td></tr></table></figure>
 <p>查看topic信息</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">./kafka-topics.sh --bootstrap-server 127.0.0.1:9092 --describe  --topic test2</span><br></pre></td></tr></table></figure>
-<img src="/2022/07/30/kafka/kafka3/topic-describe.png" class="" title="img.png">
+<img src="/rookie/2022/07/30/kafka/kafka3/topic-describe.png" class="" title="img.png">
 <blockquote>
 <p>分配规则大致如下，借鉴网上教程的图</p>
 </blockquote>
-<img src="/2022/07/30/kafka/kafka3/partitions-divide.png" class="" title="img.png">
+<img src="/rookie/2022/07/30/kafka/kafka3/partitions-divide.png" class="" title="img.png">
 <h1 id="3-分区消费者分配策略"><a href="#3-分区消费者分配策略" class="headerlink" title="3. 分区消费者分配策略"></a>3. 分区消费者分配策略</h1><p><em><strong>消费者配置项：partition.assignment.strategy</strong></em></p>
 <h2 id="3-1-org-apache-kafka-clients-consumer-RangeAssignor"><a href="#3-1-org-apache-kafka-clients-consumer-RangeAssignor" class="headerlink" title="3.1 org.apache.kafka.clients.consumer.RangeAssignor"></a>3.1 org.apache.kafka.clients.consumer.RangeAssignor</h2><blockquote>
 <p>以Topic为基础，将分区以分区号排序均匀分布给每个消费组中的消费者（按字母顺序排序），比如topic有7个分区，消费组中有3个消费者，<br>他会将分区数与消费者整除，余出的会加在前面的消费者身上，分区如下</p>
@@ -225,7 +225,7 @@
 <p>实现org.apache.kafka.clients.consumer.ConsumerPartitionAssignor接口</p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.kafka.clients.consumer.ConsumerPartitionAssignor;</span><br><span class="line"><span class="keyword">import</span> org.apache.kafka.common.Cluster;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyConsumerPartitionAssignor</span> <span class="keyword">implements</span> <span class="title class_">ConsumerPartitionAssignor</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> GroupAssignment <span class="title function_">assign</span><span class="params">(Cluster metadata, GroupSubscription groupSubscription)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">name</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="3-6-消费者分区分配规则流程"><a href="#3-6-消费者分区分配规则流程" class="headerlink" title="3.6 消费者分区分配规则流程"></a>3.6 消费者分区分配规则流程</h2><img src="/2022/07/30/kafka/kafka3/consumer-partition-assignment.png" class="" title="img.png">
+<h2 id="3-6-消费者分区分配规则流程"><a href="#3-6-消费者分区分配规则流程" class="headerlink" title="3.6 消费者分区分配规则流程"></a>3.6 消费者分区分配规则流程</h2><img src="/rookie/2022/07/30/kafka/kafka3/consumer-partition-assignment.png" class="" title="img.png">
 
 
 ]]></content>
@@ -239,7 +239,7 @@
   </entry>
   <entry>
     <title>kafka常见面试题以及答案整理</title>
-    <url>/2022/08/01/kafka/kafka4/</url>
+    <url>/rookie/2022/08/01/kafka/kafka4/</url>
     <content><![CDATA[<h3 id="1-Kafka的用途有哪些？使用场景如何？"><a href="#1-Kafka的用途有哪些？使用场景如何？" class="headerlink" title="1. Kafka的用途有哪些？使用场景如何？"></a>1. Kafka的用途有哪些？使用场景如何？</h3><blockquote>
 </blockquote>
 <p>###Kafka中的ISR、AR又代表什么？ISR的伸缩又指什么</p>
@@ -260,7 +260,7 @@
 </ul>
 <h3 id=""><a href="#" class="headerlink" title=""></a></h3><p>###Kafka生产者客户端的整体结构是什么样子的？</p>
 </blockquote>
-<img src="/2022/08/01/kafka/kafka4/producer-design.png" class="" title="img.png">
+<img src="/rookie/2022/08/01/kafka/kafka4/producer-design.png" class="" title="img.png">
 <p>###Kafka生产者客户端中使用了几个线程来处理？分别是什么？</p>
 <blockquote>
 <p>俩个，main线程和sender线程,具体作用详见上图<br>###Kafka的旧版Scala的消费者客户端的设计有什么缺陷？<br>老版本的 Consumer Group 把位移保存在 ZooKeeper 中,这种大吞吐量的写操作会极大地拖慢 ZooKeeper 集群的性能<br>###“消费组中的消费者个数如果超过topic的分区，那么就会有消费者消费不到数据”这句话是否正确？如果不正确，那么有没有什么hack的手段？<br>一般来说如果消费者过多，出现了消费者的个数大于分区个数的情况，就会有消费者分配不到任何分区,但是可以通过继承AbstractPartitionAssignor<br>实现自定义消费策略，从而实现同一消费组内的任意消费者都可以消费订阅主题的所有分区，其实就是组内广播，<br>###消费者提交消费位移时提交的是当前消费到的最新消息的offset还是offset+1?<br>在旧消费者客户端中，消费位移是存储在 ZooKeeper 中的。而在新消费者客户端中，消费位移存储在 Kafka 内部的主题__consumer_offsets 中。<br>当前消费者需要提交的消费位移是offset+1<br>###有哪些情形会造成重复消费？</p>
@@ -283,7 +283,7 @@
 </ul>
 <p>###KafkaConsumer是非线程安全的，那么怎么样实现多线程消费？</p>
 </blockquote>
-<img src="/2022/08/01/kafka/kafka4/multi-thread-consumer.png" class="" title="img.png">
+<img src="/rookie/2022/08/01/kafka/kafka4/multi-thread-consumer.png" class="" title="img.png">
 <p>###简述消费者与消费组之间的关系</p>
 <blockquote>
 <p>Consumer Group 下可以有一个或多个 Consumer 实例。这里的实例可以是一个单独的进程，也可以是同一进程下的线程。在实际场景中，使用进程更为常见一些。<br>Consumer Group 下所有实例订阅的主题的单个分区，只能分配给组内的某个 Consumer 实例消费。这个分区当然也可以被其他的 Group 消费<br>###当你使用kafka-topics.sh创建（删除）了一个topic之后，Kafka背后会执行什么逻辑？<br>Kafka 会在 log.dir 或 log.dirs 参数所配置的目录下创建相应的主题分区，默认情况下这个目录为&#x2F;tmp&#x2F;kafka-logs&#x2F;。<br>在 ZooKeeper 的&#x2F;brokers&#x2F;topics&#x2F;目录下创建一个同名的实节点，该节点中记录了该主题的分区副本分配方案<br>###topic的分区数可不可以增加？如果可以怎么增加？如果不可以，那又是为什么？<br>可以增加，使用 kafka-topics 脚本，结合 –alter 参数来增加某个主题的分区数</p>
@@ -298,7 +298,7 @@
 </ul>
 </blockquote>
 <p>###简述Kafka的日志目录结构</p>
-<img src="/2022/08/01/kafka/kafka4/log-construct.png" class="" title="img.png">
+<img src="/rookie/2022/08/01/kafka/kafka4/log-construct.png" class="" title="img.png">
 <p>###Kafka中有那些索引文件？</p>
 <blockquote>
 <ul>
@@ -329,7 +329,7 @@
 <blockquote>
 <p>下图中左侧为传统方式，右侧为零拷贝，详细可见：<a href="https://developer.ibm.com/articles/j-zerocopy/">https://developer.ibm.com/articles/j-zerocopy/</a></p>
 </blockquote>
-<img src="/2022/08/01/kafka/kafka4/zero-copy.png" class="" title="img.png">
+<img src="/rookie/2022/08/01/kafka/kafka4/zero-copy.png" class="" title="img.png">
 <p>###聊一聊Kafka的延时操作的原理</p>
 <blockquote>
 </blockquote>
