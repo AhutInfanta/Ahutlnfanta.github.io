@@ -23,6 +23,40 @@
       </tags>
   </entry>
   <entry>
+    <title>kafka概述（一）</title>
+    <url>/rookie/2022/07/24/kafka/kafka1/</url>
+    <content><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><h2 id="1、定义"><a href="#1、定义" class="headerlink" title="1、定义"></a>1、定义</h2><blockquote>
+<p>Kafka 是由 Linkedin 公司开发的， 是一个分布式的基于发布&#x2F;订阅模式的消息队列（Message Queue）,同时是支持多分区、多副本的分布式消息流平台，适合大数据的存储以及计算</p>
+</blockquote>
+<h2 id="2、应用场景"><a href="#2、应用场景" class="headerlink" title="2、应用场景"></a>2、应用场景</h2><blockquote>
+<p><strong>限流削峰</strong>：在非常高的并发下，防止导致服务系统崩溃，消息队列能帮忙服务顶住突发的访问压力，解决生产能力和消费能力不一致的问题</p>
+</blockquote>
+<blockquote>
+<p><strong>服务解耦</strong>：解除不同服务之间的依赖关系，防止一端服务变更导致另一端服务需要同步变更或崩溃的问题，使修改更为灵活，维护与开发成本降低</p>
+</blockquote>
+<blockquote>
+<p><strong>异步通信</strong>：允许将消息放入队列中不用立即处理，且生产者发送消息时也可选择异步或者同步发送</p>
+</blockquote>
+<h2 id="3、特点"><a href="#3、特点" class="headerlink" title="3、特点"></a>3、特点</h2><blockquote>
+<p><strong>高吞吐、低延迟</strong>：kakfa 最大的特点就是收发消息非常快，kafka 每秒可以处理几十万条消息，它的最低延迟只有几毫秒；<br><strong>高伸缩性</strong>：每个主题(topic) 包含多个分区(partition)，主题中的分区可以分布在不同的主机(broker)中；<br><strong>持久性、可靠性</strong>：Kafka 能够允许数据的持久化存储，消息被持久化到磁盘，并支持数据备份防止数据丢失，Kafka 底层的数据存储是基于 Zookeeper 存储的，<br>Zookeeper 我们知道它的数据能够持久存储；<br><strong>容错性</strong>：允许集群中的节点失败，某个节点宕机，Kafka 集群能够正常工作；<br><strong>高并发</strong>：支持数千个客户端同时读写。</p>
+</blockquote>
+<h2 id="4、基本概念"><a href="#4、基本概念" class="headerlink" title="4、基本概念"></a>4、基本概念</h2><blockquote>
+<p><strong>生产者（Producer）</strong>：向 Kafka 发布（写入）事件的客户端应用程序<br><strong>消费者（Consumer）</strong>：订阅（读取和处理）事件的客户端应用程序<br><strong>节点（Broker）</strong>：kafka所安装的服务器，负责存储和读取消息<br><strong>主题（Topic）</strong>：消息的主题，每条发布到队列中的消息都隶属一个主题<br><strong>分区（Partition）</strong>：可以为主题划定分区，存储在不同的节点，提高消息存储以及读取的速率<br><strong>消费者群组（Consumer Group）</strong>：包含一组消费者，topic的一个分区只会被同一消费组中的某一个消费者进行消费</p>
+</blockquote>
+<h2 id="5、对比"><a href="#5、对比" class="headerlink" title="5、对比"></a>5、对比</h2><img src="/rookie/2022/07/24/kafka/kafka1/kafka-compare.png" class="" title="img.png">  
+
+
+
+]]></content>
+      <categories>
+        <category>kafka</category>
+        <category>基础篇</category>
+      </categories>
+      <tags>
+        <tag>kafka</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>kafka概述（二）</title>
     <url>/rookie/2022/07/25/kafka/kafka2/</url>
     <content><![CDATA[<h2 id="1-kafka配置详解"><a href="#1-kafka配置详解" class="headerlink" title="1. kafka配置详解"></a>1. kafka配置详解</h2><h3 id="1-1-broker配置"><a href="#1-1-broker配置" class="headerlink" title="1.1 broker配置"></a>1.1 broker配置</h3><blockquote>
@@ -198,40 +232,6 @@
       <categories>
         <category>kafka</category>
         <category>进阶篇</category>
-      </categories>
-      <tags>
-        <tag>kafka</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>kafka概述（一）</title>
-    <url>/rookie/2022/07/24/kafka/kafka1/</url>
-    <content><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><h2 id="1、定义"><a href="#1、定义" class="headerlink" title="1、定义"></a>1、定义</h2><blockquote>
-<p>Kafka 是由 Linkedin 公司开发的， 是一个分布式的基于发布&#x2F;订阅模式的消息队列（Message Queue）,同时是支持多分区、多副本的分布式消息流平台，适合大数据的存储以及计算</p>
-</blockquote>
-<h2 id="2、应用场景"><a href="#2、应用场景" class="headerlink" title="2、应用场景"></a>2、应用场景</h2><blockquote>
-<p><strong>限流削峰</strong>：在非常高的并发下，防止导致服务系统崩溃，消息队列能帮忙服务顶住突发的访问压力，解决生产能力和消费能力不一致的问题</p>
-</blockquote>
-<blockquote>
-<p><strong>服务解耦</strong>：解除不同服务之间的依赖关系，防止一端服务变更导致另一端服务需要同步变更或崩溃的问题，使修改更为灵活，维护与开发成本降低</p>
-</blockquote>
-<blockquote>
-<p><strong>异步通信</strong>：允许将消息放入队列中不用立即处理，且生产者发送消息时也可选择异步或者同步发送</p>
-</blockquote>
-<h2 id="3、特点"><a href="#3、特点" class="headerlink" title="3、特点"></a>3、特点</h2><blockquote>
-<p><strong>高吞吐、低延迟</strong>：kakfa 最大的特点就是收发消息非常快，kafka 每秒可以处理几十万条消息，它的最低延迟只有几毫秒；<br><strong>高伸缩性</strong>：每个主题(topic) 包含多个分区(partition)，主题中的分区可以分布在不同的主机(broker)中；<br><strong>持久性、可靠性</strong>：Kafka 能够允许数据的持久化存储，消息被持久化到磁盘，并支持数据备份防止数据丢失，Kafka 底层的数据存储是基于 Zookeeper 存储的，<br>Zookeeper 我们知道它的数据能够持久存储；<br><strong>容错性</strong>：允许集群中的节点失败，某个节点宕机，Kafka 集群能够正常工作；<br><strong>高并发</strong>：支持数千个客户端同时读写。</p>
-</blockquote>
-<h2 id="4、基本概念"><a href="#4、基本概念" class="headerlink" title="4、基本概念"></a>4、基本概念</h2><blockquote>
-<p><strong>生产者（Producer）</strong>：向 Kafka 发布（写入）事件的客户端应用程序<br><strong>消费者（Consumer）</strong>：订阅（读取和处理）事件的客户端应用程序<br><strong>节点（Broker）</strong>：kafka所安装的服务器，负责存储和读取消息<br><strong>主题（Topic）</strong>：消息的主题，每条发布到队列中的消息都隶属一个主题<br><strong>分区（Partition）</strong>：可以为主题划定分区，存储在不同的节点，提高消息存储以及读取的速率<br><strong>消费者群组（Consumer Group）</strong>：包含一组消费者，topic的一个分区只会被同一消费组中的某一个消费者进行消费</p>
-</blockquote>
-<h2 id="5、对比"><a href="#5、对比" class="headerlink" title="5、对比"></a>5、对比</h2><img src="/rookie/2022/07/24/kafka/kafka1/kafka-compare.png" class="" title="img.png">  
-
-
-
-]]></content>
-      <categories>
-        <category>kafka</category>
-        <category>基础篇</category>
       </categories>
       <tags>
         <tag>kafka</tag>
