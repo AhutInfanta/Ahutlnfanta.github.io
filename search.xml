@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>Hello World</title>
-    <url>/rookie/2022/07/24/hello-world/</url>
+    <url>/2022/07/24/hello-world/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
 
@@ -24,7 +24,7 @@
   </entry>
   <entry>
     <title>kafka概述（一）</title>
-    <url>/rookie/2022/07/24/kafka/kafka1/</url>
+    <url>/2022/07/24/kafka/kafka1/</url>
     <content><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><h2 id="1、定义"><a href="#1、定义" class="headerlink" title="1、定义"></a>1、定义</h2><blockquote>
 <p>Kafka 是由 Linkedin 公司开发的， 是一个分布式的基于发布&#x2F;订阅模式的消息队列（Message Queue）,同时是支持多分区、多副本的分布式消息流平台，适合大数据的存储以及计算</p>
 </blockquote>
@@ -43,7 +43,7 @@
 <h2 id="4、基本概念"><a href="#4、基本概念" class="headerlink" title="4、基本概念"></a>4、基本概念</h2><blockquote>
 <p><strong>生产者（Producer）</strong>：向 Kafka 发布（写入）事件的客户端应用程序<br><strong>消费者（Consumer）</strong>：订阅（读取和处理）事件的客户端应用程序<br><strong>节点（Broker）</strong>：kafka所安装的服务器，负责存储和读取消息<br><strong>主题（Topic）</strong>：消息的主题，每条发布到队列中的消息都隶属一个主题<br><strong>分区（Partition）</strong>：可以为主题划定分区，存储在不同的节点，提高消息存储以及读取的速率<br><strong>消费者群组（Consumer Group）</strong>：包含一组消费者，topic的一个分区只会被同一消费组中的某一个消费者进行消费</p>
 </blockquote>
-<h2 id="5、对比"><a href="#5、对比" class="headerlink" title="5、对比"></a>5、对比</h2><img src="/rookie/2022/07/24/kafka/kafka1/kafka-compare.png" class="" title="img.png">  
+<h2 id="5、对比"><a href="#5、对比" class="headerlink" title="5、对比"></a>5、对比</h2><img src="/2022/07/24/kafka/kafka1/kafka-compare.png" class="" title="img.png">  
 
 
 
@@ -58,7 +58,7 @@
   </entry>
   <entry>
     <title>kafka概述（二）</title>
-    <url>/rookie/2022/07/25/kafka/kafka2/</url>
+    <url>/2022/07/25/kafka/kafka2/</url>
     <content><![CDATA[<h2 id="1-kafka配置详解"><a href="#1-kafka配置详解" class="headerlink" title="1. kafka配置详解"></a>1. kafka配置详解</h2><h3 id="1-1-broker配置"><a href="#1-1-broker配置" class="headerlink" title="1.1 broker配置"></a>1.1 broker配置</h3><blockquote>
 <ul>
 <li><strong>broker.id</strong>：（必须配置）节点ID，必须全局唯一</li>
@@ -142,7 +142,7 @@
   </entry>
   <entry>
     <title>kafka-分区原来是这样子</title>
-    <url>/rookie/2022/07/30/kafka/kafka3/</url>
+    <url>/2022/07/30/kafka/kafka3/</url>
     <content><![CDATA[<h1 id="1-分区器"><a href="#1-分区器" class="headerlink" title="1. 分区器"></a>1. 分区器</h1><blockquote>
 <p><em><strong>broker配置项：partitioner.class</strong></em></p>
 <ul>
@@ -170,11 +170,11 @@
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">./kafka-topics.sh --bootstrap-server 127.0.0.1:9092 --create --replication-factor 3  --partitions 16 --topic test2</span><br></pre></td></tr></table></figure>
 <p>查看topic信息</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">./kafka-topics.sh --bootstrap-server 127.0.0.1:9092 --describe  --topic test2</span><br></pre></td></tr></table></figure>
-<img src="/rookie/2022/07/30/kafka/kafka3/topic-describe.png" class="" title="img.png">
+<img src="/2022/07/30/kafka/kafka3/topic-describe.png" class="" title="img.png">
 <blockquote>
 <p>分配规则大致如下，借鉴网上教程的图</p>
 </blockquote>
-<img src="/rookie/2022/07/30/kafka/kafka3/partitions-divide.png" class="" title="img.png">
+<img src="/2022/07/30/kafka/kafka3/partitions-divide.png" class="" title="img.png">
 <h1 id="3-分区消费者分配策略"><a href="#3-分区消费者分配策略" class="headerlink" title="3. 分区消费者分配策略"></a>3. 分区消费者分配策略</h1><p><em><strong>消费者配置项：partition.assignment.strategy</strong></em></p>
 <h2 id="3-1-org-apache-kafka-clients-consumer-RangeAssignor"><a href="#3-1-org-apache-kafka-clients-consumer-RangeAssignor" class="headerlink" title="3.1 org.apache.kafka.clients.consumer.RangeAssignor"></a>3.1 org.apache.kafka.clients.consumer.RangeAssignor</h2><blockquote>
 <p>以Topic为基础，将分区以分区号排序均匀分布给每个消费组中的消费者（按字母顺序排序），比如topic有7个分区，消费组中有3个消费者，<br>他会将分区数与消费者整除，余出的会加在前面的消费者身上，分区如下</p>
@@ -225,7 +225,7 @@
 <p>实现org.apache.kafka.clients.consumer.ConsumerPartitionAssignor接口</p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.kafka.clients.consumer.ConsumerPartitionAssignor;</span><br><span class="line"><span class="keyword">import</span> org.apache.kafka.common.Cluster;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyConsumerPartitionAssignor</span> <span class="keyword">implements</span> <span class="title class_">ConsumerPartitionAssignor</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> GroupAssignment <span class="title function_">assign</span><span class="params">(Cluster metadata, GroupSubscription groupSubscription)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">name</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="3-6-消费者分区分配规则流程"><a href="#3-6-消费者分区分配规则流程" class="headerlink" title="3.6 消费者分区分配规则流程"></a>3.6 消费者分区分配规则流程</h2><img src="/rookie/2022/07/30/kafka/kafka3/consumer-partition-assignment.png" class="" title="img.png">
+<h2 id="3-6-消费者分区分配规则流程"><a href="#3-6-消费者分区分配规则流程" class="headerlink" title="3.6 消费者分区分配规则流程"></a>3.6 消费者分区分配规则流程</h2><img src="/2022/07/30/kafka/kafka3/consumer-partition-assignment.png" class="" title="img.png">
 
 
 ]]></content>
@@ -239,7 +239,7 @@
   </entry>
   <entry>
     <title>kafka常见面试题以及答案整理</title>
-    <url>/rookie/2022/08/01/kafka/kafka4/</url>
+    <url>/2022/08/01/kafka/kafka4/</url>
     <content><![CDATA[<h3 id="Kafka的用途有哪些？使用场景如何？"><a href="#Kafka的用途有哪些？使用场景如何？" class="headerlink" title="Kafka的用途有哪些？使用场景如何？"></a>Kafka的用途有哪些？使用场景如何？</h3><blockquote>
 </blockquote>
 <h3 id="Kafka中的ISR、AR又代表什么？ISR的伸缩又指什么"><a href="#Kafka中的ISR、AR又代表什么？ISR的伸缩又指什么" class="headerlink" title="Kafka中的ISR、AR又代表什么？ISR的伸缩又指什么"></a>Kafka中的ISR、AR又代表什么？ISR的伸缩又指什么</h3><blockquote>
@@ -266,7 +266,7 @@
 <li><strong>分区器</strong>：按照一定规则，将数据划分到不同的分区，若未手动指定分区，则使用默认的分区策略，也可通过实现Partitioner实现自定义分区</li>
 </ul>
 </blockquote>
-<h3 id="Kafka生产者客户端的整体结构是什么样子的？"><a href="#Kafka生产者客户端的整体结构是什么样子的？" class="headerlink" title="Kafka生产者客户端的整体结构是什么样子的？"></a>Kafka生产者客户端的整体结构是什么样子的？</h3><img src="/rookie/2022/08/01/kafka/kafka4/producer-design.png" class="" title="img.png">
+<h3 id="Kafka生产者客户端的整体结构是什么样子的？"><a href="#Kafka生产者客户端的整体结构是什么样子的？" class="headerlink" title="Kafka生产者客户端的整体结构是什么样子的？"></a>Kafka生产者客户端的整体结构是什么样子的？</h3><img src="/2022/08/01/kafka/kafka4/producer-design.png" class="" title="img.png">
 <h3 id="Kafka生产者客户端中使用了几个线程来处理？分别是什么？"><a href="#Kafka生产者客户端中使用了几个线程来处理？分别是什么？" class="headerlink" title="Kafka生产者客户端中使用了几个线程来处理？分别是什么？"></a>Kafka生产者客户端中使用了几个线程来处理？分别是什么？</h3><blockquote>
 <p>俩个，main线程和sender线程,具体作用详见上图</p>
 </blockquote>
@@ -299,7 +299,7 @@
 <li><strong>acks没有设置为all</strong>:<br>如果在broker还没把消息同步到其他broker的时候宕机了，那么消息将会丢失</li>
 </ul>
 </blockquote>
-<h3 id="KafkaConsumer是非线程安全的，那么怎么样实现多线程消费？"><a href="#KafkaConsumer是非线程安全的，那么怎么样实现多线程消费？" class="headerlink" title="KafkaConsumer是非线程安全的，那么怎么样实现多线程消费？"></a>KafkaConsumer是非线程安全的，那么怎么样实现多线程消费？</h3><img src="/rookie/2022/08/01/kafka/kafka4/multi-thread-consumer.png" class="" title="img.png">
+<h3 id="KafkaConsumer是非线程安全的，那么怎么样实现多线程消费？"><a href="#KafkaConsumer是非线程安全的，那么怎么样实现多线程消费？" class="headerlink" title="KafkaConsumer是非线程安全的，那么怎么样实现多线程消费？"></a>KafkaConsumer是非线程安全的，那么怎么样实现多线程消费？</h3><img src="/2022/08/01/kafka/kafka4/multi-thread-consumer.png" class="" title="img.png">
 <h3 id="简述消费者与消费组之间的关系"><a href="#简述消费者与消费组之间的关系" class="headerlink" title="简述消费者与消费组之间的关系"></a>简述消费者与消费组之间的关系</h3><blockquote>
 <p>Consumer Group 下可以有一个或多个 Consumer 实例。这里的实例可以是一个单独的进程，也可以是同一进程下的线程。在实际场景中，使用进程更为常见一些。<br>Consumer Group 下所有实例订阅的主题的单个分区，只能分配给组内的某个 Consumer 实例消费。这个分区当然也可以被其他的 Group 消费</p>
 </blockquote>
@@ -332,7 +332,7 @@
 <li><strong>分区副本的分配</strong>:是指为集群制定创建主题时的分区副本分配方案，即在哪个 broker 中创建哪些分区的副本。kafka-topics.sh 脚本中提供了一个 replica-assignment 参数来手动指定分区副本的分配方案</li>
 </ul>
 </blockquote>
-<h3 id="简述Kafka的日志目录结构"><a href="#简述Kafka的日志目录结构" class="headerlink" title="简述Kafka的日志目录结构"></a>简述Kafka的日志目录结构</h3><img src="/rookie/2022/08/01/kafka/kafka4/log-construct.png" class="" title="img.png">
+<h3 id="简述Kafka的日志目录结构"><a href="#简述Kafka的日志目录结构" class="headerlink" title="简述Kafka的日志目录结构"></a>简述Kafka的日志目录结构</h3><img src="/2022/08/01/kafka/kafka4/log-construct.png" class="" title="img.png">
 <h3 id="Kafka中有那些索引文件？"><a href="#Kafka中有那些索引文件？" class="headerlink" title="Kafka中有那些索引文件？"></a>Kafka中有那些索引文件？</h3><blockquote>
 <ul>
 <li><strong>偏移量索引文件</strong>:用来建立消息偏移量（offset）到物理地址之间的映射关系，方便快速定位消息所在的物理文件位置</li>
@@ -364,7 +364,7 @@
 <blockquote>
 <p>下图中左侧为传统方式，右侧为零拷贝，详细可见：<a href="https://developer.ibm.com/articles/j-zerocopy/">https://developer.ibm.com/articles/j-zerocopy/</a></p>
 </blockquote>
-<img src="/rookie/2022/08/01/kafka/kafka4/zero-copy.png" class="" title="img.png">
+<img src="/2022/08/01/kafka/kafka4/zero-copy.png" class="" title="img.png">
 <h3 id="聊一聊Kafka的延时操作的原理"><a href="#聊一聊Kafka的延时操作的原理" class="headerlink" title="聊一聊Kafka的延时操作的原理"></a>聊一聊Kafka的延时操作的原理</h3><blockquote>
 <p>Kafka 中有多种延时操作，比如延时生产，还有延时拉取（DelayedFetch）、延时数据删除（DelayedDeleteRecords）等。<br>延时操作创建之后会被加入延时操作管理器（DelayedOperationPurgatory）来做专门的处理。延时操作有可能会超时，每个延时操作管理器都会配备一个定时器（SystemTimer）来做超时管理，定时器的底层就是采用时间轮（TimingWheel）实现的。</p>
 </blockquote>
@@ -433,18 +433,18 @@
 <p><strong>LeaderEpoch:</strong> 代表 leader 的纪元信息（epoch），初始值为0。每当 leader 变更一次，leader epoch 的值就会加1<br>leader epoch 的值就会加1，相当于为 leader 增设了一个版本号。每个副本中还会增设一个矢量 &lt;LeaderEpoch &#x3D;&gt; StartOffset&gt;，<br>其中 StartOffset 表示当前 LeaderEpoch 下写入的第一条消息的偏移量。</p>
 </blockquote>
 <p>假设有两个节点A和B，B是leader节点，里面的数据如图：</p>
-<img src="/rookie/2022/08/01/kafka/kafka4/leaderEpoch1.png" class="" title="img.png">  
+<img src="/2022/08/01/kafka/kafka4/leaderEpoch1.png" class="" title="img.png">  
 <p>A发生重启，之后A不是先忙着截断日志而是先发送OffsetsForLeaderEpochRequest请求给B，B作为目前的leader在收到请求之后会返回当前的LEO（LogEndOffset，注意图中LE0和LEO的不同），与请求对应的响应为OffsetsForLeaderEpochResponse。如果 A 中的 LeaderEpoch（假设为 LE_A）和 B 中的不相同，那么 B 此时会查找 LeaderEpoch 为 LE_A+1 对应的 StartOffset 并返回给 A</p>
-<img src="/rookie/2022/08/01/kafka/kafka4/leaderEpoch2.png" class="" title="img_1.png">  
+<img src="/2022/08/01/kafka/kafka4/leaderEpoch2.png" class="" title="img_1.png">  
 <p>如上图所示，A 在收到2之后发现和目前的 LEO 相同，也就不需要截断日志了，以此来保护数据的完整性。</p>
 <p>再如，之后 B 发生了宕机，A 成为新的 leader，那么对应的 LE&#x3D;0 也变成了 LE&#x3D;1，对应的消息 m2 此时就得到了保留。后续的消息都可以以 LE1 为 LeaderEpoch 陆续追加到 A 中。这个时候A就会有两个LE，第二LE所记录的Offset从2开始。如果B恢复了，那么就会从A中获取到LE+1的Offset为2的值返回给B。</p>
-<img src="/rookie/2022/08/01/kafka/kafka4/leaderEpoch3.png" class="" title="img_2.png">  
+<img src="/2022/08/01/kafka/kafka4/leaderEpoch3.png" class="" title="img_2.png">  
 <p>再来看看LE如何解决数据不一致的问题：<br>当前 A 为 leader，B 为 follower，A 中有2条消息 m1 和 m2，而 B 中有1条消息 m1。假设 A 和 B 同时“挂掉”，然后 B 第一个恢复过来并成为新的 leader。</p>
-<img src="/rookie/2022/08/01/kafka/kafka4/leaderEpoch4.png" class="" title="img_3.png">  
+<img src="/2022/08/01/kafka/kafka4/leaderEpoch4.png" class="" title="img_3.png">  
 <p>之后 B 写入消息 m3，并将 LEO 和 HW 更新至2，如下图所示。注意此时的 LeaderEpoch 已经从 LE0 增至 LE1 了。</p>
-<img src="/rookie/2022/08/01/kafka/kafka4/leaderEpoch5.png" class="" title="img_4.png">  
+<img src="/2022/08/01/kafka/kafka4/leaderEpoch5.png" class="" title="img_4.png">  
 <p>紧接着 A 也恢复过来成为 follower 并向 B 发送 OffsetsForLeaderEpochRequest 请求，此时 A 的 LeaderEpoch 为 LE0。B 根据 LE0 查询到对应的 offset 为1并返回给 A，A 就截断日志并删除了消息 m2，如下图所示。之后 A 发送 FetchRequest 至 B 请求来同步数据，最终A和B中都有两条消息 m1 和 m3，HW 和 LEO都为2，并且 LeaderEpoch 都为 LE1，如此便解决了数据不一致的问题。</p>
-<img src="/rookie/2022/08/01/kafka/kafka4/leaderEpoch6.png" class="" title="img_5.png">  
+<img src="/2022/08/01/kafka/kafka4/leaderEpoch6.png" class="" title="img_5.png">  
 
 <h3 id="Kafka中怎么实现死信队列和重试队列？"><a href="#Kafka中怎么实现死信队列和重试队列？" class="headerlink" title="Kafka中怎么实现死信队列和重试队列？"></a>Kafka中怎么实现死信队列和重试队列？</h3><h3 id="Kafka中的延迟队列怎么实现（这题被问的比事务那题还要多！！！听说你会Kafka，那你说说延迟队列怎么实现？）"><a href="#Kafka中的延迟队列怎么实现（这题被问的比事务那题还要多！！！听说你会Kafka，那你说说延迟队列怎么实现？）" class="headerlink" title="Kafka中的延迟队列怎么实现（这题被问的比事务那题还要多！！！听说你会Kafka，那你说说延迟队列怎么实现？）"></a>Kafka中的延迟队列怎么实现（这题被问的比事务那题还要多！！！听说你会Kafka，那你说说延迟队列怎么实现？）</h3><h3 id="Kafka中怎么做消息审计？"><a href="#Kafka中怎么做消息审计？" class="headerlink" title="Kafka中怎么做消息审计？"></a>Kafka中怎么做消息审计？</h3><blockquote>
 <p>消息审计是指在消息生产、存储和消费的整个过程之间对消息个数及延迟的审计，以此来检测是否有数据丢失、是否有数据重复、端到端的延迟又是多少等内容。</p>
@@ -457,7 +457,7 @@
 <p>对消息轨迹而言，最常见的实现方式是封装客户端，在保证正常生产消费的同时添加相应的轨迹信息埋点逻辑。无论生产，还是消费，在执行之后都会有相应的轨迹信息，我们需要将这些信息保存起来。</p>
 <p>我们同样可以将轨迹信息保存到 Kafka 的某个主题中，比如下图中的主题 trace_topic。</p>
 </blockquote>
-<img src="/rookie/2022/08/01/kafka/kafka4/messageTrace.png" class="" title="img.png">
+<img src="/2022/08/01/kafka/kafka4/messageTrace.png" class="" title="img.png">
 <h3 id="Kafka中有那些配置参数比较有意思？聊一聊你的看法"><a href="#Kafka中有那些配置参数比较有意思？聊一聊你的看法" class="headerlink" title="Kafka中有那些配置参数比较有意思？聊一聊你的看法"></a>Kafka中有那些配置参数比较有意思？聊一聊你的看法</h3><h3 id="Kafka中有那些命名比较有意思？聊一聊你的看法"><a href="#Kafka中有那些命名比较有意思？聊一聊你的看法" class="headerlink" title="Kafka中有那些命名比较有意思？聊一聊你的看法"></a>Kafka中有那些命名比较有意思？聊一聊你的看法</h3><h3 id="Kafka有哪些指标需要着重关注？"><a href="#Kafka有哪些指标需要着重关注？" class="headerlink" title="Kafka有哪些指标需要着重关注？"></a>Kafka有哪些指标需要着重关注？</h3><blockquote>
 <p>比较重要的 Broker 端 JMX 指标：</p>
 <ul>
@@ -485,7 +485,7 @@
 <li><strong>网络传输：</strong> 采用批量发送和拉取和端到端的信息压缩，（kafaka会将这些批量的数据进行压缩，将一批消息打包后进行压缩，发送broker服务器后，最终这些数据还是提供给消费者用，所以数据在服务器上还是保持压缩状态，不会进行解压，而且频繁的压缩和解压也会降低性能，最终还是以压缩的方式传递到消费者的手上）</li>
 <li><strong>顺序读写：</strong> kafka将消息追加到日志文件中，利用了磁盘的顺序读写，来提高读写效率    </li>
 <li><strong>零拷贝：</strong> 零拷贝将文件内容从磁盘通过DMA引擎复制到内核缓冲区，而且没有把数据复制到socket缓冲区，只是将数据位置和长度信息的描述符复制到了socket缓存区，然后直接将数据传输到网络接口，最后发送。这样大大减小了拷贝的次数，提高了效率。kafka正是调用linux系统给出的sendfile系统调用来使用零拷贝。Java中的系统调用给出的是FileChannel.transferTo接口。</li>
-<li><strong>存储机制：</strong> 如果分区规则设置得合理，那么所有的消息可以均匀地分布到不同的分区中，这样就可以实现水平扩展。不考虑多副本的情况，一个分区对应一个日志（Log）。为了防止 Log 过大，Kafka 又引入了日志分段（LogSegment）的概念，将 Log 切分为多个 LogSegment，相当于一个巨型文件被平均分配为多个相对较小的文件，这样也便于消息的维护和清理。  <img src="/rookie/2022/08/01/kafka/kafka4/log-construct.png" class="" title="img.png">
+<li><strong>存储机制：</strong> 如果分区规则设置得合理，那么所有的消息可以均匀地分布到不同的分区中，这样就可以实现水平扩展。不考虑多副本的情况，一个分区对应一个日志（Log）。为了防止 Log 过大，Kafka 又引入了日志分段（LogSegment）的概念，将 Log 切分为多个 LogSegment，相当于一个巨型文件被平均分配为多个相对较小的文件，这样也便于消息的维护和清理。  <img src="/2022/08/01/kafka/kafka4/log-construct.png" class="" title="img.png">
 Kafka 中的索引文件以稀疏索引（sparse index）的方式构造消息的索引，它并不保证每个消息在索引文件中都有对应的索引项。每当写入一定量（由 broker 端参数 log.index.interval.bytes 指定，默认值为4096，即 4KB）的消息时，偏移量索引文件和时间戳索引文件分别增加一个偏移量索引项和时间戳索引项，增大或减小 log.index.interval.bytes 的值，对应地可以增加或缩小索引项的密度。</li>
 </ul>
 </blockquote>

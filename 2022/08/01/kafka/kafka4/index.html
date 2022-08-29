@@ -5,48 +5,48 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 6.2.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/rookie/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/rookie/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/rookie/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/rookie/images/logo.svg" color="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-<link rel="stylesheet" href="/rookie/css/main.css">
+<link rel="stylesheet" href="/css/main.css">
 
 
-<link rel="stylesheet" href="/rookie/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"ahutinfanta.github.io","root":"/rookie/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"ailydia.top","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="kafka必会面试题，从基础到高端，再也不怕面试官问kafka了">
 <meta property="og:type" content="article">
 <meta property="og:title" content="kafka常见面试题以及答案整理">
-<meta property="og:url" content="https://ahutinfanta.github.io/rookie/2022/08/01/kafka/kafka4/index.html">
+<meta property="og:url" content="http://ailydia.top/2022/08/01/kafka/kafka4/index.html">
 <meta property="og:site_name" content="rookie的博客">
 <meta property="og:description" content="kafka必会面试题，从基础到高端，再也不怕面试官问kafka了">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://ahutinfanta.github.io/rookie/2022/08/01/kafka/kafka4/producer-design.png">
-<meta property="og:image" content="https://ahutinfanta.github.io/rookie/2022/08/01/kafka/kafka4/multi-thread-consumer.png">
-<meta property="og:image" content="https://ahutinfanta.github.io/rookie/2022/08/01/kafka/kafka4/log-construct.png">
-<meta property="og:image" content="https://ahutinfanta.github.io/rookie/2022/08/01/kafka/kafka4/zero-copy.png">
-<meta property="og:image" content="https://ahutinfanta.github.io/rookie/2022/08/01/kafka/kafka4/leaderEpoch1.png">
-<meta property="og:image" content="https://ahutinfanta.github.io/rookie/2022/08/01/kafka/kafka4/leaderEpoch2.png">
-<meta property="og:image" content="https://ahutinfanta.github.io/rookie/2022/08/01/kafka/kafka4/leaderEpoch3.png">
-<meta property="og:image" content="https://ahutinfanta.github.io/rookie/2022/08/01/kafka/kafka4/leaderEpoch4.png">
-<meta property="og:image" content="https://ahutinfanta.github.io/rookie/2022/08/01/kafka/kafka4/leaderEpoch5.png">
-<meta property="og:image" content="https://ahutinfanta.github.io/rookie/2022/08/01/kafka/kafka4/leaderEpoch6.png">
-<meta property="og:image" content="https://ahutinfanta.github.io/rookie/2022/08/01/kafka/kafka4/messageTrace.png">
-<meta property="og:image" content="https://ahutinfanta.github.io/rookie/2022/08/01/kafka/kafka4/log-construct.png">
+<meta property="og:image" content="http://ailydia.top/2022/08/01/kafka/kafka4/producer-design.png">
+<meta property="og:image" content="http://ailydia.top/2022/08/01/kafka/kafka4/multi-thread-consumer.png">
+<meta property="og:image" content="http://ailydia.top/2022/08/01/kafka/kafka4/log-construct.png">
+<meta property="og:image" content="http://ailydia.top/2022/08/01/kafka/kafka4/zero-copy.png">
+<meta property="og:image" content="http://ailydia.top/2022/08/01/kafka/kafka4/leaderEpoch1.png">
+<meta property="og:image" content="http://ailydia.top/2022/08/01/kafka/kafka4/leaderEpoch2.png">
+<meta property="og:image" content="http://ailydia.top/2022/08/01/kafka/kafka4/leaderEpoch3.png">
+<meta property="og:image" content="http://ailydia.top/2022/08/01/kafka/kafka4/leaderEpoch4.png">
+<meta property="og:image" content="http://ailydia.top/2022/08/01/kafka/kafka4/leaderEpoch5.png">
+<meta property="og:image" content="http://ailydia.top/2022/08/01/kafka/kafka4/leaderEpoch6.png">
+<meta property="og:image" content="http://ailydia.top/2022/08/01/kafka/kafka4/messageTrace.png">
+<meta property="og:image" content="http://ailydia.top/2022/08/01/kafka/kafka4/log-construct.png">
 <meta property="article:published_time" content="2022-08-01T13:40:57.000Z">
 <meta property="article:modified_time" content="2022-08-09T13:14:00.848Z">
 <meta property="article:author" content="peng gang">
 <meta property="article:tag" content="kafka 面试题">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ahutinfanta.github.io/rookie/2022/08/01/kafka/kafka4/producer-design.png">
+<meta name="twitter:image" content="http://ailydia.top/2022/08/01/kafka/kafka4/producer-design.png">
 
-<link rel="canonical" href="https://ahutinfanta.github.io/rookie/2022/08/01/kafka/kafka4/">
+<link rel="canonical" href="http://ailydia.top/2022/08/01/kafka/kafka4/">
 
 
 <script id="page-configurations">
@@ -108,7 +108,7 @@
 
   <div class="site-meta">
 
-    <a href="/rookie/" class="brand" rel="start">
+    <a href="/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
       <h1 class="site-title">rookie的博客</h1>
       <span class="logo-line-after"><i></i></span>
@@ -130,27 +130,27 @@
   <ul id="menu" class="main-menu menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/rookie/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
 
   </li>
         <li class="menu-item menu-item-about">
 
-    <a href="/rookie/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/rookie/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/rookie/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/rookie/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -205,10 +205,10 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://ahutinfanta.github.io/rookie/2022/08/01/kafka/kafka4/">
+    <link itemprop="mainEntityOfPage" href="http://ailydia.top/2022/08/01/kafka/kafka4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/rookie/images/myHead.jpg">
+      <meta itemprop="image" content="/images/myHead.jpg">
       <meta itemprop="name" content="peng gang">
       <meta itemprop="description" content="在通往大牛的路上马不停蹄">
     </span>
@@ -239,7 +239,7 @@
               </span>
 
           
-            <span id="/rookie/2022/08/01/kafka/kafka4/" class="post-meta-item leancloud_visitors" data-flag-title="kafka常见面试题以及答案整理" title="阅读次数">
+            <span id="/2022/08/01/kafka/kafka4/" class="post-meta-item leancloud_visitors" data-flag-title="kafka常见面试题以及答案整理" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -297,7 +297,7 @@
 <li><strong>分区器</strong>：按照一定规则，将数据划分到不同的分区，若未手动指定分区，则使用默认的分区策略，也可通过实现Partitioner实现自定义分区</li>
 </ul>
 </blockquote>
-<h3 id="Kafka生产者客户端的整体结构是什么样子的？"><a href="#Kafka生产者客户端的整体结构是什么样子的？" class="headerlink" title="Kafka生产者客户端的整体结构是什么样子的？"></a>Kafka生产者客户端的整体结构是什么样子的？</h3><img src="/rookie/2022/08/01/kafka/kafka4/producer-design.png" class="" title="img.png">
+<h3 id="Kafka生产者客户端的整体结构是什么样子的？"><a href="#Kafka生产者客户端的整体结构是什么样子的？" class="headerlink" title="Kafka生产者客户端的整体结构是什么样子的？"></a>Kafka生产者客户端的整体结构是什么样子的？</h3><img src="/2022/08/01/kafka/kafka4/producer-design.png" class="" title="img.png">
 <h3 id="Kafka生产者客户端中使用了几个线程来处理？分别是什么？"><a href="#Kafka生产者客户端中使用了几个线程来处理？分别是什么？" class="headerlink" title="Kafka生产者客户端中使用了几个线程来处理？分别是什么？"></a>Kafka生产者客户端中使用了几个线程来处理？分别是什么？</h3><blockquote>
 <p>俩个，main线程和sender线程,具体作用详见上图</p>
 </blockquote>
@@ -330,7 +330,7 @@
 <li><strong>acks没有设置为all</strong>:<br>如果在broker还没把消息同步到其他broker的时候宕机了，那么消息将会丢失</li>
 </ul>
 </blockquote>
-<h3 id="KafkaConsumer是非线程安全的，那么怎么样实现多线程消费？"><a href="#KafkaConsumer是非线程安全的，那么怎么样实现多线程消费？" class="headerlink" title="KafkaConsumer是非线程安全的，那么怎么样实现多线程消费？"></a>KafkaConsumer是非线程安全的，那么怎么样实现多线程消费？</h3><img src="/rookie/2022/08/01/kafka/kafka4/multi-thread-consumer.png" class="" title="img.png">
+<h3 id="KafkaConsumer是非线程安全的，那么怎么样实现多线程消费？"><a href="#KafkaConsumer是非线程安全的，那么怎么样实现多线程消费？" class="headerlink" title="KafkaConsumer是非线程安全的，那么怎么样实现多线程消费？"></a>KafkaConsumer是非线程安全的，那么怎么样实现多线程消费？</h3><img src="/2022/08/01/kafka/kafka4/multi-thread-consumer.png" class="" title="img.png">
 <h3 id="简述消费者与消费组之间的关系"><a href="#简述消费者与消费组之间的关系" class="headerlink" title="简述消费者与消费组之间的关系"></a>简述消费者与消费组之间的关系</h3><blockquote>
 <p>Consumer Group 下可以有一个或多个 Consumer 实例。这里的实例可以是一个单独的进程，也可以是同一进程下的线程。在实际场景中，使用进程更为常见一些。<br>Consumer Group 下所有实例订阅的主题的单个分区，只能分配给组内的某个 Consumer 实例消费。这个分区当然也可以被其他的 Group 消费</p>
 </blockquote>
@@ -363,7 +363,7 @@
 <li><strong>分区副本的分配</strong>:是指为集群制定创建主题时的分区副本分配方案，即在哪个 broker 中创建哪些分区的副本。kafka-topics.sh 脚本中提供了一个 replica-assignment 参数来手动指定分区副本的分配方案</li>
 </ul>
 </blockquote>
-<h3 id="简述Kafka的日志目录结构"><a href="#简述Kafka的日志目录结构" class="headerlink" title="简述Kafka的日志目录结构"></a>简述Kafka的日志目录结构</h3><img src="/rookie/2022/08/01/kafka/kafka4/log-construct.png" class="" title="img.png">
+<h3 id="简述Kafka的日志目录结构"><a href="#简述Kafka的日志目录结构" class="headerlink" title="简述Kafka的日志目录结构"></a>简述Kafka的日志目录结构</h3><img src="/2022/08/01/kafka/kafka4/log-construct.png" class="" title="img.png">
 <h3 id="Kafka中有那些索引文件？"><a href="#Kafka中有那些索引文件？" class="headerlink" title="Kafka中有那些索引文件？"></a>Kafka中有那些索引文件？</h3><blockquote>
 <ul>
 <li><strong>偏移量索引文件</strong>:用来建立消息偏移量（offset）到物理地址之间的映射关系，方便快速定位消息所在的物理文件位置</li>
@@ -395,7 +395,7 @@
 <blockquote>
 <p>下图中左侧为传统方式，右侧为零拷贝，详细可见：<a target="_blank" rel="noopener" href="https://developer.ibm.com/articles/j-zerocopy/">https://developer.ibm.com/articles/j-zerocopy/</a></p>
 </blockquote>
-<img src="/rookie/2022/08/01/kafka/kafka4/zero-copy.png" class="" title="img.png">
+<img src="/2022/08/01/kafka/kafka4/zero-copy.png" class="" title="img.png">
 <h3 id="聊一聊Kafka的延时操作的原理"><a href="#聊一聊Kafka的延时操作的原理" class="headerlink" title="聊一聊Kafka的延时操作的原理"></a>聊一聊Kafka的延时操作的原理</h3><blockquote>
 <p>Kafka 中有多种延时操作，比如延时生产，还有延时拉取（DelayedFetch）、延时数据删除（DelayedDeleteRecords）等。<br>延时操作创建之后会被加入延时操作管理器（DelayedOperationPurgatory）来做专门的处理。延时操作有可能会超时，每个延时操作管理器都会配备一个定时器（SystemTimer）来做超时管理，定时器的底层就是采用时间轮（TimingWheel）实现的。</p>
 </blockquote>
@@ -464,18 +464,18 @@
 <p><strong>LeaderEpoch:</strong> 代表 leader 的纪元信息（epoch），初始值为0。每当 leader 变更一次，leader epoch 的值就会加1<br>leader epoch 的值就会加1，相当于为 leader 增设了一个版本号。每个副本中还会增设一个矢量 &lt;LeaderEpoch &#x3D;&gt; StartOffset&gt;，<br>其中 StartOffset 表示当前 LeaderEpoch 下写入的第一条消息的偏移量。</p>
 </blockquote>
 <p>假设有两个节点A和B，B是leader节点，里面的数据如图：</p>
-<img src="/rookie/2022/08/01/kafka/kafka4/leaderEpoch1.png" class="" title="img.png">  
+<img src="/2022/08/01/kafka/kafka4/leaderEpoch1.png" class="" title="img.png">  
 <p>A发生重启，之后A不是先忙着截断日志而是先发送OffsetsForLeaderEpochRequest请求给B，B作为目前的leader在收到请求之后会返回当前的LEO（LogEndOffset，注意图中LE0和LEO的不同），与请求对应的响应为OffsetsForLeaderEpochResponse。如果 A 中的 LeaderEpoch（假设为 LE_A）和 B 中的不相同，那么 B 此时会查找 LeaderEpoch 为 LE_A+1 对应的 StartOffset 并返回给 A</p>
-<img src="/rookie/2022/08/01/kafka/kafka4/leaderEpoch2.png" class="" title="img_1.png">  
+<img src="/2022/08/01/kafka/kafka4/leaderEpoch2.png" class="" title="img_1.png">  
 <p>如上图所示，A 在收到2之后发现和目前的 LEO 相同，也就不需要截断日志了，以此来保护数据的完整性。</p>
 <p>再如，之后 B 发生了宕机，A 成为新的 leader，那么对应的 LE&#x3D;0 也变成了 LE&#x3D;1，对应的消息 m2 此时就得到了保留。后续的消息都可以以 LE1 为 LeaderEpoch 陆续追加到 A 中。这个时候A就会有两个LE，第二LE所记录的Offset从2开始。如果B恢复了，那么就会从A中获取到LE+1的Offset为2的值返回给B。</p>
-<img src="/rookie/2022/08/01/kafka/kafka4/leaderEpoch3.png" class="" title="img_2.png">  
+<img src="/2022/08/01/kafka/kafka4/leaderEpoch3.png" class="" title="img_2.png">  
 <p>再来看看LE如何解决数据不一致的问题：<br>当前 A 为 leader，B 为 follower，A 中有2条消息 m1 和 m2，而 B 中有1条消息 m1。假设 A 和 B 同时“挂掉”，然后 B 第一个恢复过来并成为新的 leader。</p>
-<img src="/rookie/2022/08/01/kafka/kafka4/leaderEpoch4.png" class="" title="img_3.png">  
+<img src="/2022/08/01/kafka/kafka4/leaderEpoch4.png" class="" title="img_3.png">  
 <p>之后 B 写入消息 m3，并将 LEO 和 HW 更新至2，如下图所示。注意此时的 LeaderEpoch 已经从 LE0 增至 LE1 了。</p>
-<img src="/rookie/2022/08/01/kafka/kafka4/leaderEpoch5.png" class="" title="img_4.png">  
+<img src="/2022/08/01/kafka/kafka4/leaderEpoch5.png" class="" title="img_4.png">  
 <p>紧接着 A 也恢复过来成为 follower 并向 B 发送 OffsetsForLeaderEpochRequest 请求，此时 A 的 LeaderEpoch 为 LE0。B 根据 LE0 查询到对应的 offset 为1并返回给 A，A 就截断日志并删除了消息 m2，如下图所示。之后 A 发送 FetchRequest 至 B 请求来同步数据，最终A和B中都有两条消息 m1 和 m3，HW 和 LEO都为2，并且 LeaderEpoch 都为 LE1，如此便解决了数据不一致的问题。</p>
-<img src="/rookie/2022/08/01/kafka/kafka4/leaderEpoch6.png" class="" title="img_5.png">  
+<img src="/2022/08/01/kafka/kafka4/leaderEpoch6.png" class="" title="img_5.png">  
 
 <h3 id="Kafka中怎么实现死信队列和重试队列？"><a href="#Kafka中怎么实现死信队列和重试队列？" class="headerlink" title="Kafka中怎么实现死信队列和重试队列？"></a>Kafka中怎么实现死信队列和重试队列？</h3><h3 id="Kafka中的延迟队列怎么实现（这题被问的比事务那题还要多！！！听说你会Kafka，那你说说延迟队列怎么实现？）"><a href="#Kafka中的延迟队列怎么实现（这题被问的比事务那题还要多！！！听说你会Kafka，那你说说延迟队列怎么实现？）" class="headerlink" title="Kafka中的延迟队列怎么实现（这题被问的比事务那题还要多！！！听说你会Kafka，那你说说延迟队列怎么实现？）"></a>Kafka中的延迟队列怎么实现（这题被问的比事务那题还要多！！！听说你会Kafka，那你说说延迟队列怎么实现？）</h3><h3 id="Kafka中怎么做消息审计？"><a href="#Kafka中怎么做消息审计？" class="headerlink" title="Kafka中怎么做消息审计？"></a>Kafka中怎么做消息审计？</h3><blockquote>
 <p>消息审计是指在消息生产、存储和消费的整个过程之间对消息个数及延迟的审计，以此来检测是否有数据丢失、是否有数据重复、端到端的延迟又是多少等内容。</p>
@@ -488,7 +488,7 @@
 <p>对消息轨迹而言，最常见的实现方式是封装客户端，在保证正常生产消费的同时添加相应的轨迹信息埋点逻辑。无论生产，还是消费，在执行之后都会有相应的轨迹信息，我们需要将这些信息保存起来。</p>
 <p>我们同样可以将轨迹信息保存到 Kafka 的某个主题中，比如下图中的主题 trace_topic。</p>
 </blockquote>
-<img src="/rookie/2022/08/01/kafka/kafka4/messageTrace.png" class="" title="img.png">
+<img src="/2022/08/01/kafka/kafka4/messageTrace.png" class="" title="img.png">
 <h3 id="Kafka中有那些配置参数比较有意思？聊一聊你的看法"><a href="#Kafka中有那些配置参数比较有意思？聊一聊你的看法" class="headerlink" title="Kafka中有那些配置参数比较有意思？聊一聊你的看法"></a>Kafka中有那些配置参数比较有意思？聊一聊你的看法</h3><h3 id="Kafka中有那些命名比较有意思？聊一聊你的看法"><a href="#Kafka中有那些命名比较有意思？聊一聊你的看法" class="headerlink" title="Kafka中有那些命名比较有意思？聊一聊你的看法"></a>Kafka中有那些命名比较有意思？聊一聊你的看法</h3><h3 id="Kafka有哪些指标需要着重关注？"><a href="#Kafka有哪些指标需要着重关注？" class="headerlink" title="Kafka有哪些指标需要着重关注？"></a>Kafka有哪些指标需要着重关注？</h3><blockquote>
 <p>比较重要的 Broker 端 JMX 指标：</p>
 <ul>
@@ -516,7 +516,7 @@
 <li><strong>网络传输：</strong> 采用批量发送和拉取和端到端的信息压缩，（kafaka会将这些批量的数据进行压缩，将一批消息打包后进行压缩，发送broker服务器后，最终这些数据还是提供给消费者用，所以数据在服务器上还是保持压缩状态，不会进行解压，而且频繁的压缩和解压也会降低性能，最终还是以压缩的方式传递到消费者的手上）</li>
 <li><strong>顺序读写：</strong> kafka将消息追加到日志文件中，利用了磁盘的顺序读写，来提高读写效率    </li>
 <li><strong>零拷贝：</strong> 零拷贝将文件内容从磁盘通过DMA引擎复制到内核缓冲区，而且没有把数据复制到socket缓冲区，只是将数据位置和长度信息的描述符复制到了socket缓存区，然后直接将数据传输到网络接口，最后发送。这样大大减小了拷贝的次数，提高了效率。kafka正是调用linux系统给出的sendfile系统调用来使用零拷贝。Java中的系统调用给出的是FileChannel.transferTo接口。</li>
-<li><strong>存储机制：</strong> 如果分区规则设置得合理，那么所有的消息可以均匀地分布到不同的分区中，这样就可以实现水平扩展。不考虑多副本的情况，一个分区对应一个日志（Log）。为了防止 Log 过大，Kafka 又引入了日志分段（LogSegment）的概念，将 Log 切分为多个 LogSegment，相当于一个巨型文件被平均分配为多个相对较小的文件，这样也便于消息的维护和清理。  <img src="/rookie/2022/08/01/kafka/kafka4/log-construct.png" class="" title="img.png">
+<li><strong>存储机制：</strong> 如果分区规则设置得合理，那么所有的消息可以均匀地分布到不同的分区中，这样就可以实现水平扩展。不考虑多副本的情况，一个分区对应一个日志（Log）。为了防止 Log 过大，Kafka 又引入了日志分段（LogSegment）的概念，将 Log 切分为多个 LogSegment，相当于一个巨型文件被平均分配为多个相对较小的文件，这样也便于消息的维护和清理。  <img src="/2022/08/01/kafka/kafka4/log-construct.png" class="" title="img.png">
 Kafka 中的索引文件以稀疏索引（sparse index）的方式构造消息的索引，它并不保证每个消息在索引文件中都有对应的索引项。每当写入一定量（由 broker 端参数 log.index.interval.bytes 指定，默认值为4096，即 4KB）的消息时，偏移量索引文件和时间戳索引文件分别增加一个偏移量索引项和时间戳索引项，增大或减小 log.index.interval.bytes 的值，对应地可以增加或缩小索引项的密度。</li>
 </ul>
 </blockquote>
@@ -529,7 +529,7 @@ Kafka 中的索引文件以稀疏索引（sparse index）的方式构造消息�
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/rookie/tags/kafka-%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag"># kafka 面试题</a>
+              <a href="/tags/kafka-%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag"># kafka 面试题</a>
           </div>
 
         
@@ -538,7 +538,7 @@ Kafka 中的索引文件以稀疏索引（sparse index）的方式构造消息�
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/rookie/2022/07/30/kafka/kafka3/" rel="prev" title="kafka-分区原来是这样子">
+    <a href="/2022/07/30/kafka/kafka3/" rel="prev" title="kafka-分区原来是这样子">
       <i class="fa fa-chevron-left"></i> kafka-分区原来是这样子
     </a></div>
       <div class="post-nav-item"></div>
@@ -607,27 +607,27 @@ Kafka 中的索引文件以稀疏索引（sparse index）的方式构造消息�
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="peng gang"
-      src="/rookie/images/myHead.jpg">
+      src="/images/myHead.jpg">
   <p class="site-author-name" itemprop="name">peng gang</p>
   <div class="site-description" itemprop="description">在通往大牛的路上马不停蹄</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/rookie/archives/">
+          <a href="/archives/">
         
           <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-            <a href="/rookie/categories/">
+            <a href="/categories/">
           
         <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-            <a href="/rookie/tags/">
+            <a href="/tags/">
           
         <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">标签</span></a>
@@ -639,7 +639,7 @@ Kafka 中的索引文件以稀疏索引（sparse index）的方式构造消息�
         <a href="https://github.com/AhutInfanta/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;AhutInfanta&#x2F;" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/rookie/1713927716@qq.com" title="E-Mail → 1713927716@qq.com"><i class="envelope fa-fw"></i>E-Mail</a>
+        <a href="/1713927716@qq.com" title="E-Mail → 1713927716@qq.com"><i class="envelope fa-fw"></i>E-Mail</a>
       </span>
   </div>
 
@@ -748,7 +748,7 @@ Kafka 中的索引文件以稀疏索引（sparse index）的方式构造消息�
         });
     }
 
-    let { app_id, app_key, server_url } = {"enable":true,"app_id":"mnth714sN0x11GSTltLOReMd-gzGzoHsz","app_key":"0MGz6GqPNdPq1lBU6eeFUrtl","server_url":null,"security":true};
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"mnth714sN0x11GSTltLOReMd-gzGzoHsz","app_key":"0MGz6GqPNdPq1lBU6eeFUrtl","server_url":"https://ahutinfanta.github.io/rookie/","security":true};
     function fetchData(api_server) {
       var Counter = (method, url, data) => {
         return fetch(`${api_server}/1.1${url}`, {
@@ -789,46 +789,46 @@ Kafka 中的索引文件以稀疏索引（sparse index）的方式构造消息�
   </div>
 
   
-  <script src="/rookie/lib/anime.min.js"></script>
-  <script src="/rookie/lib/velocity/velocity.min.js"></script>
-  <script src="/rookie/lib/velocity/velocity.ui.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
-<script src="/rookie/js/utils.js"></script>
+<script src="/js/utils.js"></script>
 
-<script src="/rookie/js/motion.js"></script>
-
-
-<script src="/rookie/js/schemes/pisces.js"></script>
+<script src="/js/motion.js"></script>
 
 
-<script src="/rookie/js/next-boot.js"></script>
+<script src="/js/schemes/pisces.js"></script>
 
 
-
-
-  
-
-
-
-
-  
-<script src="/rookie/js/local-search.js"></script>
-
-
-
-
-
-
-
-
-
+<script src="/js/next-boot.js"></script>
 
 
 
 
   
 
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
   
 
-<script src="/rookie/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/rookie/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":200,"height":400},"mobile":{"show":true},"log":false});</script></body>
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":200,"height":400},"mobile":{"show":true},"log":false});</script></body>
 </html>
