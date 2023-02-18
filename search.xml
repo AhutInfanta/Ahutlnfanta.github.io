@@ -23,6 +23,12 @@
       </tags>
   </entry>
   <entry>
+    <title>javaBase1</title>
+    <url>/2023/02/18/java/javaBase1/</url>
+    <content><![CDATA[<h1 id="类的加载顺序"><a href="#类的加载顺序" class="headerlink" title="类的加载顺序"></a>类的加载顺序</h1><p>加载—连接（验证、准备、解析）—初始化—使用—卸载</p>
+<h1 id="双亲委派"><a href="#双亲委派" class="headerlink" title="双亲委派"></a>双亲委派</h1><img src="/2023/02/18/java/javaBase1/doubleParent.png" class="" title="img.png">]]></content>
+  </entry>
+  <entry>
     <title>kafka概述（一）</title>
     <url>/2022/07/24/kafka/kafka1/</url>
     <content><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><h2 id="1、定义"><a href="#1、定义" class="headerlink" title="1、定义"></a>1、定义</h2><blockquote>
@@ -54,6 +60,101 @@
       </categories>
       <tags>
         <tag>kafka</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>jvm简要介绍</title>
+    <url>/2023/02/18/java/jvm/</url>
+    <content><![CDATA[<h1 id="内存模型"><a href="#内存模型" class="headerlink" title="内存模型"></a>内存模型</h1><img src="/2023/02/18/java/jvm/jvmMoudle.png" class="" title="img.png">
+
+<h2 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h2><ul>
+<li>字节码解释器通过改变程序计数器来依次读取指令，从而实现代码的流程控制，如：顺序执行、选择、循环、异常处理。</li>
+<li>在多线程的情况下，程序计数器用于记录当前线程执行的位置，从而当线程被切换回来的时候能够知道该线程上次运行到哪儿了。</li>
+</ul>
+<h2 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h2><img src="/2023/02/18/java/jvm/stack.png" class="" title="img.png">
+
+<h2 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h2><p>在 JDK 7 版本及 JDK 7 版本之前，堆内存被通常分为下面三部分：</p>
+<ul>
+<li>新生代内存(Young Generation)</li>
+<li>老生代(Old Generation)</li>
+<li>永久代(Permanent Generation)<img src="/2023/02/18/java/jvm/heap.png" class="" title="img.png"></li>
+</ul>
+<h2 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h2><pre><code>方法区会存储已被虚拟机加载的 类信息、字段信息、方法信息、常量、静态变量、即时编译器编译后的代码缓存等数据。  
+方法区和永久代以及元空间的关系很像 Java 中接口和类的关系，类实现了接口，这里的类就可以看作是永久代和元空间，接口可以看作是方法区，也就是说永久代以及元空间是 HotSpot 虚拟机对虚拟机规范中方法区的两种实现方式。
+</code></pre>
+<p><strong>为什么永久代要换成元空间</strong></p>
+<ul>
+<li>整个永久代有一个 JVM 本身设置的固定大小上限，无法进行调整，而元空间使用的是直接内存，受本机可用内存的限制，虽然元空间仍旧可能溢出，但是比原来出现的几率会更小。使用 -XX：MaxMetaspaceSize 标志设置最大元空间大小，默认值为 unlimited，这意味着它只受系统内存的限制。-XX：MetaspaceSize 调整标志定义元空间的初始大小如果未指定此标志，则 Metaspace 将根据运行时的应用程序需求动态地重新调整大小。</li>
+<li>元空间里面存放的是类的元数据，这样加载多少类的元数据就不由 MaxPermSize 控制了, 而由系统的实际可用空间来控制，这样能加载的类就更多了<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">-XX:PermSize=N //方法区 (永久代) 初始大小</span><br><span class="line">-XX:MaxPermSize=N //方法区 (永久代) 最大大小</span><br><span class="line"></span><br><span class="line">-XX:MetaspaceSize=N //设置 Metaspace 的初始（和最小大小）</span><br><span class="line">-XX:MaxMetaspaceSize=N //设置 Metaspace 的最大大小</span><br></pre></td></tr></table></figure>
+<img src="/2023/02/18/java/jvm/metaspace.png" class="" title="img.png">
+因为永久代（方法区实现）的 GC 回收效率太低，只有在整堆收集 (Full GC)的时候才会被执行 GC。Java 程序中通常会有大量的被创建的字符串等待回收，将字符串常量池放到堆中，能够更高效及时地回收字符串内存。</li>
+</ul>
+<h1 id="对象创建流程"><a href="#对象创建流程" class="headerlink" title="对象创建流程"></a>对象创建流程</h1><p>  类加载检查-分配内存-初始化-设置对象头-init</p>
+<h2 id="分配内存"><a href="#分配内存" class="headerlink" title="分配内存"></a>分配内存</h2><ul>
+<li>指针碰撞<blockquote>
+<p>用过的内存全部整合到一边，没有用过的内存放在另一边，中间有一个分界指针，只需要向着没用过的内存方向将该指针移动对象内存大小位置即可,代表Serial, ParNew</p>
+</blockquote>
+</li>
+<li>空闲列表<blockquote>
+<p>虚拟机会维护一个列表，该列表中会记录哪些内存块是可用的，在分配的时候，找一块儿足够大的内存块儿来划分给对象实例，最后更新列表记录，代表CMS</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="内存并发"><a href="#内存并发" class="headerlink" title="内存并发"></a>内存并发</h2><ul>
+<li>CAS+失败重试： CAS 是乐观锁的一种实现方式。所谓乐观锁就是，每次不加锁而是假设没有冲突而去完成某项操作，如果因为冲突失败就重试，直到成功为止。虚拟机采用 CAS 配上失败重试的方式保证更新操作的原子性。</li>
+<li>TLAB： 为每一个线程预先在 Eden 区分配一块儿内存，JVM 在给线程中的对象分配内存时，首先在 TLAB 分配，当对象大于 TLAB 中的剩余内存或 TLAB 的内存已用尽时，再采用上述的 CAS 进行内存分配</li>
+</ul>
+<h1 id="垃圾回收器"><a href="#垃圾回收器" class="headerlink" title="垃圾回收器"></a>垃圾回收器</h1><h2 id="Serial收集器（新生代-复制算法）"><a href="#Serial收集器（新生代-复制算法）" class="headerlink" title="Serial收集器（新生代-复制算法）"></a>Serial收集器（新生代-复制算法）</h2><p>JDK1.3.1之前是虚拟机新生代垃圾回收的唯一选择。这个收集器是一个单线程的，它进行垃圾收集时，其他工作线程会暂停</p>
+<h2 id="ParNew收集器（新生代-复制算法）"><a href="#ParNew收集器（新生代-复制算法）" class="headerlink" title="ParNew收集器（新生代-复制算法）"></a>ParNew收集器（新生代-复制算法）</h2><p>Serial收集器的多线程版本，可配合CMS收集器，可以使用-XX:+UseParNewGC强行指定它，或者使用-XX:+UseConcMarkSweepGC选项后的默认新生代收集器，使用-XX:ParallelGCThreads来限制垃圾回收线程的数量</p>
+<h2 id="Parallel-Scavenge收集器（新生代-复制算法）"><a href="#Parallel-Scavenge收集器（新生代-复制算法）" class="headerlink" title="Parallel Scavenge收集器（新生代-复制算法）"></a>Parallel Scavenge收集器（新生代-复制算法）</h2><p>采用复制算法，又是并行的多线程垃圾收集器。</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">-XX:MaxGCPauseMills 最大垃圾手机时间</span><br><span class="line">-XX:GCTimeRatio 设置吞吐量大小</span><br><span class="line">-XX:+UseAdaptiveSizePolicy 自适应</span><br></pre></td></tr></table></figure>
+<h2 id="Serial-Old收集器（老年代-标记整理算法）"><a href="#Serial-Old收集器（老年代-标记整理算法）" class="headerlink" title="Serial Old收集器（老年代-标记整理算法）"></a>Serial Old收集器（老年代-标记整理算法）</h2><p>Serial收集器的老年代版本，</p>
+<h2 id="Parallel-Old收集器（老年代-多线程和标记整理算法）"><a href="#Parallel-Old收集器（老年代-多线程和标记整理算法）" class="headerlink" title="Parallel Old收集器（老年代-多线程和标记整理算法）"></a>Parallel Old收集器（老年代-多线程和标记整理算法）</h2><p>Parallel Scavenge收集器的老年代版本，</p>
+<h2 id="CMS收集器（老年代-标记清除算法）"><a href="#CMS收集器（老年代-标记清除算法）" class="headerlink" title="CMS收集器（老年代-标记清除算法）"></a>CMS收集器（老年代-标记清除算法）</h2><p>Concurrent Mark Sweep，以获取最短停顿时间为目标</p>
+<ol>
+<li>初始标记 — 仅仅关联GC Roots能直接关联到的对象，速度很快;</li>
+<li>并发标记 — 进行GC Roots Tracing的过程;</li>
+<li>重新标记 — 为了修正并发标记期间，因用户程序运作而导致标记产生变动的那一部分对象的标记记录;</li>
+<li>并发清除</li>
+</ol>
+<p>初始标记和重新标记需要暂停用户线程，<strong>缺点</strong></p>
+<ol>
+<li>CMS收集器对CPU资源非常敏感(默认启动的回收线程数是（CPU数量+3）&#x2F;4)</li>
+<li>无法处理浮动垃圾(CMS并发清理阶段用户线程还在运行着，伴随程序运行自然就还会有新的垃圾不断产生。这一部分垃圾出现在标记过程之后)</li>
+<li>会有大量的垃圾碎片产生 -XX:+UseCMSCompactAtFullCollection</li>
+</ol>
+<h2 id="G1收集器（整个堆-整理）"><a href="#G1收集器（整个堆-整理）" class="headerlink" title="G1收集器（整个堆-整理）"></a>G1收集器（整个堆-整理）</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//开启G1收集器，设置最大堆内存32G，Gc暂停时间200ms</span></span><br><span class="line">XX:+UseG1GC -Xmx32g -XX:MaxGCPauseMillis=<span class="number">200</span></span><br></pre></td></tr></table></figure>
+<p>把Java内存拆分成多等份，多个域（Region）,最多2048个，</p>
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ol>
+<li>分利用多CPU、多核环境下的硬件优势，使用多个CPU来缩短“Stop The World”停顿时间</li>
+<li>不会产生碎片</li>
+<li>可预测的停顿</li>
+</ol>
+<p>###回收流程</p>
+<ol>
+<li>初始标记（Initial Marking），需停止线程，时间很短</li>
+<li>并发标记（Concurrent Marking），利用可达性分析，可与用户程序并发执行</li>
+<li>修正在并发标记期间因用户程序继续运作而导致标记产生变动的那一部分标记记录，将线程的Remembered Set Logs里面数据合并到Remembered Set（记忆集，跟踪对象引用），需要停顿，但可并行<br>4.筛选回收（Live Data Counting and Evacuation） 首先对各个Region中的回收价值和成本进行排序，需要停顿线程</li>
+</ol>
+<h3 id="使用G1的情况"><a href="#使用G1的情况" class="headerlink" title="使用G1的情况"></a>使用G1的情况</h3><ul>
+<li>实时数据占用超过一半的堆空间</li>
+<li>对象分配或者晋升的速度变化大</li>
+<li>希望消除长时间的GC停顿（超过0.5-1秒）</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><img src="/2023/02/18/java/jvm/gc.png" class="" title="img.png">
+<h1 id="GC日志开启命令"><a href="#GC日志开启命令" class="headerlink" title="GC日志开启命令"></a>GC日志开启命令</h1><figure class="highlight text"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">-XX:+PrintGCDetails 输出GC的详细日志</span><br><span class="line">-XX:+PrintGCDateStamps 输出GC的日期戳</span><br><span class="line">-Xloggc:/var/log/hbase/gc-regionserver-hbase.log GC日志输出的路径</span><br><span class="line">-XX:+UseGCLogFileRotation 打开GC日志滚动记录功能</span><br><span class="line">-XX:NumberOfGCLogFiles 设置滚动日志文件的个数，必须大于等于1  日志文件命名策略是，.0, .1, …, .n-1，其中n是该参数的值</span><br><span class="line">-XX:GCLogFileSize 设置滚动日志文件的大小，必须大于8k</span><br><span class="line">-XX:+PrintGCApplicationStoppedTime 打印GC造成应用暂停的时间</span><br><span class="line">-XX:+PrintHeapAtGC 在进行GC的前后打印出堆的信息</span><br><span class="line">-XX:+PrintTenuringDistribution 在每次新生代 young GC时,输出幸存区中对象的年龄分布</span><br><span class="line"></span><br><span class="line">oom的时候生成dump文件</span><br><span class="line">-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=目录</span><br><span class="line">-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=目录/xxx.hprof</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>总结如下</strong></p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">-XX:+PrintGCDetails</span><br><span class="line">-XX:+PrintGCDateStamps</span><br><span class="line">-Xloggc:D://haha//gc.log</span><br><span class="line">-XX:+UseGCLogFileRotation</span><br><span class="line">-XX:NumberOfGCLogFiles=10</span><br><span class="line">-XX:GCLogFileSize=512k</span><br><span class="line">-XX:+PrintGCApplicationStoppedTime</span><br><span class="line">-XX:+PrintHeapAtGC</span><br><span class="line">-XX:+HeapDumpOnOutOfMemoryError</span><br><span class="line">-XX:HeapDumpPath=D://haha</span><br></pre></td></tr></table></figure>
+<h1 id="常见设置参数"><a href="#常见设置参数" class="headerlink" title="常见设置参数"></a>常见设置参数</h1><img src="/2023/02/18/java/jvm/jvmparam.png" class="" title="img.png">
+
+
+]]></content>
+      <categories>
+        <category>java</category>
+        <category>jvm</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
       </tags>
   </entry>
   <entry>
@@ -492,6 +593,570 @@ Kafka 中的索引文件以稀疏索引（sparse index）的方式构造消息�
 <h3 id="Kafka有什么优缺点？"><a href="#Kafka有什么优缺点？" class="headerlink" title="Kafka有什么优缺点？"></a>Kafka有什么优缺点？</h3><h3 id="还用过什么同质类的其它产品，与Kafka相比有什么优缺点？"><a href="#还用过什么同质类的其它产品，与Kafka相比有什么优缺点？" class="headerlink" title="还用过什么同质类的其它产品，与Kafka相比有什么优缺点？"></a>还用过什么同质类的其它产品，与Kafka相比有什么优缺点？</h3><h3 id="为什么选择Kafka"><a href="#为什么选择Kafka" class="headerlink" title="为什么选择Kafka?"></a>为什么选择Kafka?</h3><h3 id="在使用Kafka的过程中遇到过什么困难？怎么解决的？"><a href="#在使用Kafka的过程中遇到过什么困难？怎么解决的？" class="headerlink" title="在使用Kafka的过程中遇到过什么困难？怎么解决的？"></a>在使用Kafka的过程中遇到过什么困难？怎么解决的？</h3><h3 id="怎么样才能确保Kafka极大程度上的可靠性？"><a href="#怎么样才能确保Kafka极大程度上的可靠性？" class="headerlink" title="怎么样才能确保Kafka极大程度上的可靠性？"></a>怎么样才能确保Kafka极大程度上的可靠性？</h3><h3 id="聊一聊你对Kafka生态的理解"><a href="#聊一聊你对Kafka生态的理解" class="headerlink" title="聊一聊你对Kafka生态的理解"></a>聊一聊你对Kafka生态的理解</h3>]]></content>
       <tags>
         <tag>kafka 面试题</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>mysql-index</title>
+    <url>/2022/10/13/mysql/mysql-index/</url>
+    <content><![CDATA[<h1 id="数据页"><a href="#数据页" class="headerlink" title="数据页"></a>数据页</h1><h2 id="InnoDB-是如何存储数据的？"><a href="#InnoDB-是如何存储数据的？" class="headerlink" title="InnoDB 是如何存储数据的？"></a>InnoDB 是如何存储数据的？</h2><p>记录是按照行来存储的，但是数据库的读取并不是以行为单位，否则一次读取(一次 I&#x2F;O 操作) 只能处理一行数据，效率会非常低。因此，InnoDB 的数据是按 数据页<br>数据页为单位来读写的，也就是说，当需要读一条记录的时候，并不是将这个记录本身从磁盘读出来，而是以页为单位，将其整体读入内存。</p>
+<p>数据库的 I&#x2F;O 操作的最小单位是页，InnoDB 数据页的默认大小是 16KB，数据库每次读写都是以 16KB 为单位，一次最少从磁盘中读取 16K 的内容到内存中 或者 一次最少把 16K 内容刷新到磁盘中。</p>
+<p>数据页包括七个部分，结构如下：</p>
+<img src="/2022/10/13/mysql/mysql-index/data-page.png" class="" title="img.png">
+
+<p>7个部分的说明如下：</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>File Header</td>
+<td>文件头，表示页的信息</td>
+</tr>
+<tr>
+<td>Page Header</td>
+<td>页头，表示页的状态信息</td>
+</tr>
+<tr>
+<td>Infimum + Supremum Records</td>
+<td>两个虚拟伪记录，分别表示页中的最小记录和最大记录</td>
+</tr>
+<tr>
+<td>User Records</td>
+<td>用户记录，存储行记录内容</td>
+</tr>
+<tr>
+<td>Free Space</td>
+<td>空闲空间，表示页中还未被使用的空间</td>
+</tr>
+<tr>
+<td>Page Directory</td>
+<td>页目录，存储用户记录的相对位置，对记录起到索引作用</td>
+</tr>
+<tr>
+<td>Fil Trailer</td>
+<td>文件尾，校验页是否完整</td>
+</tr>
+</tbody></table>
+<p>在 File Header 中有两个指针(FIL_PAGE_PREV, FIL_PAGE_NEXT)，分别指向上一个数据页和下一个数据页，连接起来的页相当于一个双向的链表，如下图：</p>
+<h2 id="数据页中的-User-Records-是如何组织的"><a href="#数据页中的-User-Records-是如何组织的" class="headerlink" title="数据页中的 User Records 是如何组织的"></a>数据页中的 User Records 是如何组织的</h2><p>User Reocrds 是用来存储用户数据的，各条记录之间通过 next_record 字段串联成了一个链表。除了用户的行记录之外，还有两条记录: Infimum(最小行) 和 Supermum(最大行)。这是 InnoDB<br>在创建表时自动生成的。如下图：</p>
+<img src="/2022/10/13/mysql/mysql-index/data-pages.png" class="" title="img.png">
+
+<h2 id="页目录-Page-Directory"><a href="#页目录-Page-Directory" class="headerlink" title="页目录(Page Directory)"></a>页目录(Page Directory)</h2><p>数据页中的记录按照索引键值顺序组成单项链表，单向链表的特点是插入、删除很高效，但是检索效率不高，最差的情况下需要遍历链表上的所有节点才能完成检索。 因此，数据页中有一个页目录(Page Directory)，起到记录的 “索引” 作用。</p>
+<h3 id="页目录创建过程"><a href="#页目录创建过程" class="headerlink" title="页目录创建过程"></a>页目录创建过程</h3><ul>
+<li>将所有的记录划分成几个组，这些记录包括 Infimum 和 Supermum</li>
+<li>每个记录组的最后一条记录就是组内最大的那条记录，并且最后一条记录的头信息中会存储该组一共有多少条记录，作为 n_owned 字</li>
+<li>页目录用来存储每组最后一条记录的地址偏移量，这些地址偏移量会按照先后顺序存储起来，每组的地址偏移量也被称之为槽（slots），每个槽相当于指针指向了不同组的最后一个记录。</li>
+</ul>
+<h3 id="槽中可以放多少数据行"><a href="#槽中可以放多少数据行" class="headerlink" title="槽中可以放多少数据行"></a>槽中可以放多少数据行</h3><ul>
+<li>Infimum 只能包含一条记录</li>
+<li>Supermum 可以是 [1,8] 条记录</li>
+<li>其他的则是 [4,8] 条记录</li>
+</ul>
+<h3 id="举例说明"><a href="#举例说明" class="headerlink" title="举例说明"></a>举例说明</h3><img src="/2022/10/13/mysql/mysql-index/data-page-demo.png" class="" title="img.png">
+
+<p>页目录就是多个槽组成的，槽相当于分组记录的索引。因为记录是按照索引键值顺序存放，所以我们通过槽查找记录时，可以使用二分法快速定位要查询的记录在哪个槽(哪个记录分组)，定位到槽后，再遍历槽内的所有记录，无需从最小记录开始遍历整个页中的记录。</p>
+<p>以上图为例，5 个槽的编号分别为 0，1，2，3，4，我想查找主键为 10 的用户记录</p>
+<ul>
+<li>先二分得出槽中间位是 (0+4)&#x2F;2&#x3D;2 ，2号槽里最大的记录为 8。因为 10 &gt; 8，所以需要从 2 号槽后继续搜索记录</li>
+<li>再使用二分搜索出 2 号和 4 槽的中间位是 (2+4)&#x2F;2&#x3D; 3，3 号槽里最大的记录为 12。因为 10 &lt; 12，所以键值为 10 的记录在 3 号槽里</li>
+<li>再从 3 号槽指向的主键值为 9 记录开始向下搜索 1 次，定位到主键为 10 的记录，取出该条记录的信息即为我们想要查找的内容</li>
+</ul>
+<p>此外，还必须清楚：</p>
+<ul>
+<li>B+树 索引本身并不能找到具体的一条记录，能找到的只是该记录所在的页。数据库把页载入内存，然后通过 Page Directory 进行二叉查找。只不过二叉查找的时间复杂度很低，同时内存中的查找很快，因此通常忽略这部分查找所用的时间。</li>
+</ul>
+<h1 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h1><h2 id="二分查找法"><a href="#二分查找法" class="headerlink" title="二分查找法"></a>二分查找法</h2><p>二分查找法（binary search）也称为折半查找法，先以有序数列的中点位比较对象，如果要找的元素值小于该中心元素，则将待查找序列缩小为左半部分，否则为右半部分。通过一次比较，将查找区间缩小一半。如下图所示。</p>
+<img src="/2022/10/13/mysql/mysql-index/half-search.png" class="" title="img.png">
+
+<p>前面数据页结构中，每页 Page Directory 中的槽是按照主键顺序存放的，对于某一条具体记录的查询是通过对 Page Directory 进行二分查找得到的。</p>
+<h2 id="二叉查找树"><a href="#二叉查找树" class="headerlink" title="二叉查找树"></a>二叉查找树</h2><p>二叉查找树不同于普通二叉查找树，是将小于根节点的元素放在左子树，而右子树正好相反，是放大于根节点的元素。如下图</p>
+<img src="/2022/10/13/mysql/mysql-index/binary-tree.png" class="" title="img.png">
+
+<p>二叉查找树在在查找数据时，只需要将需要查找的元素与树节点元素进行比较，当元素大于根节点则往右子树中查找，元素小于根节点则往左子树中查找，元素如果正好是中位数那么就是正好是根节点，所以二叉查找树具备高效查询。</p>
+<p>但是二叉树也有明显弊端，在极端情况下，如果每次插入的数据都是最小或者都是最大的元素，那么树结构会退化成一条链表，如下图所示。</p>
+<img src="/2022/10/13/mysql/mysql-index/binary-tree2.png" class="" title="img.png">
+
+<p>当二叉查找树退化成链表时，查找效率很低，就和顺序查找差不多。如果想最大性能地构造出一个二叉树，需要这棵二叉查找树是平衡的。</p>
+<h2 id="平衡二叉树"><a href="#平衡二叉树" class="headerlink" title="平衡二叉树"></a>平衡二叉树</h2><p>平衡二叉树是来解决二叉查找树极端情况下退化为链表的问题。平衡二叉树其实就是在二叉查找树的基础上加上约束：让每个节点的左右子树高度差不能超过 1。这样可以让左右子树都保持平衡。如下图。</p>
+<img src="/2022/10/13/mysql/mysql-index/balance-binary-tree.png" class="" title="img.png">
+
+<p>但是尽管是平衡二叉树，也会随着插入的元素增多，而导致树的高度变高，这同样意味着磁盘 I&#x2F;O 操作次数变多，影响到整体的查询效率。</p>
+<h2 id="B-树"><a href="#B-树" class="headerlink" title="B 树"></a>B 树</h2><p>平衡二叉树本身是一个二叉树，每个节点只能有2个子节点，随着数据量的增大，节点个数越多，树的高度也会增高，增加了磁盘的 I&#x2F;O 次数，影响查询效率。</p>
+<p>B 树的出现可以解决树高度的问题。之所以是 B 树，而不是”某某二叉树”，就是它不在限制一个父节点中只能有两个子节点，而是允许 M 个子节点（M&gt;<br>2）。不仅如此，B树的一个节点可以存储多个元素，相比较于前面的那些二叉树数据结构又将整体的树高度降低了。</p>
+<p>B 树是一棵多叉树，它的每一个节点包含的最多子节点数量称为B树的阶。下图是一棵3阶的B树。</p>
+<img src="/2022/10/13/mysql/mysql-index/b-tree.png" class="" title="img.png">
+
+<ul>
+<li>每个节点称为页，在mysql中数据读取去的基本单位是页，而也就是上面的磁盘块。P节点是指向子节点的指针。</li>
+</ul>
+<h3 id="B-树查找流程"><a href="#B-树查找流程" class="headerlink" title="B 树查找流程"></a>B 树查找流程</h3><p>在这个3阶B树中，查找 89 这个元素时的流程：</p>
+<p>先从根节点出发，也就是 磁盘块1，判断 89 大于 45，通过磁盘块1中的指针 p3 找到磁盘块4。还是按照原来的步骤，在磁盘块4中的65 ~ 87之间相比较，最后磁盘4的指针p3找到磁盘块11。也就找到有匹配89的键值。</p>
+<p>B树其实已经满足了减少磁盘 I&#x2F;O 操作，同时支持按区间查找。但是 B树的区间查找效率并不高。因为B树在做范围查询时，需要使用中序遍历，那么父节点和子节点也就需要不断的来回切换。会给磁盘 I&#x2F;O 带来很多负担。</p>
+<h2 id="B-树-1"><a href="#B-树-1" class="headerlink" title="B+ 树"></a>B+ 树</h2><p>B+树从 + 可以看出是B树的升级版，MySQL 中 InnoDB 引擎中的索引底层数据结构采用的正是 B+树。</p>
+<h3 id="B-树结构"><a href="#B-树结构" class="headerlink" title="B+ 树结构"></a>B+ 树结构</h3><p>B+树相比于B树，做了这样的升级：B+树中的非叶子节点都不存储数据，而是只作为索引。由叶子节点存放整棵树的所有数据。而叶子节点之间构成一个从小到大有序的链表互相指向相邻的叶子节点，也就是叶子节点之间形成了有序的双向链表。如下图B+树的结构。</p>
+<img src="/2022/10/13/mysql/mysql-index/b(+)-tree.png" class="" title="img.png">
+
+<h3 id="B-树查询"><a href="#B-树查询" class="headerlink" title="B+ 树查询"></a>B+ 树查询</h3><p>B+ 树底层是数据，上层都是按底层区间构成的索引。搜到到关键字不会直接返回，会一直走到叶子节点这一层查询数据。比如搜索 id&#x3D;10，虽然在根节点中就命中了，但是全部的数据在叶子节点上，所以还要继续往下搜索，一直到叶子节点。</p>
+<h3 id="B-树插入和删除"><a href="#B-树插入和删除" class="headerlink" title="B+ 树插入和删除"></a>B+ 树插入和删除</h3><p>B树没有冗余节点，删除节点时会发生复杂的树变形。B+树做了大量冗余节点，从上面可以发现父节点的所有元素都会在子节点中出现，这样当删除一个节点时，可以直接从叶子节点中删除，这样效率更快，不会涉及到复杂的树变形。</p>
+<p>而且B+ 树的插入也是如此，最多只涉及树的一条分支路线。</p>
+<h3 id="估算一颗-B-树-中的数据量"><a href="#估算一颗-B-树-中的数据量" class="headerlink" title="估算一颗 B+ 树 中的数据量"></a>估算一颗 B+ 树 中的数据量</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">假设一条记录是 <span class="number">1</span>K，一个叶子节点（数据页）可以存储 <span class="number">16</span> 条记录，那非叶子节点可以存储多少个指针呢？</span><br><span class="line">假设索引字段是 <span class="type">bigint</span> 类型，长度是 <span class="number">8</span> 字节。指针大小为 <span class="number">6</span> 字节，这样一共 <span class="number">14</span> 字节。非叶子节点（索引页）可以存储 <span class="number">16384</span><span class="operator">/</span><span class="number">14</span> <span class="operator">=</span><span class="number">1170</span> 个这样的单元（键值<span class="operator">+</span>指针）。</span><br><span class="line">树深度为<span class="number">2</span>的时候，有 <span class="number">1170</span><span class="operator">^</span><span class="number">2</span> 个叶子节点，<span class="number">1170</span><span class="operator">^</span><span class="number">2</span><span class="operator">*</span><span class="number">16</span><span class="operator">=</span><span class="number">21902400</span>。</span><br><span class="line">在查询数据时一次页的查找代表一次 IO，也就是说，一张 <span class="number">2000</span> 万数据的表，查询数据最多需要访问<span class="number">3</span>次磁盘。所以 在 InnoDB 中 B<span class="operator">+</span> 树深度一般为 <span class="number">1</span><span class="number">-3</span> 层，就能满足千万级别的数据存储。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="Explain"><a href="#Explain" class="headerlink" title="Explain"></a>Explain</h1><p><strong>explain</strong> 关键字可以模拟 MySQL 优化器执行 SQL 语句，可以很好的分析 SQL 语句或表结构的性能瓶颈。</p>
+<h2 id="key-len-计算公式"><a href="#key-len-计算公式" class="headerlink" title="key_len 计算公式"></a>key_len 计算公式</h2><table>
+<thead>
+<tr>
+<th>字段类型</th>
+<th>长度</th>
+<th>latin1</th>
+<th>gbk</th>
+<th>uft8</th>
+<th>utf8mb4</th>
+<th>允许为 null</th>
+<th>不允许为 null</th>
+<th>key_len</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>char</td>
+<td>L</td>
+<td>k &#x3D; 1</td>
+<td>k &#x3D; 2</td>
+<td>k &#x3D; 3</td>
+<td>k &#x3D; 4</td>
+<td>n &#x3D; 1</td>
+<td>n &#x3D; 0</td>
+<td>L*k + n</td>
+</tr>
+<tr>
+<td>varchar</td>
+<td>L</td>
+<td>k &#x3D; 1</td>
+<td>k &#x3D; 2</td>
+<td>k &#x3D; 3</td>
+<td>k &#x3D; 4</td>
+<td>n &#x3D; 1</td>
+<td>n &#x3D; 0</td>
+<td>L*k + n + 2</td>
+</tr>
+<tr>
+<td>tinyint</td>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>n &#x3D; 1</td>
+<td>n &#x3D; 0</td>
+<td>1 + n</td>
+</tr>
+<tr>
+<td>smallint</td>
+<td>2</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>n&#x3D;1</td>
+<td>n &#x3D; 0</td>
+<td>2 + n</td>
+</tr>
+<tr>
+<td>mediumint</td>
+<td>3</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>n&#x3D;1</td>
+<td>n &#x3D; 0</td>
+<td>3 + n</td>
+</tr>
+<tr>
+<td>int</td>
+<td>4</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>n&#x3D;1</td>
+<td>n &#x3D; 0</td>
+<td>4 + n</td>
+</tr>
+<tr>
+<td>bigint</td>
+<td>8</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>n&#x3D;1</td>
+<td>n &#x3D; 0</td>
+<td>8 + n</td>
+</tr>
+<tr>
+<td>datetime</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>(mysql5.6及以后)</td>
+<td>5</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>n&#x3D;1</td>
+<td>n &#x3D; 0</td>
+<td>5 + n</td>
+</tr>
+<tr>
+<td>date</td>
+<td>3</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>n&#x3D;1</td>
+<td>n &#x3D; 0</td>
+<td>3 + n</td>
+</tr>
+<tr>
+<td>time</td>
+<td>3</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>n&#x3D;1</td>
+<td>n &#x3D; 0</td>
+<td>3 + n</td>
+</tr>
+<tr>
+<td>year</td>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>n&#x3D;1</td>
+<td>n &#x3D; 0</td>
+<td>1 + n</td>
+</tr>
+<tr>
+<td>timestamp</td>
+<td>4</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>n&#x3D;1</td>
+<td>n &#x3D; 0</td>
+<td>4 + n</td>
+</tr>
+</tbody></table>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="number">1.</span>整数类型，浮点数类型，时间类型的索引长度 <span class="keyword">NOT</span> <span class="keyword">NULL</span><span class="operator">=</span>字段本身的字段长度 <span class="keyword">NULL</span><span class="operator">=</span>字段本身的字段长度<span class="operator">+</span><span class="number">1</span>，因为需要有是否为空的标记，这个标记需要占用<span class="number">1</span>个字节 datetime 类型在<span class="number">5.6</span>中字段长度是<span class="number">5</span>个字节</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span>字符类型 varchr(n)变长字段且允许<span class="keyword">NULL</span> <span class="operator">=</span> n <span class="operator">*</span> (utf8mb4<span class="operator">=</span><span class="number">4</span>,utf8<span class="operator">=</span><span class="number">3</span>,gbk<span class="operator">=</span><span class="number">2</span>,latin1<span class="operator">=</span><span class="number">1</span>)<span class="operator">+</span><span class="number">1</span>(<span class="keyword">NULL</span>)<span class="operator">+</span><span class="number">2</span> varchr(n)变长字段且不允许<span class="keyword">NULL</span> <span class="operator">=</span> n <span class="operator">*</span> (</span><br><span class="line">utf8mb4<span class="operator">=</span><span class="number">4</span>,utf8<span class="operator">=</span><span class="number">3</span>,gbk<span class="operator">=</span><span class="number">2</span>,latin1<span class="operator">=</span><span class="number">1</span>)<span class="operator">+</span><span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span>(n)固定字段且允许<span class="keyword">NULL</span> <span class="operator">=</span> n <span class="operator">*</span> (utf8mb4<span class="operator">=</span><span class="number">4</span>,utf8<span class="operator">=</span><span class="number">3</span>,gbk<span class="operator">=</span><span class="number">2</span>,latin1<span class="operator">=</span><span class="number">1</span>)<span class="operator">+</span><span class="number">1</span>(<span class="keyword">NULL</span>)</span><br><span class="line"><span class="type">char</span>(n)固定字段且允许<span class="keyword">NULL</span> <span class="operator">=</span> n <span class="operator">*</span> (utf8mb4<span class="operator">=</span><span class="number">4</span>,utf8<span class="operator">=</span><span class="number">3</span>,gbk<span class="operator">=</span><span class="number">2</span>,latin1<span class="operator">=</span><span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">变长字段需要额外的<span class="number">2</span>个字节来记录长度，所以VARCAHR索引长度计算时候要加<span class="number">2</span>。固定长度字段不需要额外的字节。而<span class="keyword">null</span>都需要<span class="number">1</span>个字节的额外空间,所以索引字段最好不要为<span class="keyword">NULL</span>，因为<span class="keyword">NULL</span>让统计更加复杂，并且需要额外的存储空间。这个结论在此得到了证实，复合索引有最左前缀的特性，如果复合索引能全部使用上，则是复合索引字段的索引长度之和，这也可以用来判定复合索引是否部分使用，还是全部使用。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>##explain 各字段含义<br>explain 中各字段含义见下图：</p>
+<img src="/2022/10/13/mysql/mysql-index/explain.png" class="" title="img.png">
+<p>#索引</p>
+<p>##索引定义</p>
+<p>索引是一个单独的、存储在磁盘上的数据库结构，包含着对数据表里多有记录的引用指针。使用索引可以快度找出某个或多个列中有一特定值的行，所有 MySQL 列类型都可以被索引，对相关列使用索引是提高查询操作速度的最佳途径。<br>##聚集索引和非聚集索引</p>
+<p>###概括</p>
+<p>聚集索引就是以 主键 创建的索引</p>
+<p>非聚集索引就是以 非主键 创建的索引，也叫做 二级索引</p>
+<p>###区别</p>
+<ul>
+<li>聚集索引在叶子节点存储的是表中的数据</li>
+<li>非聚集索引在叶子节点存储的是主键和索引列</li>
+<li>使用非聚集索引查询出数据时，先查询到叶子节点上的主键，再去主键索引中查找要找的数据(拿到主键再查找的这个过程叫做回表)</li>
+</ul>
+<p>##联合索引</p>
+<p>联合索引是指按一定顺序对表上的多个列进行索引。一个联合索引是一个有序元组 &lt;a1, a2, …, an&gt;。单列索引可以看成联合索引元素数为1的特例。</p>
+<p>###好处</p>
+<ul>
+<li>对于需要排序的查询，联合索引中的键值都是排序的，通过叶子节点可以逻辑上顺序读的读出所有数据，可以避免多一次的排序操作。</li>
+</ul>
+<p>###最左匹配原则</p>
+<p>假如索引列分别为 A, B, C，且顺序也为 A, B, C</p>
+<ul>
+<li>如果查询的时候，查询 【A】【A, B】【A, B, C】，那么可以通过索引查询。</li>
+<li>如果查询的时候，采用 【A, C】，那么 C 虽然是索引，但是由于中间缺失了B，因此C 这个索引是用不到的，只能用到 A 索引。</li>
+<li>如果查询的时候，采用【B】【B, C】【C】，由于没有用到第一列索引，不是最左前缀，那么后面索引也是用不到的。</li>
+<li>如果查询的时候，采用范围查询(&gt;、&lt;、between、like 左匹配)，并且是最左前缀，mysql 无法再使用范围列后面的其他索引列了。如果查询的时候，采用 A &#x3D; 1 and b &gt; 2 and C &#x3D; 3，则会在每个节点依次命中<br>A、B，无法命中C。</li>
+<li>列的排列顺序决定了可命中索引的列数。</li>
+</ul>
+<p>###&#x3D;、in 自动优化顺序</p>
+<p>不需要考虑&#x3D;、in 等的顺序，mysql 会自动优化这些条件的顺序，以匹配尽可能多的索引列。</p>
+<ul>
+<li>如有索引 (a, b, c, d)，查询条件 c &gt; 3 and b &#x3D; 2 and a &#x3D; 1 and d &lt; 4 与 a &#x3D; 1 and c &gt; 3 and b &#x3D; 2 and d &lt; 4 等顺序都是可以的，MySQL<br>都会自动优化为 a &#x3D; 1 and b &#x3D; 2 and c &gt; 3 and d &lt; 4，依次命 a、b、c。</li>
+</ul>
+<p>##覆盖索引</p>
+<p>在联合索引中，存在着一种特殊的索引 - 覆盖索引。</p>
+<p>###优势</p>
+<ul>
+<li>非聚集索引的叶子节点存储的是主键 + 列值，最终还是要 回表，也就是要通过主键再查找一次，这样就会比较慢。覆盖索引从二级索引中就可以得到查询的记录，不需要查询聚集索引中的记录。</li>
+<li>覆盖索引不包含整行记录的所有信息，故其大小要远小于聚集索引，因此可以减少大量的 I&#x2F;O 操作。</li>
+<li>能使用覆盖索引就使用。</li>
+</ul>
+<p>###举例</p>
+<ul>
+<li>如果现有索引 (username, age)，在查询数据的时候：select username，age from user where username &#x3D; ‘Tom’ and age &#x3D; 19;</li>
+<li>很明显，where 后面的 username 和 age 是要走索引的，而且要查询的 username 和 age 也正是索引的列，这些列都存于索引的叶子节点上，所以就不用回表了。</li>
+</ul>
+<p>##使用索引扫描来做排序</p>
+<p>MySQL 有两种方式可以生成有序的结果：通过排序操作 或者 按索引顺序扫描。如果 EXPLAIN 出来的 type 列的值为 “index”，则说明 MySQL 使用了索引扫描来做排序。</p>
+<p>只有当索引的列顺序和 ORDER BY 子句的顺序完全一致，并且所有列的排序方向（倒序或顺序）都一样时，MySQL 才能够使用索引来对结果做排序。如果查询需要关联多张表，则只有当 ORDER BY<br>子句引用的字段全部为第一个表时，才能使用索引做排序。ORDER BY 子句和查找型查询的限制是一样的：需要满足索引的最左前缀的要求；否则，MySQL 都需要执行文件排序操作，而无法利用索引排序。</p>
+<p>##索引不是越多越好</p>
+<p>在进行插入操作时，数据页的存放还是按主键 id<br>的执行顺序存放，凡是对于非聚集索引，叶子节点的插入不再是顺序的了。这时就需要离散地访问非聚集索引页，插入性能在这里变低了。然而这并不是字段上索引的错误，因为B+树的特性决定了非聚集索引插入的离散型。</p>
+<p>##索引下推</p>
+<p>Index Condition Pushdown 是 MySQL 5.6 开始支持的一种根据索引进行查询的优化方式。mysql 数据库会在取出索引的同时，判断是否可以进行 where 条件的过滤，也就是将 where<br>的部分过滤操作放在了存储引擎层。在某些查询下，可以大大减少上层 sql 层对记录的索取（fetch），从而提高数据库的整体性能。</p>
+<p>索引下推优化支持 range、ref、eq_ref、ref_or_null 类型的查询。支持 MyISAM 和 InnoDB 存储引擎。当优化器选择 Index Condition Pushdown 优化时，可以在执行计划的列 Extra<br>看到 Using index condition 提示。</p>
+<p>##索引不可见</p>
+<p>不可见索引是 mysql8.0 的新特性。</p>
+<p>在删除多余索引前，可以先隐藏一个索引，然后观察对数据库的影响。如果数据库心梗有所下降，就说明这个索引是有用的，于是将其”恢复显示” 即可。如果数据库性能看不出变化，说明这个索引是多余的，可以删除了。</p>
+<p>##索引倾斜</p>
+<p>一般情况下，推荐在基数高的列上创建索引；比如订单表的status字段，可能该字段有出货中，派件中，已完成三个值，一般都会觉得在该列不推荐创建索引；但是在实际情况中，比如订单表有1000万条数据，只有10w条数据的status是派件中，而实际业务中，查询派件中的订单这种需求比较多，此时就可以创建status字段的索引了，因为status<br>列的值分布不均，这个索引是严重倾斜的，而索引的优势就是从大量数据中找出少量数据；但是就算创建了该列的索引，mysql的优化器可能也不会用该索引，因为优化器不会知道该列存在索引倾斜，此时有可能需要人工指定索引了，explain select</p>
+<ul>
+<li>from table force index() where …</li>
+</ul>
+<p>查看一个索引是否是高选择性，也就是基数（cardinality）</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> information_schema.statistics <span class="keyword">where</span> table_schema<span class="operator">=</span><span class="string">&#x27;DBNAME&#x27;</span> <span class="keyword">and</span> table_name <span class="operator">=</span> <span class="string">&#x27;TABLENAME&#x27;</span>;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>在实际应用中，cardinality&#x2F;n_rows_in_table 应尽可能的接近1。如果非常小，那么需要考虑是否还有必要创建这个索引。</p>
+<p>创建复合索引规则：应该把基数高的列放在前面，这样就可以最先筛选掉大部分的数据。</p>
+<p>##索引失效的情况</p>
+<ul>
+<li>查询条件包含 or，可能导致索引失效 示例</li>
+<li>如果字段名类型是字符串，where 时一定要用引号括起来,否则不使用索引 示例</li>
+<li>使用 like 以 % 开头导致索引失效 示例</li>
+<li>不符合最左匹配原则 示例</li>
+<li>在索引列上使用 mysql 内置函数，索引失效 示例</li>
+<li>对索引列运算（如，+、-、*、&#x2F;），索引失效 示例</li>
+<li>mysql 估计使用全表扫描要比使用索引快,则不使用索引 示例</li>
+<li>连接查询关联字段的字符集不一样，可能导致索引失效 示例</li>
+</ul>
+<p>##建立索引技巧</p>
+<ul>
+<li>最左匹配原则。MySQL 会一直向右匹配到范围查询 列的排列顺序决定了可命中索引的列数 就停止匹配</li>
+<li>尽量选择区分度搞的列作为索引，区分度的公式是 COUNT(DISTINCT col) &#x2F; COUNT(*)，表示字段不重复的比率，比率越大扫描的记录数就越少。</li>
+<li>索引不能参与计算，尽量保持列“干净”。比如 比如，FROM_UNIXTIME(create_time) &#x3D; ‘2022-08-06’<br>就不能使用索引，原因很简单，B+树中存储的都是数据表中的字段值，但是进行检索时，需要把所有元素都应用函数才能比较，显然这样的代价太大。所以语句要写成 ： create_time &#x3D; UNIX_TIMESTAMP(‘<br>2022-08-06’)</li>
+<li>尽可能的扩展索引，不要新建立索引。比如表中已经有了 (a) 的索引，现在要加 (a, b) 的索引，那么只需要修改原来的索引即可。</li>
+<li>单个多列组合索引和多个单列索引的检索查询效果不同，因为在执行SQL时，MySQL会从多个单列索引中选择一个或多个（union 索引合并时）效率最高的索引。</li>
+</ul>
+<p>索引举例</p>
+<p>创建 t_user_action_log 表并插入数据</p>
+<p>– create table CREATE TABLE <code>customer_info</code> (<br><code>id</code> bigint(20) unsigned NOT NULL AUTO_INCREMENT,<br><code>name</code> varchar(32) NOT NULL COMMENT ‘名字’,<br><code>province</code> varchar(32) NOT NULL COMMENT ‘省份’,<br><code>level</code> int(6) NOT NULL COMMENT ‘等级’,<br><code>sex</code> varchar(10) NOT NULL COMMENT ‘性别’, PRIMARY KEY (<code>id</code>)<br>) ENGINE&#x3D;InnoDB DEFAULT CHARSET&#x3D;utf8mb4 ROW_FORMAT&#x3D;DYNAMIC COMMENT&#x3D;’顾客信息表’;</p>
+<p>– create sql script import random import string</p>
+<p>with open(‘customer.sql’, ‘a’) as f:<br>for i in range(0, 100000):<br>name&#x3D;’’.join(random.sample(string.ascii_lowercase, 4))</p>
+<pre><code>    provice = random.choice([&#39;heilongjiang&#39;, &#39;jilin&#39;, &#39;liaoning&#39;, &#39;hebei&#39;, &#39;neimenggu&#39;, &#39;henan&#39;, &#39;xinjiang&#39;, &#39;gansu&#39;, &#39;shanxi&#39;, &#39;shanxi&#39;, &#39;shandong&#39;, &#39;jiangsu&#39;, &#39;hubei&#39;, &#39;sichuan&#39;, &#39;xizang&#39;, &#39;qinghai&#39;, &#39;anhui&#39;, &#39;jiangsu&#39;, &#39;zhejiang&#39;, &#39;jiangxi&#39;, &#39;fujian&#39;, &#39;hunan&#39;, &#39;guzhou&#39;, &#39;yunan&#39;, &#39;guangxi&#39;, &#39;guangdong&#39;, &#39;taiwan&#39;, &#39;hainan&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;, &#39;jilin&#39;])
+
+    level = random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
+
+    sex = random.choice([&#39;female&#39;, &#39;male&#39;, &#39;female&#39;, &#39;female&#39;, &#39;female&#39;, &#39;female&#39;, &#39;female&#39;, &#39;female&#39;, &#39;female&#39;, &#39;female&#39;, &#39;female&#39;])
+
+    sql = f&quot;INSERT INTO customer_info (name, province, level, sex) values (&#39;&#123;name&#125;&#39;, &#39;&#123;provice&#125;&#39;, &#39;&#123;level&#125;&#39;, &#39;&#123;sex&#125;&#39;);&quot;
+
+
+    f.write(sql)
+    f.write(&#39;\n&#39;)
+</code></pre>
+<p>– impport sql 将数据导入表中</p>
+<p>1，主键索引</p>
+<p>查询 id 为 1 的记录，sql 如下：</p>
+<p>select name, province, level, sex from customer_info where id &#x3D; 1;</p>
+<p>通过查询分析器explain分析这条查询语句：</p>
+<p>mysql&gt; explain select name, province, level, sex from customer_info where id &#x3D; 1;<br>+—-+————-+—————+————+——-+—————+———+———+——-+——+———-+——-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——-+—————+———+———+——-+——+———-+——-+<br>| 1 | SIMPLE | customer_info | NULL | const | PRIMARY | PRIMARY | 8 | const | 1 | 100.00 | NULL |<br>+—-+————-+—————+————+——-+—————+———+———+——-+——+———-+——-+</p>
+<ul>
+<li>key 都为 PRIMARY，表示使用了主键索引</li>
+<li>ref 为 const，表示通过索引一次就找到了</li>
+<li>rows 为 1，表示大致估算出找到所需的记录需要读取1行记录</li>
+</ul>
+<p>2，非主键单列索引</p>
+<p>添加索引前后对比</p>
+<p>查询 province 为 zhejiang的所有记录，sql 如下：</p>
+<p>select name, province, level, sex from customer_info where province &#x3D; ‘zhejiang’;</p>
+<p>通过查询分析器explain分析这条查询语句：</p>
+<p>mysql&gt; explain select name, province, level, sex from customer_info where province &#x3D; ‘zhejiang’;<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>| 1 | SIMPLE | customer_info | NULL | ALL | NULL | NULL | NULL | NULL | 100962 | 10.00 | Using where |<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>1 row in set, 1 warning (0.00 sec)</p>
+<ul>
+<li>type为ALL表示要进行全表扫描。这样效率无疑是极慢的。</li>
+</ul>
+<p>为province列添加索引：</p>
+<p>alter table customer_info add index prov_idx(<code>province</code>);</p>
+<p>再通过查询分析器分析：</p>
+<p>mysql&gt; explain select name, province, level, sex from customer_info where province &#x3D; ‘zhejiang’;<br>+—-+————-+—————+————+——+—————+———-+———+——-+——+———-+——-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+—————+———-+———+——-+——+———-+——-+<br>| 1 | SIMPLE | customer_info | NULL | ref | prov_idx | prov_idx | 130 | const | 1768 | 100.00 | NULL |<br>+—-+————-+—————+————+——+—————+———-+———+——-+——+———-+——-+<br>1 row in set, 1 warning (0.00 sec)</p>
+<ul>
+<li>看到这次查询就使用索引 prov_idx 了。</li>
+<li>这次查询扫描了 1768 行，即所有 province&#x3D; ‘zhejiang’ 的行。</li>
+</ul>
+<p>varchar 中存的为数字时</p>
+<p>insert into customer_info(<code>name</code>, <code>province</code>, <code>level</code>, <code>sex</code>) values (‘kd’, ‘1’, 2, ‘male’);</p>
+<p>通过查询分析器explain分析</p>
+<p>mysql&gt; explain select name, province, level, sex from customer_info where province &#x3D; 1;<br>+—-+————-+—————+————+——+——————–+——+———+——+——–+———-+————-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+——————–+——+———+——+——–+———-+————-+<br>| 1 | SIMPLE | customer_info | NULL | ALL | prov_level_sex_idx | NULL | NULL | NULL | 100963 | 10.00 | Using where |<br>+—-+————-+—————+————+——+——————–+——+———+——+——–+———-+————-+<br>1 row in set, 3 warnings (0.00 sec)</p>
+<p>mysql&gt; explain select name, province, level, sex from customer_info where province &#x3D; ‘1’;<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+——-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+——-+<br>| 1 | SIMPLE | customer_info | NULL | ref | prov_level_sex_idx | prov_level_sex_idx | 130 | const | 1 | 100.00 | NULL |<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+——-+<br>1 row in set, 1 warning (0.00 sec)</p>
+<ul>
+<li>如果字段名类型是字符串，where 时一定要用引号括起来,否则不使用索引</li>
+</ul>
+<p>在索引列上使用 mysql 内置函数</p>
+<p>alter table customer_info add key lvl_idx(<code>level</code>);</p>
+<p>通过查询分析器explain分析</p>
+<p>mysql&gt; explain select name, province, level, sex from customer_info where level &#x3D; 5;<br>+—-+————-+—————+————+——+—————+———+———+——-+——+———-+——-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+—————+———+———+——-+——+———-+——-+<br>| 1 | SIMPLE | customer_info | NULL | ref | lvl_idx | lvl_idx | 4 | const | 2179 | 100.00 | NULL |<br>+—-+————-+—————+————+——+—————+———+———+——-+——+———-+——-+<br>1 row in set, 1 warning (0.00 sec)</p>
+<p>mysql&gt; explain select name, province, level, sex from customer_info where ABS(level) &#x3D; 5;<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>| 1 | SIMPLE | customer_info | NULL | ALL | NULL | NULL | NULL | NULL | 100963 | 100.00 | Using where |<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>1 row in set, 1 warning (0.00 sec)</p>
+<ul>
+<li>在索引列上使用 mysql 内置函数，索引失效</li>
+</ul>
+<p>对索引列进行运算</p>
+<p>mysql&gt; explain select name, province, level, sex from customer_info where level &#x3D; 5;<br>+—-+————-+—————+————+——+—————+———+———+——-+——+———-+——-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+—————+———+———+——-+——+———-+——-+<br>| 1 | SIMPLE | customer_info | NULL | ref | lvl_idx | lvl_idx | 4 | const | 2179 | 100.00 | NULL |<br>+—-+————-+—————+————+——+—————+———+———+——-+——+———-+——-+<br>1 row in set, 1 warning (0.00 sec)</p>
+<p>mysql&gt; explain select name, province, level, sex from customer_info where level - 1 &#x3D; 4;<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>| 1 | SIMPLE | customer_info | NULL | ALL | NULL | NULL | NULL | NULL | 100963 | 100.00 | Using where |<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>1 row in set, 1 warning (0.00 sec)</p>
+<ul>
+<li>对索引列运算（如，+、-、*、&#x2F;），索引失效</li>
+</ul>
+<p>可以使用索引但未走索引</p>
+<p>mysql&gt; explain select name, level from customer_info where level not in (5);<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>| 1 | SIMPLE | customer_info | NULL | ALL | lvl_idx | NULL | NULL | NULL | 100963 | 58.75 | Using where |<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>1 row in set, 1 warning (0.00 sec)</p>
+<p>mysql&gt; explain select name, level from customer_info force index(lvl_idx) where level not in (5);<br>+—-+————-+—————+————+——-+—————+———+———+——+——-+———-+———————–+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——-+—————+———+———+——+——-+———-+———————–+<br>| 1 | SIMPLE | customer_info | NULL | range | lvl_idx | lvl_idx | 4 | NULL | 59316 | 100.00 | Using index condition |<br>+—-+————-+—————+————+——-+—————+———+———+——+——-+———-+———————–+<br>1 row in set, 1 warning (0.00 sec)</p>
+<ul>
+<li>mysql 估计使用全表扫描要比使用索引快,则不使用索引</li>
+</ul>
+<p>3，联合索引</p>
+<p>删除之前创建的索引 prov_idx ， lvl_idx</p>
+<p>alter table customer_info dorp index prov_idx, drop index lvl_idx;</p>
+<p>查询条件：来自浙江，level 为 1 的男生。sql 如下：</p>
+<p>select name, province, level, sex from customer_info where province &#x3D; ‘zhejiang’ and level&#x3D;1 and sex&#x3D;’male’;</p>
+<p>通过查询分析器explain分析这条查询语句：</p>
+<p>mysql&gt; explain select name, province, level, sex from customer_info where province &#x3D; ‘zhejiang’ and level&#x3D;1 and<br>sex&#x3D;’male’;<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>| 1 | SIMPLE | customer_info | NULL | ALL | NULL | NULL | NULL | NULL | 100962 | 0.10 | Using where |<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>1 row in set, 1 warning (0.00 sec)</p>
+<ul>
+<li>type 为 ALL，全表扫描</li>
+</ul>
+<p>创建一个联合索引</p>
+<p>alter table customer_info add index prov_level_sex_idx(<code>province</code>, <code>level</code>, <code>sex</code>);</p>
+<p>再查询分析器分析：</p>
+<p>mysql&gt; explain select name, province, level, sex from customer_info where province &#x3D; ‘zhejiang’ and level&#x3D;1 and<br>sex&#x3D;’male’;<br>+—-+————-+—————+————+——+——————–+——————–+———+——————-+——+———-+——-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+——————–+——————–+———+——————-+——+———-+——-+<br>| 1 | SIMPLE | customer_info | NULL | ref | prov_level_sex_idx | prov_level_sex_idx | 176 | const,const,const | 126 |<br>100.00 | NULL |<br>+—-+————-+—————+————+——+——————–+——————–+———+——————-+——+———-+——-+<br>1 row in set, 1 warning (0.00 sec)</p>
+<ul>
+<li>查询走了索引 prov_sex_level_idx</li>
+<li>ref 显示命中了 prov_sex_level_idx 中的三个字段</li>
+</ul>
+<p>更换查询条件顺序</p>
+<p>更换 where 后面的查询条件再执行一次 explain：</p>
+<p>mysql&gt; explain select name, province, level, sex from customer_info where sex&#x3D;’male’ and province &#x3D; ‘zhejiang’ and<br>level&#x3D;1;<br>+—-+————-+—————+————+——+——————–+——————–+———+——————-+——+———-+——-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+——————–+——————–+———+——————-+——+———-+——-+<br>| 1 | SIMPLE | customer_info | NULL | ref | prov_level_sex_idx | prov_level_sex_idx | 176 | const,const,const | 126 |<br>100.00 | NULL |<br>+—-+————-+—————+————+——+——————–+——————–+———+——————-+——+———-+——-+<br>1 row in set, 1 warning (0.00 sec)</p>
+<ul>
+<li>结果和上面的一样，说明 mysql 会自动优化这些条件的顺序</li>
+</ul>
+<p>查询条件变为2个</p>
+<p>– 查询条件为 province 和 level mysql&gt; explain select name, province, level, sex from customer_info where province &#x3D; ‘<br>zhejiang’ and level&#x3D;1;<br>+—-+————-+—————+————+——+——————–+——————–+———+————-+——+———-+——-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+——————–+——————–+———+————-+——+———-+——-+<br>| 1 | SIMPLE | customer_info | NULL | ref | prov_level_sex_idx | prov_level_sex_idx | 134 | const,const | 1486 | 100.00<br>| NULL |<br>+—-+————-+—————+————+——+——————–+——————–+———+————-+——+———-+——-+<br>1 row in set, 1 warning (0.00 sec)</p>
+<p>– 查询条件为 province 和 sex mysql&gt; explain select name, province, level, sex from customer_info where province &#x3D; ‘zhejiang’<br>and sex&#x3D;’male’;<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+———————–+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+———————–+<br>| 1 | SIMPLE | customer_info | NULL | ref | prov_level_sex_idx | prov_level_sex_idx | 130 | const | 1768 | 10.00 | Using<br>index condition |<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+———————–+<br>1 row in set, 1 warning (0.00 sec)</p>
+<p>– 查询条件为 level 和 sex mysql&gt; explain select name, province, level, sex from customer_info where level&#x3D;1 and sex&#x3D;’male’;<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>| 1 | SIMPLE | customer_info | NULL | ALL | NULL | NULL | NULL | NULL | 100962 | 1.00 | Using where |<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>1 row in set, 1 warning (0.00 sec)</p>
+<ul>
+<li>查询条件为 province 和 level 时，符合最左前缀原则，走了 prov_sex_level_idx 索引</li>
+<li>查询条件为 province 和 sex 时，只有 province 符合最左匹配原则，所以只有 province 走了索引</li>
+<li>查询条件为 level 和 sex 时，都不符合最左匹配原则，不能走索引</li>
+</ul>
+<p>查询条件变为 1 个</p>
+<p>– 查询条件为 province mysql&gt; explain select name, province, level, sex from customer_info where province &#x3D; ‘zhejiang’;<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+——-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+——-+<br>| 1 | SIMPLE | customer_info | NULL | ref | prov_level_sex_idx | prov_level_sex_idx | 130 | const | 1768 | 100.00 | NULL<br>|<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+——-+<br>1 row in set, 1 warning (0.00 sec)</p>
+<p>– 查询条件为 level mysql&gt; explain select name, province, level, sex from customer_info where level&#x3D;1;<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>| 1 | SIMPLE | customer_info | NULL | ALL | NULL | NULL | NULL | NULL | 100962 | 10.00 | Using where |<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>1 row in set, 1 warning (0.00 sec)</p>
+<p>– 查询条件为 sex mysql&gt; explain select name, province, level, sex from customer_info where sex&#x3D;’male’;<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>| 1 | SIMPLE | customer_info | NULL | ALL | NULL | NULL | NULL | NULL | 100962 | 10.00 | Using where |<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>1 row in set, 1 warning (0.00 sec)</p>
+<ul>
+<li>和预期的一样，只有查询条件为 province 时才符合最左前缀原则，才会走索引</li>
+</ul>
+<p>查询条件中有范围查询 &gt;、&lt;</p>
+<p>– 范围查询 &gt; &lt;<br>mysql&gt; explain select name, province, level, sex from customer_info where province &#x3D; ‘zhejiang’ and level &gt; 2 and<br>level &lt; 8;<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>| 1 | SIMPLE | customer_info | NULL | range | prov_level_sex_idx | prov_level_sex_idx | 134 | NULL | 174 | 100.00 |<br>Using index condition |<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>1 row in set, 1 warning (0.00 sec)</p>
+<p>mysql&gt; explain select name, province, level, sex from customer_info where province &#x3D; ‘zhejiang’ and level &gt; 2 and<br>level &lt; 8 and sex&#x3D;’male’;<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>| 1 | SIMPLE | customer_info | NULL | range | prov_level_sex_idx | prov_level_sex_idx | 134 | NULL | 174 | 10.00 | Using<br>index condition |<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>1 row in set, 1 warning (0.00 sec)</p>
+<ul>
+<li>使用了 prov_level_sex_idx 索引，根据扫描的行数知道，province 和 level 字段使用了索引</li>
+<li>遇到 &gt;、&lt;范围查询，mysql 无法再使用范围列后面的其他索引列了</li>
+</ul>
+<p>查询条件中有 between</p>
+<p>– 范围查询 between mysql&gt; explain select name, province, level, sex from customer_info where province &#x3D; ‘zhejiang’ and<br>level between 3 and 7;<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>| 1 | SIMPLE | customer_info | NULL | range | prov_level_sex_idx | prov_level_sex_idx | 134 | NULL | 174 | 100.00 |<br>Using index condition |<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>1 row in set, 1 warning (0.00 sec)</p>
+<p>mysql&gt;  explain select name, province, level, sex from customer_info where province &#x3D; ‘zhejiang’ and level between 3 and<br>7 and sex&#x3D;’male’;<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>| 1 | SIMPLE | customer_info | NULL | range | prov_level_sex_idx | prov_level_sex_idx | 176 | NULL | 133 | 10.00 | Using<br>index condition |<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>1 row in set, 1 warning (0.00 sec)</p>
+<p>从 key 看，三个字段都走了索引，但是从 filter看，并不是所有的字段都走了索引。那该如何判断？ 可以看下这篇文章 The range access method and why you should use EXPLAIN<br>JSON，这时候 explain 可以加上参数 format&#x3D;json 来查看哪些字段走了索引</p>
+<p>mysql&gt; explain format&#x3D;json select name, province, level, sex from customer_info where province &#x3D; ‘zhejiang’ and level<br>between 3 and 7 and sex&#x3D;’male’ \G<br>*************************** 1. row ***************************<br>EXPLAIN: {<br>“query_block”: {<br>“select_id”: 1,<br>“cost_info”: {<br>“query_cost”: “187.21”<br>},<br>“table”: {<br>“table_name”: “customer_info”,<br>“access_type”: “range”,<br>“possible_keys”: [<br>“prov_level_sex_idx”<br>],<br>“key”: “prov_level_sex_idx”,<br>“used_key_parts”: [<br>“province”,<br>“level”<br>],<br>“key_length”: “176”,<br>“rows_examined_per_scan”: 133,<br>“rows_produced_per_join”: 13,<br>“filtered”: “10.00”,<br>“index_condition”: “((<code>testdb</code>.<code>customer_info</code>.<code>province</code> &#x3D; ‘zhejiang’) and (<code>testdb</code>.<code>customer_info</code>.<code>level</code> between 3<br>and 7) and (<code>testdb</code>.<code>customer_info</code>.<code>sex</code> &#x3D; ‘male’))”,<br>“cost_info”: {<br>“read_cost”: “184.55”,<br>“eval_cost”: “2.66”,<br>“prefix_cost”: “187.21”,<br>“data_read_per_join”: “4K”<br>},<br>“used_columns”: [<br>“name”,<br>“province”,<br>“level”,<br>“sex”<br>]<br>} } } 1 row in set, 1 warning (0.00 sec)</p>
+<ul>
+<li>从 “used_key_parts”: [“province”, “level”] 可以看出只有 province 和 level 走了索引，sex 字段并没有走索引。</li>
+<li>key_len 字段并不是所有走了索引的索引长度之和</li>
+<li>使用 format&#x3D;json 可以更好的查看 explain</li>
+<li>遇到 between 范围查询，mysql 无法再使用范围列后面的其他索引列了</li>
+</ul>
+<p>查询条件中有 like</p>
+<p>– 范围查询 like mysql&gt; explain select name, province, level, sex from customer_info where province &#x3D; ‘zhejiang’;<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+——-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+——-+<br>| 1 | SIMPLE | customer_info | NULL | ref | prov_level_sex_idx | prov_level_sex_idx | 130 | const | 1768 | 100.00 | NULL<br>|<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+——-+<br>1 row in set, 1 warning (0.00 sec)</p>
+<p>mysql&gt; explain select name, province, level, sex from customer_info where province like ‘%zhe’;<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>| 1 | SIMPLE | customer_info | NULL | ALL | NULL | NULL | NULL | NULL | 100962 | 11.11 | Using where |<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>1 row in set, 1 warning (0.00 sec)</p>
+<p>mysql&gt; explain select name, province, level, sex from customer_info where province like ‘zhe%’;<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>| 1 | SIMPLE | customer_info | NULL | range | prov_level_sex_idx | prov_level_sex_idx | 130 | NULL | 1768 | 100.00 |<br>Using index condition |<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>1 row in set, 1 warning (0.00 sec)</p>
+<p>mysql&gt; explain select name, province, level, sex from customer_info where province like ‘zhe%iang’;<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>| 1 | SIMPLE | customer_info | NULL | range | prov_level_sex_idx | prov_level_sex_idx | 130 | NULL | 1768 | 100.00 |<br>Using index condition |<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>1 row in set, 1 warning (0.00 sec)</p>
+<p>mysql&gt; explain select name, province, level, sex from customer_info where province like ‘zhe%’ and level &#x3D; 9;<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>| 1 | SIMPLE | customer_info | NULL | range | prov_level_sex_idx | prov_level_sex_idx | 134 | NULL | 1768 | 10.00 |<br>Using index condition |<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>1 row in set, 1 warning (0.00 sec)</p>
+<ul>
+<li><p>前模糊不能使用索引，非前模糊可以使用索引</p>
+</li>
+<li><p>和 between 一样，这里通过 key_len 和 filter 判断哪些字段走了索引时有冲突，使用 format&#x3D;json 重新查看 mysql&gt; explain format&#x3D;json select name,<br>province, level, sex from customer_info where province like ‘zhe%’ and level &#x3D; 9 \G<br>*************************** 1. row ***************************<br>EXPLAIN: {<br>“query_block”: {<br>“select_id”: 1,<br>“cost_info”: {<br>“query_cost”: “2476.21”<br>},<br>“table”: {<br>“table_name”: “customer_info”,<br>“access_type”: “range”,<br>“possible_keys”: [<br>“prov_level_sex_idx”<br>],<br>“key”: “prov_level_sex_idx”,<br>“used_key_parts”: [<br>“province”<br>],<br>“key_length”: “134”,<br>“rows_examined_per_scan”: 1768,<br>“rows_produced_per_join”: 176,<br>“filtered”: “10.00”,<br>“index_condition”: “((<code>testdb</code>.<code>customer_info</code>.<code>level</code> &#x3D; 9) and (<code>testdb</code>.<code>customer_info</code>.<code>province</code> like ‘zhe%’))”,<br>“cost_info”: {<br>“read_cost”: “2440.85”,<br>“eval_cost”: “35.36”,<br>“prefix_cost”: “2476.21”,<br>“data_read_per_join”: “53K”<br>},<br>“used_columns”: [<br>“name”,<br>“province”,<br>“level”,<br>“sex”<br>]<br>} } } 1 row in set, 1 warning (0.00 sec)</p>
+</li>
+<li><p>从 “used_key_parts”: [“province”] 可以看出只有 province 走了索引，level 字段并没有走索引。</p>
+</li>
+<li><p>遇到 like 范围查询，mysql 无法再使用范围列后面的其他索引列了</p>
+</li>
+</ul>
+<p>查询条件中有 or</p>
+<p>– 相同列使用 or 查询 – drop index prov_level_sex_idx on customer_info; – alter table customer_info add index<br>prov(<code>province</code>); mysql&gt; explain select name, province, level, sex from customer_info where province &#x3D; ‘zhejiang’ or<br>province&#x3D; ‘jiangsu’;<br>+—-+————-+—————+————+——-+—————+——+———+——+——+———-+———————–+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——-+—————+——+———+——+——+———-+———————–+<br>| 1 | SIMPLE | customer_info | NULL | range | prov | prov | 130 | NULL | 5280 | 100.00 | Using index condition |<br>+—-+————-+—————+————+——-+—————+——+———+——+——+———-+———————–+<br>1 row in set, 1 warning (0.00 sec)</p>
+<p>– 不同列且部分列建立索引 mysql&gt; explain select name, province, level, sex from customer_info where province &#x3D; ‘zhejiang’ or level<br>&#x3D; 9;<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>| 1 | SIMPLE | customer_info | NULL | ALL | prov | NULL | NULL | NULL | 100962 | 19.00 | Using where |<br>+—-+————-+—————+————+——+—————+——+———+——+——–+———-+————-+<br>1 row in set, 1 warning (0.00 sec)</p>
+<p>– 不同列且全部列分别建立索引 – alter table customer_info add index level(<code>level</code>); mysql&gt; explain select name, province, level, sex<br>from customer_info where province &#x3D; ‘zhejiang’ or level &#x3D; 9;<br>+—-+————-+—————+————+————-+—————+————+———+——+——+———-+————————————–+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+————-+—————+————+———+——+——+———-+————————————–+<br>| 1 | SIMPLE | customer_info | NULL | index_merge | prov,level | prov,level | 130,4 | NULL | 3999 | 100.00 | Using<br>union(prov,level); Using where |<br>+—-+————-+—————+————+————-+—————+————+———+——+——+———-+————————————–+<br>1 row in set, 1 warning (0.00 sec)</p>
+<p>– 不同列建立联合索引 – drop index prov on customer_info; – drop index level on customer_info; – alter table customer_info add<br>index prov_level_sex_idx(<code>province</code>, <code>level</code>, <code>sex</code>); mysql&gt; explain select name, province, level, sex from<br>customer_info where province &#x3D; ‘zhejiang’ or level &#x3D; 9;<br>+—-+————-+—————+————+——+——————–+——+———+——+——–+———-+————-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+——————–+——+———+——+——–+———-+————-+<br>| 1 | SIMPLE | customer_info | NULL | ALL | prov_level_sex_idx | NULL | NULL | NULL | 100962 | 19.00 | Using where |<br>+—-+————-+—————+————+——+——————–+——+———+——+——–+———-+————-+<br>1 row in set, 1 warning (0.00 sec)</p>
+<ul>
+<li>相同列使用 or：索引生效</li>
+<li>不同列且部分列建立索引：索引失效</li>
+<li>不同列且全部列分别建立索引：自动将 or 转为 union，索引生效</li>
+<li>不同列建立联合索引：索引失效</li>
+</ul>
+<p>查询条件中有 in</p>
+<p>mysql&gt; explain select name, province, level, sex from customer_info where province in (‘zhejiang’, ‘jiangsu’);<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>| 1 | SIMPLE | customer_info | NULL | range | prov_level_sex_idx | prov_level_sex_idx | 130 | NULL | 5280 | 100.00 |<br>Using index condition |<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>1 row in set, 1 warning (0.00 sec)</p>
+<p>mysql&gt; explain select name, province, level, sex from customer_info where province in (‘zhejiang’, ‘jiangsu’) and level<br>&#x3D; 9;<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>| 1 | SIMPLE | customer_info | NULL | range | prov_level_sex_idx | prov_level_sex_idx | 134 | NULL | 110 | 100.00 |<br>Using index condition |<br>+—-+————-+—————+————+——-+——————–+——————–+———+——+——+———-+———————–+<br>1 row in set, 1 warning (0.00 sec)</p>
+<ul>
+<li>in 后面的 level 字段可以走索引</li>
+</ul>
+<p>查询条件中有 order by</p>
+<p>mysql&gt; explain select name, province, level, sex from customer_info where province &#x3D; ‘zhejiang’;<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+——-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+——-+<br>| 1 | SIMPLE | customer_info | NULL | ref | prov_level_sex_idx | prov_level_sex_idx | 130 | const | 1768 | 100.00 | NULL<br>|<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+——-+<br>1 row in set, 1 warning (0.00 sec)</p>
+<p>– 索引列顺序和 order by 子句的顺序完全一致 – 所有列的排序方向全部相同 mysql&gt; explain select name, province, level, sex from customer_info where<br>province &#x3D; ‘zhejiang’ order by level,sex;<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+———————–+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+———————–+<br>| 1 | SIMPLE | customer_info | NULL | ref | prov_level_sex_idx | prov_level_sex_idx | 130 | const | 1768 | 100.00 |<br>Using index condition |<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+———————–+<br>1 row in set, 1 warning (0.00 sec)</p>
+<p>mysql&gt; explain select name, province, level, sex from customer_info where province &#x3D; ‘zhejiang’ order by level desc,sex<br>desc;<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+————-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+————-+<br>| 1 | SIMPLE | customer_info | NULL | ref | prov_level_sex_idx | prov_level_sex_idx | 130 | const | 1768 | 100.00 |<br>Using where |<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+————-+<br>1 row in set, 1 warning (0.00 sec)</p>
+<p>– 索引列顺序和 order by 子句的顺序完全一致 – 所有列的排序方向非全部相同 mysql&gt; explain select name, province, level, sex from customer_info where<br>province &#x3D; ‘zhejiang’ order by level desc,sex;<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+—————————————+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+—————————————+<br>| 1 | SIMPLE | customer_info | NULL | ref | prov_level_sex_idx | prov_level_sex_idx | 130 | const | 1768 | 100.00 |<br>Using index condition; Using filesort |<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+—————————————+<br>1 row in set, 1 warning (0.00 sec)</p>
+<p>mysql&gt; explain select name, province, level, sex from customer_info where province &#x3D; ‘zhejiang’ order by level,sex desc;<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+—————————————+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+—————————————+<br>| 1 | SIMPLE | customer_info | NULL | ref | prov_level_sex_idx | prov_level_sex_idx | 130 | const | 1768 | 100.00 |<br>Using index condition; Using filesort |<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+—————————————+<br>1 row in set, 1 warning (0.00 sec)</p>
+<p>– 索引列顺序和 order by 子句的顺序非完全一致 – 所有列的排序方向全部相同 mysql&gt; explain select name, province, level, sex from customer_info where<br>province &#x3D; ‘zhejiang’ order by sex,level;<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+—————————————+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+—————————————+<br>| 1 | SIMPLE | customer_info | NULL | ref | prov_level_sex_idx | prov_level_sex_idx | 130 | const | 1768 | 100.00 |<br>Using index condition; Using filesort |<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+—————————————+<br>1 row in set, 1 warning (0.00 sec)</p>
+<p>mysql&gt; explain select name, province, level, sex from customer_info where province &#x3D; ‘zhejiang’ order by sex desc,level<br>desc;<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+—————————————+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+—————————————+<br>| 1 | SIMPLE | customer_info | NULL | ref | prov_level_sex_idx | prov_level_sex_idx | 130 | const | 1768 | 100.00 |<br>Using index condition; Using filesort |<br>+—-+————-+—————+————+——+——————–+——————–+———+——-+——+———-+—————————————+<br>1 row in set, 1 warning (0.00 sec)</p>
+<ul>
+<li>只有当索引的列顺序和 ORDER BY 子句的顺序完全一致，并且所有列的排序方向（倒序或正序）都一样时，mysql 才能够使用索引来对结果做排序。</li>
+</ul>
+<p>查询条件都在索引中</p>
+<p>mysql&gt; explain select province, level, sex from customer_info where province &#x3D; ‘zhejiang’ and level &#x3D; 5 and sex &#x3D; ‘<br>male’;<br>+—-+————-+—————+————+——+——————–+——————–+———+——————-+——+———-+————-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+—————+————+——+——————–+——————–+———+——————-+——+———-+————-+<br>| 1 | SIMPLE | customer_info | NULL | ref | prov_level_sex_idx | prov_level_sex_idx | 176 | const,const,const | 5 |<br>100.00 | Using index |<br>+—-+————-+—————+————+——+——————–+——————–+———+——————-+——+———-+————-+<br>1 row in set, 1 warning (0.00 sec)</p>
+<ul>
+<li>Extra 字段是 Using index，意思就是索引覆盖，查询的内容可以直接在索引中拿到</li>
+</ul>
+<p>联表查询</p>
+<p>两表为不同的字符集</p>
+<p>– create table customer_info – use utf8mb4 CREATE TABLE <code>customer_info</code> (<br><code>id</code> bigint(20) unsigned NOT NULL AUTO_INCREMENT,<br><code>name</code> varchar(32) NOT NULL COMMENT ‘名字’,<br><code>province</code> varchar(32) NOT NULL COMMENT ‘省份’,<br><code>level</code> int(6) NOT NULL COMMENT ‘等级’,<br><code>sex</code> varchar(10) NOT NULL COMMENT ‘性别’, PRIMARY KEY (<code>id</code>)<br>KEY <code>prov</code> (<code>province</code>), KEY <code>lvl_idx</code> (<code>level</code>), KEY <code>nm</code> (<code>name</code>)<br>) ENGINE&#x3D;InnoDB DEFAULT CHARSET&#x3D;utf8mb4 ROW_FORMAT&#x3D;DYNAMIC COMMENT&#x3D;’顾客信息表’;</p>
+<p>– create table customer_info_2 – use utf8mb4 CREATE TABLE <code>customer_info_2</code> (<br><code>id</code> bigint(20) unsigned NOT NULL AUTO_INCREMENT,<br><code>name</code> varchar(32) NOT NULL COMMENT ‘名字’,<br><code>province</code> varchar(512) NOT NULL COMMENT ‘省份’,<br><code>level</code> int(6) NOT NULL COMMENT ‘等级’,<br><code>sex</code> varchar(10) NOT NULL COMMENT ‘性别’, PRIMARY KEY (<code>id</code>), KEY <code>prov</code> (<code>province</code>), KEY <code>lvl_idx</code> (<code>level</code>),<br>KEY <code>nm</code> (<code>name</code>),<br>) ENGINE&#x3D;InnoDB DEFAULT CHARSET&#x3D;utf8 ROW_FORMAT&#x3D;DYNAMIC COMMENT&#x3D;’顾客信息表’;</p>
+<p>查询</p>
+<p>mysql&gt; explain select * from customer_info c1 join customer_info_2 c2 on c1.name &#x3D; c2.name where c1.name &#x3D; ‘gdtb’;<br>+—-+————-+——-+————+——+—————+——+———+——-+——-+———-+—————————————————-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+——-+————+——+—————+——+———+——-+——-+———-+—————————————————-+<br>| 1 | SIMPLE | c1 | NULL | ref | nm | nm | 130 | const | 1 | 100.00 | NULL | | 1 | SIMPLE | c2 | NULL | ALL | NULL |<br>NULL | NULL | NULL | 99986 | 100.00 | Using where; Using join buffer (Block Nested Loop) |<br>+—-+————-+——-+————+——+—————+——+———+——-+——-+———-+—————————————————-+<br>2 rows in set, 1 warning (0.00 sec)</p>
+<p>mysql&gt; explain select * from customer_info c1 join customer_info_2 c2 on c1.name &#x3D; c2.name where c2.name &#x3D; ‘gdtb’;<br>+—-+————-+——-+————+——+—————+——+———+——-+——+———-+———————–+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+——-+————+——+—————+——+———+——-+——+———-+———————–+<br>| 1 | SIMPLE | c2 | NULL | ref | nm | nm | 98 | const | 1 | 100.00 | NULL | | 1 | SIMPLE | c1 | NULL | ref | nm | nm |<br>130 | func | 1 | 100.00 | Using index condition |<br>+—-+————-+——-+————+——+—————+——+———+——-+——+———-+———————–+<br>2 rows in set, 1 warning (0.00 sec)</p>
+<ul>
+<li>字符集 utf8mb4 是 utf8 的超集</li>
+<li>当 c1 为驱动表时，c1 中过滤出来的 name 字段的字符集为 utf8mb4，然后再去关联 c2 中的 name(utf8) 字段，超集关联子集，这时候 c2 中的 name 字段需要转换为 utf8mb4 字符集，即<br>CONVERT(c2.name USING utf8mb4)，因为在索引列上使用了函数操作，所以索引失效了</li>
+<li>当 c2 为驱动表时，c2 中过滤出来的 name 字段的字符集为 utf8，然后再去关联 c1 的 name(utf8mb4) 字段，子集关联超集，这没问题，所以 c1 中的关联字段可以走索引</li>
+</ul>
+<p>了解了是什么原因造成的，如果要暂时解决这个问题，可以在关联条件中手动将 utf8mb4 向 utf8 进行转换</p>
+<p>mysql&gt; explain select * from customer_info c1 join customer_info_2 c2 on CONVERT(c1.name USING utf8) &#x3D; c2.name where<br>c1.name &#x3D; ‘gdtb’;<br>+—-+————-+——-+————+——+—————+——+———+——-+——+———-+———————–+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+——-+————+——+—————+——+———+——-+——+———-+———————–+<br>| 1 | SIMPLE | c1 | NULL | ref | nm | nm | 130 | const | 1 | 100.00 | NULL | | 1 | SIMPLE | c2 | NULL | ref | nm | nm |<br>98 | func | 1 | 100.00 | Using index condition |<br>+—-+————-+——-+————+——+—————+——+———+——-+——+———-+———————–+<br>2 rows in set, 1 warning (0.00 sec)</p>
+<p>当然，最好的方法还是让两张表的字符集变得一致。int 类型的不受影响。</p>
+<p>索引加在哪个表</p>
+<p>mysql&gt; explain select * from customer_info_2 c2 left join customer_info c1 on c2.name &#x3D; c1.name;<br>+—-+————-+——-+————+——+—————+——+———+——+——-+———-+————-+<br>| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |<br>+—-+————-+——-+————+——+—————+——+———+——+——-+———-+————-+<br>| 1 | SIMPLE | c2 | NULL | ALL | NULL | NULL | NULL | NULL | 99986 | 100.00 | NULL | | 1 | SIMPLE | c1 | NULL | ref | nm<br>| nm | 130 | func | 1 | 100.00 | Using where |<br>+—-+————-+——-+————+——+—————+——+———+——+——-+———-+————-+<br>2 rows in set, 1 warning (0.00 sec)</p>
+<ul>
+<li>c1 和 c2 表都有 name 字段的索引，当 c2 为驱动表时，当关联字段不是 where 的条件时，关联字段的索引只需要加在 c1 表(被驱动表)即可，c2 表(驱动表)的字段可以不加。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>mysql</category>
+        <category>索引</category>
+      </categories>
+      <tags>
+        <tag>mysql</tag>
       </tags>
   </entry>
 </search>
