@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"ailydia.top","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="内存模型  程序计数器 字节码解释器通过改变程序计数器来依次读取指令，从而实现代码的流程控制，如：顺序执行、选择、循环、异常处理。 在多线程的情况下，程序计数器用于记录当前线程执行的位置，从而当线程被切换回来的时候能够知道该线程上次运行到哪儿了。  虚拟机栈  堆在 JDK 7 版本及 JDK 7 版本之前，堆内存被通常分为下面三部分：  新生代内存(Young Generation) 老生代(O">
+  <meta name="description" content="简要介绍Jvm和垃圾回收机制">
 <meta property="og:type" content="article">
 <meta property="og:title" content="jvm简要介绍">
 <meta property="og:url" content="http://ailydia.top/2023/02/18/java/jvm/index.html">
 <meta property="og:site_name" content="rookie的博客">
-<meta property="og:description" content="内存模型  程序计数器 字节码解释器通过改变程序计数器来依次读取指令，从而实现代码的流程控制，如：顺序执行、选择、循环、异常处理。 在多线程的情况下，程序计数器用于记录当前线程执行的位置，从而当线程被切换回来的时候能够知道该线程上次运行到哪儿了。  虚拟机栈  堆在 JDK 7 版本及 JDK 7 版本之前，堆内存被通常分为下面三部分：  新生代内存(Young Generation) 老生代(O">
+<meta property="og:description" content="简要介绍Jvm和垃圾回收机制">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://ailydia.top/2023/02/18/java/jvm/jvmMoudle.png">
 <meta property="og:image" content="http://ailydia.top/2023/02/18/java/jvm/stack.png">
@@ -34,7 +34,7 @@
 <meta property="og:image" content="http://ailydia.top/2023/02/18/java/jvm/gc.png">
 <meta property="og:image" content="http://ailydia.top/2023/02/18/java/jvm/jvmparam.png">
 <meta property="article:published_time" content="2023-02-18T08:18:45.000Z">
-<meta property="article:modified_time" content="2023-02-18T11:37:46.832Z">
+<meta property="article:modified_time" content="2023-02-18T12:18:51.309Z">
 <meta property="article:author" content="peng gang">
 <meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
@@ -223,7 +223,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2023-02-18 16:18:45 / 修改时间：19:37:46" itemprop="dateCreated datePublished" datetime="2023-02-18T16:18:45+08:00">2023-02-18</time>
+              <time title="创建时间：2023-02-18 16:18:45 / 修改时间：20:18:51" itemprop="dateCreated datePublished" datetime="2023-02-18T16:18:45+08:00">2023-02-18</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -261,6 +261,7 @@
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               <span>3 分钟</span>
             </span>
+            <div class="post-description">简要介绍Jvm和垃圾回收机制</div>
 
         </div>
       </header>
@@ -460,7 +461,7 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
