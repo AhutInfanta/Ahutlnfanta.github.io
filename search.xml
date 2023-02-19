@@ -148,7 +148,7 @@
 <li>对象分配或者晋升的速度变化大</li>
 <li>希望消除长时间的GC停顿（超过0.5-1秒）</li>
 </ul>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><img src="/2023/02/18/java/jvm/gc.png" class="" title="img.png">
+<h2 id="ZGC"><a href="#ZGC" class="headerlink" title="ZGC"></a>ZGC</h2><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><img src="/2023/02/18/java/jvm/gc.png" class="" title="img.png">
 <h1 id="GC日志开启命令"><a href="#GC日志开启命令" class="headerlink" title="GC日志开启命令"></a>GC日志开启命令</h1><figure class="highlight text"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">-XX:+PrintGCDetails 输出GC的详细日志</span><br><span class="line">-XX:+PrintGCDateStamps 输出GC的日期戳</span><br><span class="line">-Xloggc:/var/log/hbase/gc-regionserver-hbase.log GC日志输出的路径</span><br><span class="line">-XX:+UseGCLogFileRotation 打开GC日志滚动记录功能</span><br><span class="line">-XX:NumberOfGCLogFiles 设置滚动日志文件的个数，必须大于等于1  日志文件命名策略是，.0, .1, …, .n-1，其中n是该参数的值</span><br><span class="line">-XX:GCLogFileSize 设置滚动日志文件的大小，必须大于8k</span><br><span class="line">-XX:+PrintGCApplicationStoppedTime 打印GC造成应用暂停的时间</span><br><span class="line">-XX:+PrintHeapAtGC 在进行GC的前后打印出堆的信息</span><br><span class="line">-XX:+PrintTenuringDistribution 在每次新生代 young GC时,输出幸存区中对象的年龄分布</span><br><span class="line"></span><br><span class="line">oom的时候生成dump文件</span><br><span class="line">-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=目录</span><br><span class="line">-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=目录/xxx.hprof</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p><strong>总结如下</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">-XX:+PrintGCDetails</span><br><span class="line">-XX:+PrintGCDateStamps</span><br><span class="line">-Xloggc:D://haha//gc.log</span><br><span class="line">-XX:+UseGCLogFileRotation</span><br><span class="line">-XX:NumberOfGCLogFiles=10</span><br><span class="line">-XX:GCLogFileSize=512k</span><br><span class="line">-XX:+PrintGCApplicationStoppedTime</span><br><span class="line">-XX:+PrintHeapAtGC</span><br><span class="line">-XX:+HeapDumpOnOutOfMemoryError</span><br><span class="line">-XX:HeapDumpPath=D://haha</span><br></pre></td></tr></table></figure>
@@ -603,7 +603,7 @@ Kafka 中的索引文件以稀疏索引（sparse index）的方式构造消息�
       </tags>
   </entry>
   <entry>
-    <title>mysql-index</title>
+    <title>mysql索引</title>
     <url>/2022/10/13/mysql/mysql-index/</url>
     <content><![CDATA[<h1 id="数据页"><a href="#数据页" class="headerlink" title="数据页"></a>数据页</h1><h2 id="InnoDB-是如何存储数据的？"><a href="#InnoDB-是如何存储数据的？" class="headerlink" title="InnoDB 是如何存储数据的？"></a>InnoDB 是如何存储数据的？</h2><p>记录是按照行来存储的，但是数据库的读取并不是以行为单位，否则一次读取(一次 I&#x2F;O 操作) 只能处理一行数据，效率会非常低。因此，InnoDB 的数据是按 数据页<br>数据页为单位来读写的，也就是说，当需要读一条记录的时候，并不是将这个记录本身从磁盘读出来，而是以页为单位，将其整体读入内存。</p>
 <p>数据库的 I&#x2F;O 操作的最小单位是页，InnoDB 数据页的默认大小是 16KB，数据库每次读写都是以 16KB 为单位，一次最少从磁盘中读取 16K 的内容到内存中 或者 一次最少把 16K 内容刷新到磁盘中。</p>
@@ -1165,5 +1165,108 @@ Kafka 中的索引文件以稀疏索引（sparse index）的方式构造消息�
       <tags>
         <tag>mysql</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>java基础-多线程</title>
+    <url>/2023/02/19/java/javaConcurrent1/</url>
+    <content><![CDATA[<h1 id="线程的生命周期"><a href="#线程的生命周期" class="headerlink" title="线程的生命周期"></a>线程的生命周期</h1><img src="/2023/02/19/java/javaConcurrent1/threadLife.png" class="" title="img.png">
+
+<h1 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h1><p>Thead源码</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Thread</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span> &#123;</span><br><span class="line">    <span class="comment">//......</span></span><br><span class="line">    <span class="comment">//与此线程有关的ThreadLocal值。由ThreadLocal类维护</span></span><br><span class="line">    ThreadLocal.<span class="type">ThreadLocalMap</span> <span class="variable">threadLocals</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//与此线程有关的InheritableThreadLocal值。由InheritableThreadLocal类维护</span></span><br><span class="line">    ThreadLocal.<span class="type">ThreadLocalMap</span> <span class="variable">inheritableThreadLocals</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="comment">//......</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>ThreadLocalMap是TreadLocal的内部类</p>
+<img src="/2023/02/19/java/javaConcurrent1/theadLocalMap.png" class="" title="img.png">
+<h2 id="ThreadLocal内存泄漏"><a href="#ThreadLocal内存泄漏" class="headerlink" title="ThreadLocal内存泄漏"></a>ThreadLocal内存泄漏</h2><p>ThreadLocalMap 中使用的 key 为 ThreadLocal 的弱引用，而 value 是强引用。所以，如果 ThreadLocal 没有被外部强引用的情况下，在垃圾回收的时候，key 会被清理掉，而 value 不会被清理掉。这样一来，ThreadLocalMap 中就会出现 key 为 null 的 Entry。假如我们不做任何措施的话，value 永远无法被 GC 回收，这个时候就可能会产生内存泄露。ThreadLocalMap 实现中已经考虑了这种情况，在调用 set()、get()、remove() 方法的时候，会清理掉 key 为 null 的记录。使用完 ThreadLocal方法后 最好手动调用remove()方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Entry</span> <span class="keyword">extends</span> <span class="title class_">WeakReference</span>&lt;ThreadLocal&lt;?&gt;&gt; &#123;</span><br><span class="line">    <span class="comment">/** The value associated with this ThreadLocal. */</span></span><br><span class="line">    Object value;</span><br><span class="line"></span><br><span class="line">    Entry(ThreadLocal&lt;?&gt; k, Object v) &#123;</span><br><span class="line">        <span class="built_in">super</span>(k);</span><br><span class="line">        value = v;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h1 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h1><h2 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h2><blockquote>
+<p>保证了变量和可见性和顺序性，无法保证原子性（如自增操作）<br>底层利用内存屏障来实现，Unsafe提供了三个内存屏障的类：<br> <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title function_">loadFence</span><span class="params">()</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title function_">storeFence</span><span class="params">()</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title function_">fullFence</span><span class="params">()</span>;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h2><blockquote>
+<ol>
+<li>修饰实例方法 （锁当前对象实例）</li>
+<li>修饰静态方法 （锁当前类）</li>
+<li>修饰代码块 （锁指定对象&#x2F;类）</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>synchronized 同步语句块的实现使用的是 monitorenter 和 monitorexit 指令，其中 monitorenter 指令指向同步代码块的开始位置，monitorexit 指令则指明同步代码块的结束位置。synchronized 修饰的方法并没有 monitorenter 指令和 monitorexit 指令，取得代之的确实是 ACC_SYNCHRONIZED 标识，该标识指明了该方法是一个同步方法。不过两者的本质都是对对象监视器 monitor 的获取。</p>
+</blockquote>
+<h2 id="AQS"><a href="#AQS" class="headerlink" title="AQS"></a>AQS</h2><p>核心内容state和CLH（虚拟的双向队列）<br>自定义同步器实现时主要实现以下几种方法：</p>
+<ol>
+<li>isHeldExclusively()：该线程是否正在独占资源。只有用到condition才需要去实现它。</li>
+<li>tryAcquire(int)：独占方式。尝试获取资源，成功则返回true，失败则返回false。</li>
+<li>tryRelease(int)：独占方式。尝试释放资源，成功则返回true，失败则返回false。</li>
+<li>tryAcquireShared(int)：共享方式。尝试获取资源。负数表示失败；0表示成功，但没有剩余可用资源；正数表示成功，且有剩余资源。</li>
+<li>tryReleaseShared(int)：共享方式。尝试释放资源，如果释放后允许唤醒后续等待结点返回true，否则返回false</li>
+</ol>
+<h2 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h2><p>限制一定数量的线程执行,内部定义Sync实现AQS，底层使用AQS的state</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Semaphore</span> <span class="variable">sem</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Semaphore</span>(<span class="number">2</span>);</span><br><span class="line"><span class="comment">//子线程</span></span><br><span class="line">sem.acquire();</span><br><span class="line">sem.release();</span><br></pre></td></tr></table></figure>
+<h2 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h2><p>表示一个线程需要等一批线程执行后才能执行，内部定义Sync实现AQS，底层使用AQS的state，state为一批线程的数量</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">CountDownLatch</span> <span class="variable">latch</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CountDownLatch</span>(<span class="number">10</span>);</span><br><span class="line"><span class="comment">//子线程</span></span><br><span class="line">latch.countDown();</span><br><span class="line"><span class="comment">//主线程</span></span><br><span class="line">latch.await();</span><br></pre></td></tr></table></figure>
+<h3 id="缺点："><a href="#缺点：" class="headerlink" title="缺点："></a>缺点：</h3><ol>
+<li>只能使用一次</li>
+</ol>
+<h2 id="CyclicBarrier"><a href="#CyclicBarrier" class="headerlink" title="CyclicBarrier"></a>CyclicBarrier</h2><p>表示所有子线程都调用wait后，先执行cyclicBarrier的回调函数，再继续子线程wait后的方法<br>底层依赖ReentrandLock和Condition，利用ReentrantLock的Condition来阻塞和通知线程；</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">CyclicBarrier</span> <span class="variable">cyclicBarrier</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CyclicBarrier</span>(<span class="number">10</span>,()-&gt;&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;所有人都准备好了裁判开始了&quot;</span>);</span><br><span class="line">        &#125;);</span><br><span class="line"><span class="comment">//子线程</span></span><br><span class="line">cyclicBarrier.await();</span><br></pre></td></tr></table></figure>
+<h3 id="优点："><a href="#优点：" class="headerlink" title="优点："></a>优点：</h3><ol>
+<li>可以循环使用</li>
+<li></li>
+</ol>
+<h2 id="synchronized-和-volatile-有什么区别？"><a href="#synchronized-和-volatile-有什么区别？" class="headerlink" title="synchronized 和 volatile 有什么区别？"></a>synchronized 和 volatile 有什么区别？</h2><h2 id="synchronized-和-ReentrantLock-有什么区别？"><a href="#synchronized-和-ReentrantLock-有什么区别？" class="headerlink" title="synchronized 和 ReentrantLock 有什么区别？"></a>synchronized 和 ReentrantLock 有什么区别？</h2><blockquote>
+<ol>
+<li>两者都是可重入锁</li>
+<li>synchronized 依赖于 JVM 而 ReentrantLock 依赖于 API</li>
+<li>ReentrantLock能力更多：等待可中断 ，可实现公平锁，可实现选择性通知（锁可以绑定多个条件）</li>
+</ol>
+</blockquote>
+<h1 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h1><h2 id="Executors工具类（不推荐）"><a href="#Executors工具类（不推荐）" class="headerlink" title="Executors工具类（不推荐）"></a>Executors工具类（不推荐）</h2><blockquote>
+<ol>
+<li>FixedThreadPool,允许请求的队列长度为 Integer.MAX_VALUE</li>
+<li>SingleThreadExecutor,允许请求的队列长度为 Integer.MAX_VALUE</li>
+<li>CachedThreadPool, 允许创建的线程数量为 Integer.MAX_VALUE</li>
+<li>ScheduledThreadPool， 允许创建的线程数量为 Integer.MAX_VALUE</li>
+</ol>
+</blockquote>
+<h2 id="ThreadPoolExecutor"><a href="#ThreadPoolExecutor" class="headerlink" title="ThreadPoolExecutor"></a>ThreadPoolExecutor</h2><p><strong>核心参数</strong></p>
+<blockquote>
+<ol>
+<li>corePoolSize：核心线程数</li>
+<li>maximumPoolSize：最大线程数，队列中存放的任务达到队列容量的时候才会由新增线程到此数值</li>
+<li>workQueue：等待队列</li>
+<li>keepAliveTime：存活时间，线程池中的线程数量大于 corePoolSize时，超出的线程的存活时间</li>
+<li>unit:存活时间的单位</li>
+<li>threadFactory：可以自定义实现，指定线程组和线程名称前缀</li>
+<li>handler：饱和策略</li>
+</ol>
+</blockquote>
+<h3 id="workQueue"><a href="#workQueue" class="headerlink" title="workQueue"></a>workQueue</h3><h3 id="handle"><a href="#handle" class="headerlink" title="handle"></a>handle</h3><blockquote>
+<ol>
+<li>ThreadPoolExecutor.AbortPolicy:抛出异常直接拒绝（默认）</li>
+<li>ThreadPoolExecutor.CallerRunsPolicy：调用执行自己的线程运行任务</li>
+<li>ThreadPoolExecutor.DiscardPolicy：不处理，直接丢掉</li>
+<li>ThreadPoolExecutor.DiscardOldestPolicy：丢弃最早的未处理的任务请求</li>
+</ol>
+</blockquote>
+<img src="/2023/02/19/java/javaConcurrent1/threadpool.png" class="" title="img.png">
+<h3 id="线程数数量设置"><a href="#线程数数量设置" class="headerlink" title="线程数数量设置"></a>线程数数量设置</h3><blockquote>
+<ol>
+<li>CPU 密集型任务(N+1)</li>
+<li>IO 密集型任务(2N)</li>
+</ol>
+</blockquote>
+]]></content>
+      <categories>
+        <category>java</category>
+        <category>多线程</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>redis</title>
+    <url>/2023/02/19/redis/redisDataType/</url>
+    <content><![CDATA[]]></content>
   </entry>
 </search>
