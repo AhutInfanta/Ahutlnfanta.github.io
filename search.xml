@@ -565,7 +565,104 @@
 <li>跳表和平衡树的查询操作都是O（logN）的时间复杂度</li>
 </ol>
 <h3 id="什么是-RedisObject？"><a href="#什么是-RedisObject？" class="headerlink" title="什么是 RedisObject？"></a>什么是 RedisObject？</h3><p>也就是我们常说的五种数据结构：字符串对象、列表对象、哈希对象、集合对象和有序集合对象等<br><strong>这样做有两个好处</strong>：<br>1）通过不同类型的对象，Redis 可以在执行命令之前，根据对象的类型来判断一个对象是否可以执行该的命令。<br>2）可以针对不同的使用场景，为对象设置不同的实现，从而优化内存或查询速度。</p>
-<h3 id="Redis过期策略"><a href="#Redis过期策略" class="headerlink" title="Redis过期策略"></a>Redis过期策略</h3>]]></content>
+<h3 id="Redis过期策略"><a href="#Redis过期策略" class="headerlink" title="Redis过期策略"></a>Redis过期策略</h3><p>采用惰性+定期删除策略，memcached只用了惰性删除</p>
+<h4 id="惰性删除"><a href="#惰性删除" class="headerlink" title="惰性删除"></a>惰性删除</h4><ol>
+<li>进行get或setnx等操作时，先检查key是否过期，过期则删除</li>
+</ol>
+<h4 id="定期删除"><a href="#定期删除" class="headerlink" title="定期删除"></a>定期删除</h4><p>在配置文件中根据server.hz来配置，默认10，即每秒10次</p>
+<ol>
+<li>遍历每个数据库，检查指定个key</li>
+</ol>
+<h3 id="持久化文件对过期策略的处理？"><a href="#持久化文件对过期策略的处理？" class="headerlink" title="持久化文件对过期策略的处理？"></a>持久化文件对过期策略的处理？</h3><h4 id="RDB："><a href="#RDB：" class="headerlink" title="RDB："></a>RDB：</h4><ol>
+<li>持久化时检查是否过期，过期不持久化</li>
+<li>恢复时同理判断</li>
+</ol>
+<h4 id="AOF"><a href="#AOF" class="headerlink" title="AOF"></a>AOF</h4><ol>
+<li>当key过期后，还没有被删除，此时进行执行持久化操作（该key是不会进入aof文件的，因为没有发生修改命令）</li>
+<li>当key过期后，在发生删除操作时，程序会向aof文件追加一条del命令（在将来的以aof文件恢复数据的时候该过期的键就会被删掉）</li>
+<li>重写时，会先判断key是否过期，已过期的key不会重写到aof文件</li>
+</ol>
+<h3 id="Redis-有哪些内存淘汰机制？"><a href="#Redis-有哪些内存淘汰机制？" class="headerlink" title="Redis 有哪些内存淘汰机制？"></a>Redis 有哪些内存淘汰机制？</h3><h4 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h4><ol>
+<li>volatile-lru：设置过期时间且最近最少使用淘汰</li>
+<li>volatile-ttl：设置过期时间且将要过期的淘汰</li>
+<li>volatile-random：设置过期时间的随机淘汰</li>
+<li>volatile-lfu：设置过期时间的且使用频率最低淘汰</li>
+</ol>
+<h4 id="allKeys"><a href="#allKeys" class="headerlink" title="allKeys"></a>allKeys</h4><ol>
+<li>allkeys-lru：最近最少使用</li>
+<li>allkeys-lfu: 使用频率最低</li>
+<li>allkeys-random： 随机</li>
+</ol>
+<h4 id="no-enviction"><a href="#no-enviction" class="headerlink" title="no-enviction"></a>no-enviction</h4><p>禁止驱逐数据，默认策略</p>
+<h3 id="Redis-有哪些持久化机制？"><a href="#Redis-有哪些持久化机制？" class="headerlink" title="Redis 有哪些持久化机制？"></a>Redis 有哪些持久化机制？</h3><h4 id="RDB"><a href="#RDB" class="headerlink" title="RDB"></a>RDB</h4><p>在指定的时间间隔内将内存中的数据集快照写入磁盘，默认的文件名为 dump.rdb，支持 同步（save 命令）、后台异步（bgsave）以及自动配置三种方式触发<br><strong>优点：</strong>  </p>
+<ol>
+<li>文件紧凑，全量备份，非常适合用于进行备份和灾难恢复</li>
+<li>支持异步</li>
+<li>恢复大数据集时比AOF快</li>
+</ol>
+<p><strong>缺点：</strong></p>
+<ol>
+<li>在快照持久化期间修改的数据不会被保存，可能丢失数据</li>
+</ol>
+<h4 id="AOF-1"><a href="#AOF-1" class="headerlink" title="AOF"></a>AOF</h4><p>将每一个收到的写命令追加到文件中，三种触发方式：1）每修改同步 always 2）每秒同步 everysec 3）不同no：从不同步<br><strong>优点</strong></p>
+<ol>
+<li>更好的保护数据不丢失</li>
+<li>通过非常可读的方式进行记录，这个特性非常适合做灾难性的误删除的紧急恢复</li>
+<li>没有任何磁盘寻址的开销，写入性能非常高，文件不容易破损</li>
+<li>不会影响客户端的读写</li>
+</ol>
+<p><strong>缺点：</strong>  </p>
+<ol>
+<li>AOF 日志文件通常比 RDB 数据快照文件更大</li>
+<li>支持的写 QPS 会比RDB支持的写 QPS 低</li>
+</ol>
+<h4 id="结合使用"><a href="#结合使用" class="headerlink" title="结合使用"></a>结合使用</h4><p>Redis从4.0版本开始引入RDB-AOF混合持久化模式，这种模式是基于AOF持久化模式构建而来，打开了服务器的AOF持久化功能，并且将aof-use-rdb-preamble <value>选项的值设置成了yes。<br><strong>原理：</strong><br>Redis服务器 在执行 AOF重写操作时，就会像执行BGSAVE命令那样，根据数据库当前的状态 生成出 相应的RDB数据，并将这些数据 写入 新建的AOF文件中，至于那些 在AOF重写开始之后 执行的Redis命令，则会继续以协议文本的方式 追加到 新AOF文件的末尾，即已有的RDB数据的后面</p>
+<img src="/2023/02/20/redis/redisMianShi/RdbAndAof.png" class="" title="img.png">
+<h3 id="redis单线程IO多路复用"><a href="#redis单线程IO多路复用" class="headerlink" title="redis单线程IO多路复用"></a>redis单线程IO多路复用</h3><img src="/2023/02/20/redis/redisMianShi/multiThread.png" class="" title="img.png">
+<ol>
+<li>IO 线程要么同时在读 socket，要么同时在写，不会同时读或写</li>
+<li>IO 线程只负责读写 socket 解析命令，不负责命令处理。</li>
+</ol>
+<h1 id="集群"><a href="#集群" class="headerlink" title="集群"></a>集群</h1><h3 id="Redis主从复制"><a href="#Redis主从复制" class="headerlink" title="Redis主从复制"></a>Redis主从复制</h3><p>全量同步和增量同步</p>
+<h4 id="全量同步"><a href="#全量同步" class="headerlink" title="全量同步"></a>全量同步</h4><img src="/2023/02/20/redis/redisMianShi/allSyncData.png" class="" title="img.png">
+<ol>
+<li>slave发送SYNC命令</li>
+<li>master收到并执行 BGSAVE 命令生产 RDB 文件，并使用缓冲区记录此后执行的所有写命令；</li>
+<li>master 执行完 BGSAVE 后，向所有的 slave 发送快照文件，并在发送过程中继续记录执行的写命令；</li>
+<li>slave 收到快照后，丢弃所有的旧数据，载入收到的数据；</li>
+<li>master 快照发送完成后就会开始向 slave 发送缓冲区的写命令；</li>
+<li>slave 完成对快照的载入，并开始接受命令请求，执行来自 master 缓冲区的写命令；</li>
+<li>slave 完成上面的数据初始化后就可以开始接受用户的读请求了。<br><strong>也可以通过无盘复制来达到目的，由master直接开启一个socket将rdb文件发送给slave服务器</strong></li>
+</ol>
+<h4 id="部分同步"><a href="#部分同步" class="headerlink" title="部分同步"></a>部分同步</h4><blockquote>
+<p>从Redis 2.8开始，如果遭遇连接断开，重新连接之后可以从中断处继续进行复制，而不必重新同步。</p>
+<p>它的工作原理是这样：<br>主服务器端为复制流维护一个内存缓冲区（in-memory backlog）。主从服务器都维护一个复制偏移量（replication offset）和master run id ，<br>当连接断开时，从服务器会重新连接上主服务器，然后请求继续复制，假如主从服务器的两个master run id相同，并且指定的偏移量在内存缓冲<br>区中还有效，复制就会从上次中断的点开始继续。如果其中一个条件不满足，就会进行完全重新同步（在2.8版本之前就是直接进行完全重新同步）。<br>因为主运行id不保存在磁盘中，如果从服务器重启了的话就只能进行完全同步了。<br>部分重新同步这个新特性内部使用PSYNC命令，旧的实现中使用SYNC命令。Redis2.8版本可以检测出它所连接的服务器是否支持PSYNC命令，不支持的<br>话使用SYNC命令。</p>
+</blockquote>
+<h4 id="增量同步"><a href="#增量同步" class="headerlink" title="增量同步"></a>增量同步</h4><ol>
+<li>将master接到的写命令也发给slave</li>
+</ol>
+<h3 id="限制有N个以上从服务器才允许写入"><a href="#限制有N个以上从服务器才允许写入" class="headerlink" title="限制有N个以上从服务器才允许写入"></a>限制有N个以上从服务器才允许写入</h3><blockquote>
+<p>从Redis 2.8版本开始，可以配置主服务器连接N个以上从服务器才允许对主服务器进行写操作。但是，因为Redis使用的是异步主从复制，<br>没办法确保从服务器确实收到了要写入的数据，所以还是有一定的数据丢失的可能性。</p>
+<p>这一特性的工作原理如下：<br>1）从服务器每秒钟ping一次主服务器，确认处理的复制流数量。<br>2）主服务器记住每个从服务器最近一次ping的时间。<br>3）用户可以配置最少要有N个服务器有小于M秒的确认延迟。<br>4）如果有N个以上从服务器，并且确认延迟小于M秒，主服务器接受写操作。</p>
+<p>还可以把这看做是CAP原则（一致性，可用性，分区容错性）不严格的一致性实现，虽然不能百分百确保一致性，但至少保证了丢失的数据不会超过M秒内的数据量。</p>
+<p>如果条件不满足，主服务器会拒绝写操作并返回一个错误。<br>1）min-slaves-to-write（最小从服务器数）<br>2）min-slaves-max-lag（从服务器最大确认延迟）</p>
+</blockquote>
+<h3 id="一致性Hash"><a href="#一致性Hash" class="headerlink" title="一致性Hash"></a>一致性Hash</h3><p>hash环，key 通过 hash 计算之后得到在 hash 环中的位置，然后顺时针方向找到第一个节点，这个节点就是存放 key 的节点。为了解决扩容和宕机问题。<br>因为普通Hash扩容或者宕机时，会影响每个节点上的Key，导致Key大面积失效，而用一致性Hash只会影响相邻的节点<br>同时还可以通过虚拟节点来解决数据倾斜的问题：就是在节点稀疏的 hash 环上对物理节点虚拟出一部分虚拟节点，key 会打到虚拟节点上面，而虚拟节点上的 key 实际也是映射到物理节点上的，这样就避免了数据倾斜导致单节点压力过大导致节点雪崩的问题。</p>
+<h3 id="Hash槽"><a href="#Hash槽" class="headerlink" title="Hash槽"></a>Hash槽</h3><p>槽的长度为16384，Redis 集群没有使用一致性hash, 而是引入了哈希槽slots的概念,jedis客户端jar包就是实现了一致性hash算法（客户端模式），或者在redis集群前面加上一层前置代理如Twemproxy也实现了hash一致性算法（代理模式）</p>
+<blockquote>
+<p>在redis节点发送心跳包时需要把所有的槽放到这个心跳包里，以便让节点知道当前集群信息，16384&#x3D;16k，在发送心跳包时使用char进行bitmap压缩后是2k（2 * 8 (8 bit) * 1024(1k) &#x3D; 16K），也就是说使用2k的空间创建了16k的槽数。 虽然使用CRC16算法最多可以分配65535（2^16-1）个槽位，65535&#x3D;65k，压缩后就是8k（8 * 8 (8 bit) *1024(1k)&#x3D;65K），也就是说需要需要8k的心跳包，作者认为这样做不太值得；并且一般情况下一个redis集群不会有超过1000个master节点，所以16k的槽位是个比较合适的选择。</p>
+</blockquote>
+<h1 id="大Key优化"><a href="#大Key优化" class="headerlink" title="大Key优化"></a>大Key优化</h1><img src="/2023/02/20/redis/redisMianShi/bigkey.png" class="" title="img.png">
+
+<h1 id="热key优化"><a href="#热key优化" class="headerlink" title="热key优化"></a>热key优化</h1><p>请求到的分片过于集中，超过单台 Server 的性能极限<br><strong>解决办法：</strong><br>1）服务端缓存：即将热点数据缓存至服务端的内存中；<br>2）备份热点Key：即将热点Key+随机数，随机分配至 Redis 其它节点中</p>
+<p><strong>如何发现：</strong>   </p>
+<ol>
+<li>凭借业务经验，进行预估哪些是热key</li>
+<li>在客户端进行收集</li>
+<li>在Proxy层做收集</li>
+<li>用redis自带命令:monitor命令和-hotkeys启动参数</li>
+</ol>
+]]></content>
       <categories>
         <category>redis</category>
         <category>面试</category>
@@ -1393,6 +1490,19 @@ Kafka 中的索引文件以稀疏索引（sparse index）的方式构造消息�
       </categories>
       <tags>
         <tag>mysql</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Spring-基础</title>
+    <url>/2023/02/22/springboot/Spring/</url>
+    <content><![CDATA[<h1 id="启动流程"><a href="#启动流程" class="headerlink" title="启动流程"></a>启动流程</h1><p><img src="/img_1.png" alt="img_1.png"></p>
+]]></content>
+      <categories>
+        <category>Spring</category>
+        <category>基础</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
       </tags>
   </entry>
 </search>
