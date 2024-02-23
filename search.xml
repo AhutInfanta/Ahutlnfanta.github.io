@@ -28,6 +28,20 @@
       </tags>
   </entry>
   <entry>
+    <title>java类相关简介</title>
+    <url>/2023/02/18/java/javaBase1/</url>
+    <content><![CDATA[<h1 id="类的加载顺序"><a href="#类的加载顺序" class="headerlink" title="类的加载顺序"></a>类的加载顺序</h1><p>加载—连接（验证、准备、解析）—初始化—使用—卸载</p>
+<h1 id="双亲委派"><a href="#双亲委派" class="headerlink" title="双亲委派"></a>双亲委派</h1><img src="/2023/02/18/java/javaBase1/doubleParent.png" class="" title="img.png">
+]]></content>
+      <categories>
+        <category>java</category>
+        <category>class</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>java基础-多线程</title>
     <url>/2023/02/19/java/javaConcurrent1/</url>
     <content><![CDATA[<h1 id="线程的生命周期"><a href="#线程的生命周期" class="headerlink" title="线程的生命周期"></a>线程的生命周期</h1><img src="/2023/02/19/java/javaConcurrent1/threadLife.png" class="" title="img.png">
@@ -126,17 +140,37 @@
       </tags>
   </entry>
   <entry>
-    <title>java类相关简介</title>
-    <url>/2023/02/18/java/javaBase1/</url>
-    <content><![CDATA[<h1 id="类的加载顺序"><a href="#类的加载顺序" class="headerlink" title="类的加载顺序"></a>类的加载顺序</h1><p>加载—连接（验证、准备、解析）—初始化—使用—卸载</p>
-<h1 id="双亲委派"><a href="#双亲委派" class="headerlink" title="双亲委派"></a>双亲委派</h1><img src="/2023/02/18/java/javaBase1/doubleParent.png" class="" title="img.png">
+    <title>kafka概述（一）</title>
+    <url>/2022/07/24/kafka/kafka1/</url>
+    <content><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><h2 id="1、定义"><a href="#1、定义" class="headerlink" title="1、定义"></a>1、定义</h2><blockquote>
+<p>Kafka 是由 Linkedin 公司开发的， 是一个分布式的基于发布&#x2F;订阅模式的消息队列（Message Queue）,同时是支持多分区、多副本的分布式消息流平台，适合大数据的存储以及计算</p>
+</blockquote>
+<h2 id="2、应用场景"><a href="#2、应用场景" class="headerlink" title="2、应用场景"></a>2、应用场景</h2><blockquote>
+<p><strong>限流削峰</strong>：在非常高的并发下，防止导致服务系统崩溃，消息队列能帮忙服务顶住突发的访问压力，解决生产能力和消费能力不一致的问题</p>
+</blockquote>
+<blockquote>
+<p><strong>服务解耦</strong>：解除不同服务之间的依赖关系，防止一端服务变更导致另一端服务需要同步变更或崩溃的问题，使修改更为灵活，维护与开发成本降低</p>
+</blockquote>
+<blockquote>
+<p><strong>异步通信</strong>：允许将消息放入队列中不用立即处理，且生产者发送消息时也可选择异步或者同步发送</p>
+</blockquote>
+<h2 id="3、特点"><a href="#3、特点" class="headerlink" title="3、特点"></a>3、特点</h2><blockquote>
+<p><strong>高吞吐、低延迟</strong>：kakfa 最大的特点就是收发消息非常快，kafka 每秒可以处理几十万条消息，它的最低延迟只有几毫秒；<br><strong>高伸缩性</strong>：每个主题(topic) 包含多个分区(partition)，主题中的分区可以分布在不同的主机(broker)中；<br><strong>持久性、可靠性</strong>：Kafka 能够允许数据的持久化存储，消息被持久化到磁盘，并支持数据备份防止数据丢失，Kafka 底层的数据存储是基于 Zookeeper 存储的，<br>Zookeeper 我们知道它的数据能够持久存储；<br><strong>容错性</strong>：允许集群中的节点失败，某个节点宕机，Kafka 集群能够正常工作；<br><strong>高并发</strong>：支持数千个客户端同时读写。</p>
+</blockquote>
+<h2 id="4、基本概念"><a href="#4、基本概念" class="headerlink" title="4、基本概念"></a>4、基本概念</h2><blockquote>
+<p><strong>生产者（Producer）</strong>：向 Kafka 发布（写入）事件的客户端应用程序<br><strong>消费者（Consumer）</strong>：订阅（读取和处理）事件的客户端应用程序<br><strong>节点（Broker）</strong>：kafka所安装的服务器，负责存储和读取消息<br><strong>主题（Topic）</strong>：消息的主题，每条发布到队列中的消息都隶属一个主题<br><strong>分区（Partition）</strong>：可以为主题划定分区，存储在不同的节点，提高消息存储以及读取的速率<br><strong>消费者群组（Consumer Group）</strong>：包含一组消费者，topic的一个分区只会被同一消费组中的某一个消费者进行消费</p>
+</blockquote>
+<h2 id="5、对比"><a href="#5、对比" class="headerlink" title="5、对比"></a>5、对比</h2><img src="/2022/07/24/kafka/kafka1/kafka-compare.png" class="" title="img.png">  
+
+
+
 ]]></content>
       <categories>
-        <category>java</category>
-        <category>class</category>
+        <category>kafka</category>
+        <category>基础篇</category>
       </categories>
       <tags>
-        <tag>java</tag>
+        <tag>kafka</tag>
       </tags>
   </entry>
   <entry>
@@ -426,37 +460,47 @@
       </tags>
   </entry>
   <entry>
-    <title>kafka概述（一）</title>
-    <url>/2022/07/24/kafka/kafka1/</url>
-    <content><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><h2 id="1、定义"><a href="#1、定义" class="headerlink" title="1、定义"></a>1、定义</h2><blockquote>
-<p>Kafka 是由 Linkedin 公司开发的， 是一个分布式的基于发布&#x2F;订阅模式的消息队列（Message Queue）,同时是支持多分区、多副本的分布式消息流平台，适合大数据的存储以及计算</p>
-</blockquote>
-<h2 id="2、应用场景"><a href="#2、应用场景" class="headerlink" title="2、应用场景"></a>2、应用场景</h2><blockquote>
-<p><strong>限流削峰</strong>：在非常高的并发下，防止导致服务系统崩溃，消息队列能帮忙服务顶住突发的访问压力，解决生产能力和消费能力不一致的问题</p>
-</blockquote>
-<blockquote>
-<p><strong>服务解耦</strong>：解除不同服务之间的依赖关系，防止一端服务变更导致另一端服务需要同步变更或崩溃的问题，使修改更为灵活，维护与开发成本降低</p>
-</blockquote>
-<blockquote>
-<p><strong>异步通信</strong>：允许将消息放入队列中不用立即处理，且生产者发送消息时也可选择异步或者同步发送</p>
-</blockquote>
-<h2 id="3、特点"><a href="#3、特点" class="headerlink" title="3、特点"></a>3、特点</h2><blockquote>
-<p><strong>高吞吐、低延迟</strong>：kakfa 最大的特点就是收发消息非常快，kafka 每秒可以处理几十万条消息，它的最低延迟只有几毫秒；<br><strong>高伸缩性</strong>：每个主题(topic) 包含多个分区(partition)，主题中的分区可以分布在不同的主机(broker)中；<br><strong>持久性、可靠性</strong>：Kafka 能够允许数据的持久化存储，消息被持久化到磁盘，并支持数据备份防止数据丢失，Kafka 底层的数据存储是基于 Zookeeper 存储的，<br>Zookeeper 我们知道它的数据能够持久存储；<br><strong>容错性</strong>：允许集群中的节点失败，某个节点宕机，Kafka 集群能够正常工作；<br><strong>高并发</strong>：支持数千个客户端同时读写。</p>
-</blockquote>
-<h2 id="4、基本概念"><a href="#4、基本概念" class="headerlink" title="4、基本概念"></a>4、基本概念</h2><blockquote>
-<p><strong>生产者（Producer）</strong>：向 Kafka 发布（写入）事件的客户端应用程序<br><strong>消费者（Consumer）</strong>：订阅（读取和处理）事件的客户端应用程序<br><strong>节点（Broker）</strong>：kafka所安装的服务器，负责存储和读取消息<br><strong>主题（Topic）</strong>：消息的主题，每条发布到队列中的消息都隶属一个主题<br><strong>分区（Partition）</strong>：可以为主题划定分区，存储在不同的节点，提高消息存储以及读取的速率<br><strong>消费者群组（Consumer Group）</strong>：包含一组消费者，topic的一个分区只会被同一消费组中的某一个消费者进行消费</p>
-</blockquote>
-<h2 id="5、对比"><a href="#5、对比" class="headerlink" title="5、对比"></a>5、对比</h2><img src="/2022/07/24/kafka/kafka1/kafka-compare.png" class="" title="img.png">  
-
-
-
+    <title>Spring-基础</title>
+    <url>/2023/02/22/springboot/Spring/</url>
+    <content><![CDATA[<h1 id="启动流程"><a href="#启动流程" class="headerlink" title="启动流程"></a>启动流程</h1><p><img src="/img_1.png" alt="img_1.png"></p>
 ]]></content>
       <categories>
-        <category>kafka</category>
-        <category>基础篇</category>
+        <category>Spring</category>
+        <category>基础</category>
       </categories>
       <tags>
-        <tag>kafka</tag>
+        <tag>Spring</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>redisCluster</title>
+    <url>/2023/03/15/redis/redisCluster/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><blockquote>
+<p>此篇文章主要介绍分片，主从和哨兵模式会在别的文章中介绍</p>
+</blockquote>
+<h1 id="一、客户端分片"><a href="#一、客户端分片" class="headerlink" title="一、客户端分片"></a>一、客户端分片</h1><p>在Redis 3.0之前，redis并没有Redis cluster功能，当时大部分使用的是客户端分片以及第三方工具实现分片集群，比如Jedis，<br>Jedis的Redis Sharding实现具有如下特点：  </p>
+<ol>
+<li>采用一致性哈希算法(consistent hashing)，将key和节点name各自hashing，，然后进行映射匹配，采用的算法是MURMUR_HASH。采用一致性哈希而不是采用简单类似哈希求模映射的主要原因是当增加或减少节点时，不会产生由于重新匹配造成的rehashing。一致性哈希只影响相邻节点key分配，影响量小。</li>
+<li>为了避免一致性哈希只影响相邻节点造成节点分配压力，ShardedJedis会对每个Redis节点根据名字(没有，Jedis会赋予缺省名字)会虚拟化出160个虚拟节点进行散列。根据权重weight，也可虚拟化出160倍数的虚拟节点。用虚拟节点做映射匹配，可以在增加或减少Redis节点时，key在各Redis节点移动再分配更均匀，而不是只有相邻节点受影响。(就比如ABC3个节点只能映射出ABC3个散列，如果每个ABC可以虚拟出多N个，即上面说的160个（即现在有3*160个可供给映射），那么存进去的数据则会更加的均匀。)</li>
+<li>ShardedJedis支持keyTagPattern模式，即抽取key的一部分keyTag做sharding，这样通过合理命名key，可以将一组相关联的key放入同一个Redis节点，这在避免跨节点访问相关数据时很重要。</li>
+</ol>
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><p>客户端自己计算数据的key应该在哪个机器上存储和查找，此方法的好处是降低了服务器集群的复杂度，客户端实现数据分片时，服务器是独立的，服务器之前没有任何关联。多数redis客户端库实现了此功能，也叫sharding,这种方式的缺点是客户端需要实时知道当前集群节点的联系信息，同时，当添加一个新的节点时，客户端要支持动态sharding.，多数客户端实现不支持此功能，需要重启redis。另一个弊端是redis的HA需要额外考虑。</p>
+<h1 id="二、代理分片"><a href="#二、代理分片" class="headerlink" title="二、代理分片"></a>二、代理分片</h1><h2 id="twemproxy"><a href="#twemproxy" class="headerlink" title="twemproxy"></a>twemproxy</h2><p>twemproxy处于客户端和服务器的中间，将客户端发来的请求，进行一定的处理后(如sharding)，再转发给后端真正的Redis服务器。也就是说，客户端不直接访问Redis服务器，而是通过twemproxy代理中间件间接访问。</p>
+<p>参照Redis Sharding架构，增加代理中间件的Redis集群架构如下：</p>
+<ol>
+<li>twemproxy中间件的内部处理是无状态的，它本身可以很轻松地集群，这样可避免单点压力或故障。</li>
+<li>twemproxy又叫nutcracker，起源于twitter系统中redis&#x2F;memcached集群开发实践，运行效果良好，后代码奉献给开源社区。其轻量高效，采用C语言开发，工程网址是：GitHub - twitter&#x2F;twemproxy: A fast, light-weight proxy for memcached andredis</li>
+</ol>
+<p>twemproxy后端不仅支持redis，同时也支持memcached，这是twitter系统具体环境造成的。<br>由于使用了中间件，twemproxy可以通过共享与后端系统的连接，降低客户端直接连接后端服务器的连接数量。同时，它也提供sharding功能，支持后端服务器集群水平扩展。统一运维管理也带来了方便。<br>当然，也是由于使用了中间件代理，相比客户端直连服务器方式，性能上会有所损耗</p>
+<h1 id="三、服务端分片（redis-cluster）"><a href="#三、服务端分片（redis-cluster）" class="headerlink" title="三、服务端分片（redis cluster）"></a>三、服务端分片（redis cluster）</h1><p>详细介绍可参照：<br><a href="http://www.redis.cn/topics/cluster-tutorial.html">http://www.redis.cn/topics/cluster-tutorial.html</a><br><a href="http://www.redis.cn/topics/cluster-spec.html">http://www.redis.cn/topics/cluster-spec.html</a></p>
+<h2 id="槽"><a href="#槽" class="headerlink" title="槽"></a>槽</h2><p>CRC16算法产生的hash值有16bit，该算法可以产生2^16-&#x3D;65536个值；不同节点之间需要相互交换信息，交换的数据信息，由消息体和消息头组成。<br>消息头里面有个myslots的char数组，长度为16383&#x2F;8，这其实是一个bitmap,每一个位代表一个槽，如果该位为1，表示这个槽是属于这个节点的，在消息头中，最占空间的是myslots[CLUSTER_SLOTS&#x2F;8]。这块的大小是:<br>16384÷8÷1024&#x3D;2kb，如果最大使用65536会需要8kb的空间，浪费带宽；</p>
+<h2 id="节点通信"><a href="#节点通信" class="headerlink" title="节点通信"></a>节点通信</h2><h2 id="集群不可用"><a href="#集群不可用" class="headerlink" title="集群不可用"></a>集群不可用</h2><h2 id="失效检测和故障转移"><a href="#失效检测和故障转移" class="headerlink" title="失效检测和故障转移"></a>失效检测和故障转移</h2><h2 id="增删节点"><a href="#增删节点" class="headerlink" title="增删节点"></a>增删节点</h2><h2 id="备份迁移"><a href="#备份迁移" class="headerlink" title="备份迁移"></a>备份迁移</h2>]]></content>
+      <categories>
+        <category>redis</category>
+        <category>集群</category>
+      </categories>
+      <tags>
+        <tag>redis</tag>
       </tags>
   </entry>
   <entry>
@@ -1490,50 +1534,6 @@ Kafka 中的索引文件以稀疏索引（sparse index）的方式构造消息�
       </categories>
       <tags>
         <tag>mysql</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Spring-基础</title>
-    <url>/2023/02/22/springboot/Spring/</url>
-    <content><![CDATA[<h1 id="启动流程"><a href="#启动流程" class="headerlink" title="启动流程"></a>启动流程</h1><p><img src="/img_1.png" alt="img_1.png"></p>
-]]></content>
-      <categories>
-        <category>Spring</category>
-        <category>基础</category>
-      </categories>
-      <tags>
-        <tag>Spring</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>redisCluster</title>
-    <url>/2023/03/15/redis/redisCluster/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><blockquote>
-<p>此篇文章主要介绍分片，主从和哨兵模式会在别的文章中介绍</p>
-</blockquote>
-<h1 id="一、客户端分片"><a href="#一、客户端分片" class="headerlink" title="一、客户端分片"></a>一、客户端分片</h1><p>在Redis 3.0之前，redis并没有Redis cluster功能，当时大部分使用的是客户端分片以及第三方工具实现分片集群，比如Jedis，<br>Jedis的Redis Sharding实现具有如下特点：  </p>
-<ol>
-<li>采用一致性哈希算法(consistent hashing)，将key和节点name各自hashing，，然后进行映射匹配，采用的算法是MURMUR_HASH。采用一致性哈希而不是采用简单类似哈希求模映射的主要原因是当增加或减少节点时，不会产生由于重新匹配造成的rehashing。一致性哈希只影响相邻节点key分配，影响量小。</li>
-<li>为了避免一致性哈希只影响相邻节点造成节点分配压力，ShardedJedis会对每个Redis节点根据名字(没有，Jedis会赋予缺省名字)会虚拟化出160个虚拟节点进行散列。根据权重weight，也可虚拟化出160倍数的虚拟节点。用虚拟节点做映射匹配，可以在增加或减少Redis节点时，key在各Redis节点移动再分配更均匀，而不是只有相邻节点受影响。(就比如ABC3个节点只能映射出ABC3个散列，如果每个ABC可以虚拟出多N个，即上面说的160个（即现在有3*160个可供给映射），那么存进去的数据则会更加的均匀。)</li>
-<li>ShardedJedis支持keyTagPattern模式，即抽取key的一部分keyTag做sharding，这样通过合理命名key，可以将一组相关联的key放入同一个Redis节点，这在避免跨节点访问相关数据时很重要。</li>
-</ol>
-<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><p>客户端自己计算数据的key应该在哪个机器上存储和查找，此方法的好处是降低了服务器集群的复杂度，客户端实现数据分片时，服务器是独立的，服务器之前没有任何关联。多数redis客户端库实现了此功能，也叫sharding,这种方式的缺点是客户端需要实时知道当前集群节点的联系信息，同时，当添加一个新的节点时，客户端要支持动态sharding.，多数客户端实现不支持此功能，需要重启redis。另一个弊端是redis的HA需要额外考虑。</p>
-<h1 id="二、代理分片"><a href="#二、代理分片" class="headerlink" title="二、代理分片"></a>二、代理分片</h1><h2 id="twemproxy"><a href="#twemproxy" class="headerlink" title="twemproxy"></a>twemproxy</h2><p>twemproxy处于客户端和服务器的中间，将客户端发来的请求，进行一定的处理后(如sharding)，再转发给后端真正的Redis服务器。也就是说，客户端不直接访问Redis服务器，而是通过twemproxy代理中间件间接访问。</p>
-<p>参照Redis Sharding架构，增加代理中间件的Redis集群架构如下：</p>
-<ol>
-<li>twemproxy中间件的内部处理是无状态的，它本身可以很轻松地集群，这样可避免单点压力或故障。</li>
-<li>twemproxy又叫nutcracker，起源于twitter系统中redis&#x2F;memcached集群开发实践，运行效果良好，后代码奉献给开源社区。其轻量高效，采用C语言开发，工程网址是：GitHub - twitter&#x2F;twemproxy: A fast, light-weight proxy for memcached andredis</li>
-</ol>
-<p>twemproxy后端不仅支持redis，同时也支持memcached，这是twitter系统具体环境造成的。<br>由于使用了中间件，twemproxy可以通过共享与后端系统的连接，降低客户端直接连接后端服务器的连接数量。同时，它也提供sharding功能，支持后端服务器集群水平扩展。统一运维管理也带来了方便。<br>当然，也是由于使用了中间件代理，相比客户端直连服务器方式，性能上会有所损耗</p>
-<h1 id="三、服务端分片（redis-cluster）"><a href="#三、服务端分片（redis-cluster）" class="headerlink" title="三、服务端分片（redis cluster）"></a>三、服务端分片（redis cluster）</h1><p>详细介绍可参照：<br><a href="http://www.redis.cn/topics/cluster-tutorial.html">http://www.redis.cn/topics/cluster-tutorial.html</a><br><a href="http://www.redis.cn/topics/cluster-spec.html">http://www.redis.cn/topics/cluster-spec.html</a></p>
-<h2 id="槽"><a href="#槽" class="headerlink" title="槽"></a>槽</h2><p>CRC16算法产生的hash值有16bit，该算法可以产生2^16-&#x3D;65536个值；不同节点之间需要相互交换信息，交换的数据信息，由消息体和消息头组成。<br>消息头里面有个myslots的char数组，长度为16383&#x2F;8，这其实是一个bitmap,每一个位代表一个槽，如果该位为1，表示这个槽是属于这个节点的，在消息头中，最占空间的是myslots[CLUSTER_SLOTS&#x2F;8]。这块的大小是:<br>16384÷8÷1024&#x3D;2kb，如果最大使用65536会需要8kb的空间，浪费带宽；</p>
-<h2 id="节点通信"><a href="#节点通信" class="headerlink" title="节点通信"></a>节点通信</h2><h2 id="集群不可用"><a href="#集群不可用" class="headerlink" title="集群不可用"></a>集群不可用</h2><h2 id="失效检测和故障转移"><a href="#失效检测和故障转移" class="headerlink" title="失效检测和故障转移"></a>失效检测和故障转移</h2><h2 id="增删节点"><a href="#增删节点" class="headerlink" title="增删节点"></a>增删节点</h2><h2 id="备份迁移"><a href="#备份迁移" class="headerlink" title="备份迁移"></a>备份迁移</h2>]]></content>
-      <categories>
-        <category>redis</category>
-        <category>集群</category>
-      </categories>
-      <tags>
-        <tag>redis</tag>
       </tags>
   </entry>
 </search>
